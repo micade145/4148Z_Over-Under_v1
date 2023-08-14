@@ -4,37 +4,37 @@
 bool isRed = false;
 
 // Constants
-double BACK_ENC_OFFSET = 0.0;
+// double SIDE_ENC_OFFSET;
 
 // Robot
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Drive Motors
-// pros::Motor leftDrive;
-// pros::Motor rightDrive;
-
-//  pros::Motor leftFrontDrive;
-//  pros::Motor leftBackDrive;
-//  pros::Motor leftTopDrive;
-//  pros::Motor rightFrontDrive;
-//  pros::Motor rightBackDrive;
-//  pros::Motor rightTopDrive;
+pros::Motor leftFrontDrive;
+pros::Motor leftMidDrive;
+pros::Motor leftBackDrive;
+pros::Motor rightFrontDrive;
+pros::Motor rightMidDrive;
+pros::Motor rightBackDrive;
 
 // Drive Motor Groups
-//  pros::Motor_Group leftDrive;
-//  pros::Motor_Group rightDrive;
+pros::Motor_Group leftDrive;
+pros::Motor_Group rightDrive;
 
 // Misc Motors
-//  pros::Motor flywheel;
-//  pros::Motor intake;
+pros::Motor rightIntake;
+pros::Motor leftIntake;
 
 // // Sensors
-//  pros::Vision vision;
-//  pros::Imu inertial;
-//  pros::Rotation frontEnc;
-//  pros::Rotation sideEnc;
+// pros::Imu inertial;
+// pros::Vision vision;
+// pros::Rotation frontEnc;
+// pros::Rotation sideEnc;
 
 // // Pneumatics (Digital I/O)
-//  pros::ADIDigitalOut angler;
-//  pros::ADIDigitalOut indexer;
-//  pros::ADIDigitalOut endgame;
+// pros::ADIDigitalOut leftWing;
+// pros::ADIDigitalOut rightWing;
+// pros::ADIDigitalOut leftParkingBrake;
+// pros::ADIDigitalOut rightParkingBrake;
+// pros::ADIDigitalOut verticalAngler;
+// pros::ADIDigitalOut tilterAngler;

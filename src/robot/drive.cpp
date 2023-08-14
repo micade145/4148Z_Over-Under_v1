@@ -1,13 +1,34 @@
 #include "robot_header/drive.h"
 
+double TURN_SENS = 0.8;
+
 // Helper function
-void setDrive(int leftVolt, int rightVolt);
+void setDrive(int leftVolt, int rightVolt) {
+    leftDrive.move_voltage(leftVolt);
+    rightDrive.move_voltage(rightVolt);
+}
 
 // Driver control functions 
-extern void splitArcade();
-extern void curveSplitArcade();
+void splitArcade() {
+    double forwardPower = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+    double turnPower = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) * TURN_SENS;
+    // Deadzone
+    if(fabs(forwardPower) <= 15) { forwardPower = 0;}
+    if(fabs(turnPower) <= 15) { turnPower = 0;}
+    setDrive(forwardPower + turnPower, forwardPower - turnPower);
+}
+
+void curveSplitArcade() {
+
+}
 
 // Drive brake modes
-extern void driveCoast();
-extern void driveBrake();
-extern void driveHold();
+void driveCoast() {
+
+}
+void driveBrake() {
+
+}
+void driveHold() {
+
+}
