@@ -12,32 +12,33 @@ extern bool isRed;
 extern pros::Controller controller;
 
 // Drive Motors
-// extern pros::Motor leftDrive;
-// extern pros::Motor rightDrive;
-
-// extern pros::Motor leftFrontDrive;
-// extern pros::Motor leftBackDrive;
-// extern pros::Motor leftTopDrive;
-// extern pros::Motor rightFrontDrive;
-// extern pros::Motor rightBackDrive;
-// extern pros::Motor rightTopDrive;
+extern pros::Motor leftFrontDrive;
+extern pros::Motor leftMidDrive;
+extern pros::Motor leftBackDrive;
+extern pros::Motor rightFrontDrive;
+extern pros::Motor rightMidDrive;
+extern pros::Motor rightBackDrive;
 
 // Drive Motor Groups
-// extern pros::Motor_Group leftDrive;
-// extern pros::Motor_Group rightDrive;
+extern pros::Motor_Group leftDrive;
+extern pros::Motor_Group rightDrive;
 
 // Misc Motors
-// extern pros::Motor flywheel;
-// extern pros::Motor intake;
+extern pros::Motor rightIntake;
+extern pros::Motor leftIntake;
 
 // // Sensors
-// extern pros::Vision vision;
 // extern pros::Imu inertial;
+// extern pros::Vision vision;
 // extern pros::Rotation frontEnc;
 // extern pros::Rotation sideEnc;
 
 // // Pneumatics (Digital I/O)
-// extern pros::ADIDigitalOut angler;
-// extern pros::ADIDigitalOut indexer;
-// extern pros::ADIDigitalOut endgame;
+// extern pros::ADIDigitalOut leftWing;
+// extern pros::ADIDigitalOut rightWing;
+// extern pros::ADIDigitalOut leftParkingBrake;
+// extern pros::ADIDigitalOut rightParkingBrake;
+// extern pros::ADIDigitalOut verticalAngler;
+// extern pros::ADIDigitalOut tilterAngler;
+
 #endif
