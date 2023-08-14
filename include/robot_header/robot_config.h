@@ -6,7 +6,7 @@
 extern bool isRed;
 
 // Constants
-extern double BACK_ENC_OFFSET;
+// extern double SIDE_ENC_OFFSET;
 
 // Robot
 extern pros::Controller controller;
