@@ -34,6 +34,7 @@ extern pros::Motor leftIntake;
 // extern pros::Rotation sideEnc;
 
 // // Pneumatics (Digital I/O)
+extern pros::ADIDigitalOut drivePTO;
 // extern pros::ADIDigitalOut leftWing;
 // extern pros::ADIDigitalOut rightWing;
 // extern pros::ADIDigitalOut leftParkingBrake;

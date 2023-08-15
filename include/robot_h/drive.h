@@ -9,6 +9,10 @@ extern void setDrive(int leftVolt, int rightVolt);
 extern void splitArcade();
 extern void curveSplitArcade();
 
+// PTO function
+extern bool sixMotorMode;
+extern void drivePTOControl();
+
 // Drive brake modes
 extern void driveCoast();
 extern void driveBrake();

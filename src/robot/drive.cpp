@@ -20,6 +20,20 @@ void curveSplitArcade() {
 
 }
 
+// PTO function
+bool sixMotorMode = false;
+void drivePTOControl() {
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+        sixMotorMode = !sixMotorMode;
+    }
+    if(sixMotorMode) { 
+        states.setDriveState(states.SIX_MOTOR);
+    }
+    else {
+        states.setDriveState(states.TWO_MOTOR);
+    }
+}
+
 // Drive brake modes
 void driveCoast() {
 

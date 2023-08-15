@@ -32,6 +32,7 @@ pros::Motor leftIntake(8, false);
 // pros::Rotation sideEnc;
 
 // // Pneumatics (Digital I/O)
+pros::ADIDigitalOut drivePTO('A', false);
 // pros::ADIDigitalOut leftWing;
 // pros::ADIDigitalOut rightWing;
 // pros::ADIDigitalOut leftParkingBrake;
