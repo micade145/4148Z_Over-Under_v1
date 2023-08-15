@@ -40,7 +40,14 @@
 #include "robot_header/robot_config.h"
 #include "robot_header/drive.h"
 #include "robot_header/intake.h"
-#include "constants.h"
+
+#include "myLib_h/constants.h"
+#include "myLib_h/robotStates.h"
+
+#include "myLib_h/auto_h/pid.h"
+#include "myLib_h/auto_h/motion.h"
+#include "myLib_h/auto_h/odom.h"
+#include "myLib_h/auto_h/autoselector.h"
 
 /**
  * You should add more #includes here
