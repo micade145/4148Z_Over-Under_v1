@@ -7,6 +7,7 @@
 // extern std::string newDriveState;
 
 // Intake States
+enum intakeState{CLOSED, OPEN, INTAKKING};
 
 // Puncher States
 
