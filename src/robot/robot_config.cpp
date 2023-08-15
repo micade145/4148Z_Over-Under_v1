@@ -10,20 +10,20 @@ bool isRed = false;
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Drive Motors
-pros::Motor leftFrontDrive;
-pros::Motor leftMidDrive;
-pros::Motor leftBackDrive;
-pros::Motor rightFrontDrive;
-pros::Motor rightMidDrive;
-pros::Motor rightBackDrive;
+pros::Motor leftFrontDrive(1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor leftMidDrive(2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor leftBackDrive(3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor rightFrontDrive(4, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor rightMidDrive(5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor rightBackDrive(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
 
 // Drive Motor Groups
-pros::Motor_Group leftDrive;
-pros::Motor_Group rightDrive;
+pros::Motor_Group leftDrive({leftFrontDrive, leftMidDrive, leftBackDrive});
+pros::Motor_Group rightDrive({rightFrontDrive, rightMidDrive, rightBackDrive});
 
 // Misc Motors
-pros::Motor rightIntake;
-pros::Motor leftIntake;
+pros::Motor rightIntake(7, false);
+pros::Motor leftIntake(8, false);
 
 // // Sensors
 // pros::Imu inertial;

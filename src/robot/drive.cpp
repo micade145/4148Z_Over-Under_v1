@@ -1,7 +1,5 @@
 #include "robot_header/drive.h"
 
-double TURN_SENS = 0.8;
-
 // Helper function
 void setDrive(int leftVolt, int rightVolt) {
     leftDrive.move_voltage(leftVolt);
