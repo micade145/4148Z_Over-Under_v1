@@ -2,8 +2,8 @@
 
 // Helper function
 void setDrive(int leftVolt, int rightVolt) {
-    leftDrive.move_voltage(leftVolt);
-    rightDrive.move_voltage(rightVolt);
+    leftFrontDrive.move(leftVolt);
+    rightFrontDrive.move(rightVolt);
 }
 
 // Driver control functions 

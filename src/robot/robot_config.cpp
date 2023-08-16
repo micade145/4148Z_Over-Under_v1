@@ -10,16 +10,16 @@ bool isRed = false;
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // Drive Motors
-pros::Motor leftFrontDrive(1, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
-pros::Motor leftMidDrive(2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
-pros::Motor leftBackDrive(3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
-pros::Motor rightFrontDrive(4, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
-pros::Motor rightMidDrive(5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
-pros::Motor rightBackDrive(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor leftFrontDrive(9, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+// pros::Motor leftMidDrive(2, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+// pros::Motor leftBackDrive(3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor rightFrontDrive(10, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_COUNTS);
+// pros::Motor rightMidDrive(5, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
+// pros::Motor rightBackDrive(6, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
 
 // Drive Motor Groups
-pros::Motor_Group leftDrive({leftFrontDrive, leftMidDrive, leftBackDrive});
-pros::Motor_Group rightDrive({rightFrontDrive, rightMidDrive, rightBackDrive});
+// pros::Motor_Group leftDrive({leftFrontDrive, leftMidDrive, leftBackDrive});
+// pros::Motor_Group rightDrive({rightFrontDrive, rightMidDrive, rightBackDrive});
 
 // Misc Motors
 pros::Motor rightIntake(7, false);
