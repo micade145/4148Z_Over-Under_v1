@@ -22,8 +22,8 @@ pros::Motor rightFrontDrive(10, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENC
 // pros::Motor_Group rightDrive({rightFrontDrive, rightMidDrive, rightBackDrive});
 
 // Misc Motors
-pros::Motor rightIntake(7, false);
-pros::Motor leftIntake(8, false);
+pros::Motor rightIntake(8, false);
+pros::Motor leftIntake(7, true);
 
 // // Sensors
 // pros::Imu inertial;

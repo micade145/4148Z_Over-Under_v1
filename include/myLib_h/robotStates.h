@@ -8,8 +8,8 @@ private:
 public:
     // Subsystem states
     enum drive_state {TWO_MOTOR, SIX_MOTOR} driveState;
-    enum intake_state {CLOSED, OPEN, INTAKING} intakeState, newIntakeState;
-    enum puncher_state {FIRE, SHORT_PULLBACK, LONG_PULLBACK, PULLED_BACK} puncherState, newPuncherState;
+    enum intake_state {INTAKING, OPEN, CLOSED} intakeState;
+    enum puncher_state {ONE_MOTOR_MODE, FIVE_MOTOR_MODE, FIRE, SHORT_PULLBACK, LONG_PULLBACK, PULLED_BACK} puncherState, newPuncherState;
     enum puncher_angle_state {STEEP, MID, FLAT, DOWN} puncherAngleState, newPuncherAngleState;
     enum wing_state {OUT, STOWED} wingState, newWingState;
     enum parking_brake_state {BRAKE_ON, BRAKE_OFF} parkingBrakeState, newParkingBrakeState;
