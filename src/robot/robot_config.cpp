@@ -33,9 +33,10 @@ pros::Motor leftIntake(7, true);
 
 // // Pneumatics (Digital I/O)
 pros::ADIDigitalOut drivePTO('A', false);
-// pros::ADIDigitalOut leftWing;
-// pros::ADIDigitalOut rightWing;
-// pros::ADIDigitalOut leftParkingBrake;
-// pros::ADIDigitalOut rightParkingBrake;
-// pros::ADIDigitalOut verticalAngler;
-// pros::ADIDigitalOut tilterAngler;
+pros::ADIDigitalOut verticalAngler('B', true);
+pros::ADIDigitalOut tilterAngler('C', false);
+pros::ADIDigitalOut leftWing('D', false);
+pros::ADIDigitalOut rightWing('E', false);
+pros::ADIDigitalOut leftParkingBrake('F', false);
+pros::ADIDigitalOut rightParkingBrake('G', false);
+

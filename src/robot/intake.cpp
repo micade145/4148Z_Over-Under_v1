@@ -23,13 +23,10 @@ void stopIntake(pros::motor_brake_mode_e_t newIntakeBrakeMode) {
 // Opcontrol function
 bool R2 = true;
 bool intakeClosed = false;
-
 void intakeControl() {
     // add current intake control
-    // if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {R2 = true;}
-    // if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {R2 = false;}
-
-    controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2) ? R2 = true : R2 = false;
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {R2 = true;}
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {R2 = false;}
 
     if(R2) {
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
@@ -39,7 +36,10 @@ void intakeControl() {
     }
     else {
         if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
-            intakeClosed = !intakeClosed;
+            // intakeClosed = !intakeClosed;
+            if(intakeClosed) {
+                intakeClosed = false;
+            } else {intakeClosed = true;}
         }
 
         if(intakeClosed) {

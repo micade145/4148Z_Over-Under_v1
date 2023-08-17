@@ -2,8 +2,16 @@
 
 // Helper function
 void setDrive(int leftVolt, int rightVolt) {
-    leftFrontDrive.move(leftVolt);
-    rightFrontDrive.move(rightVolt);
+    if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
+        // only two motors
+        // leftFrontDrive.move(leftVolt);
+        // rightFrontDrive.move(rightVolt);
+    }
+    else {
+        // all motors
+        leftFrontDrive.move(leftVolt);
+        rightFrontDrive.move(rightVolt);
+    }
 }
 
 // Driver control functions 
@@ -35,6 +43,9 @@ void drivePTOControl() {
 }
 
 // Drive brake modes
+void stopDrive() {
+    // write stop drive helper function
+}
 void driveCoast() {
 
 }

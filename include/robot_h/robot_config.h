@@ -35,11 +35,12 @@ extern pros::Motor leftIntake;
 
 // // Pneumatics (Digital I/O)
 extern pros::ADIDigitalOut drivePTO;
-// extern pros::ADIDigitalOut leftWing;
-// extern pros::ADIDigitalOut rightWing;
-// extern pros::ADIDigitalOut leftParkingBrake;
-// extern pros::ADIDigitalOut rightParkingBrake;
-// extern pros::ADIDigitalOut verticalAngler;
-// extern pros::ADIDigitalOut tilterAngler;
+extern pros::ADIDigitalOut verticalAngler;
+extern pros::ADIDigitalOut tilterAngler;
+
+extern pros::ADIDigitalOut leftWing;
+extern pros::ADIDigitalOut rightWing;
+extern pros::ADIDigitalOut leftParkingBrake;
+extern pros::ADIDigitalOut rightParkingBrake;
 
 #endif

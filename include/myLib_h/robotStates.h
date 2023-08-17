@@ -4,15 +4,22 @@
 
 struct stateMachine{
 private:
-
 public:
     // Subsystem states
-    enum drive_state {TWO_MOTOR, SIX_MOTOR} driveState;
-    enum intake_state {INTAKING, OPEN, CLOSED} intakeState;
-    enum puncher_state {ONE_MOTOR_MODE, FIVE_MOTOR_MODE, FIRE, SHORT_PULLBACK, LONG_PULLBACK, PULLED_BACK} puncherState, newPuncherState;
-    enum puncher_angle_state {STEEP, MID, FLAT, DOWN} puncherAngleState, newPuncherAngleState;
-    enum wing_state {OUT, STOWED} wingState, newWingState;
-    enum parking_brake_state {BRAKE_ON, BRAKE_OFF} parkingBrakeState, newParkingBrakeState;
+    enum drive_state {TWO_MOTOR, SIX_MOTOR} driveState, oldDriveState;
+    enum intake_state {INTAKING, OPEN, CLOSED} intakeState, oldIntakeState;
+    enum puncher_state {ONE_MOTOR_MODE, FIVE_MOTOR_MODE, FIRE, SHORT_PULLBACK, LONG_PULLBACK, PULLED_BACK} puncherState, oldPuncherState;
+    enum puncher_angle_state {STEEP, MID, FLAT, DOWN} puncherAngleState, oldPuncherAngleState;
+    enum wing_state {OUT, STOWED} wingState, oldWingState;
+    enum parking_brake_state {BRAKE_ON, BRAKE_OFF} parkingBrakeState, oldParkingBrakeState;
+
+    // State changed flags
+    bool driveStateChanged() {return(oldDriveState != driveState);}
+    bool intakeStateChanged() {return(oldIntakeState != intakeState);}
+    bool puncherStateChanged() {return(oldPuncherState != puncherState);}
+    bool puncherAngleStateChanged() {return(oldPuncherAngleState != puncherAngleState);}
+    bool wingStateChanged() {return(oldWingState != wingState);}
+    bool parkingBrakeStateChanged() {return(oldParkingBrakeState != parkingBrakeState);}
 
     // Drive
     void setDriveState(drive_state s) {driveState = s;}
@@ -45,28 +52,10 @@ public:
     bool parkingBrakeStateIs(parking_brake_state s) {return(s == parkingBrakeState);}
 };
 
+// Main states object
 extern stateMachine states;
 
+// Task to handle all states
 extern void stateHandler();
-
-
-// stateMachine states;
-
-// Drive States (PTO)
-// enum driveState{TWO_MOTOR, SIX_MOTOR};
-
-// // Intake States
-// enum intakeState{CLOSED, OPEN, INTAKING};
-
-// // Puncher States
-// enum puncherState{FIRE, PULLING_BACK, PULLED_BACK};
-// enum puncherAngle{HIGH, MID, FLAT, DOWN};
-
-// // Wing States
-// enum wingState{OUT, STOWED};
-
-// // Parking Brake States
-// enum parkingBrakeState{BRAKE_ON, BRAKE_OFF};
-
 
 #endif
