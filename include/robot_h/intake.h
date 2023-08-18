@@ -19,6 +19,6 @@ extern void spinIntake(int intakeVolt);
 extern void stopIntake(pros::motor_brake_mode_e_t newIntakeBrakeMode);
 
 // Opcontrol function 
-extern void intakeControl();
+extern void intakeOpControl();
 
 #endif

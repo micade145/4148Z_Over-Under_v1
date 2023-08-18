@@ -40,6 +40,7 @@
 #include "robot_h/robot_config.h"
 #include "robot_h/drive.h"
 #include "robot_h/intake.h"
+#include "robot_h/misc.h"
 
 #include "myLib_h/constants.h"
 #include "myLib_h/robotStates.h"

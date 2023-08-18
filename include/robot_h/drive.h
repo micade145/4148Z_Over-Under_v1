@@ -5,13 +5,12 @@
 // Helper function
 extern void setDrive(int leftVolt, int rightVolt);
 
-// Driver control functions 
+// Opcontrol functions 
 extern void splitArcade();
 extern void curveSplitArcade();
-
-// PTO function
+// PTO 
 extern bool sixMotorMode;
-extern void drivePTOControl();
+extern void drivePtoOpControl();
 
 // Drive brake modes
 extern void driveCoast();

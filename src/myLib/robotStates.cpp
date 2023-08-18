@@ -6,7 +6,7 @@ void stateHandler() {
     while(true) {
     // Drive state handler
     if(states.driveStateChanged()) {
-        if(states.driveStateIs(states.TWO_MOTOR)) {
+        if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
             drivePTO.set_value(false);  // piston retracted, 2 motor mode
             // Test
             leftFrontDrive.set_voltage_limit(1000);
@@ -16,7 +16,7 @@ void stateHandler() {
             pros::screen::set_pen(COLOR_RED);
             pros::screen::fill_rect(5,5,240,200);
         }
-        else if(states.driveStateIs(states.SIX_MOTOR)) {
+        else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
             drivePTO.set_value(true);   // piston expanded, 6 motor mode
             // Test
             leftFrontDrive.set_voltage_limit(10000);
@@ -42,6 +42,7 @@ void stateHandler() {
             if(openCount > INTAKE_OPEN_THRESHOLD) {
                 stopIntake(pros::E_MOTOR_BRAKE_HOLD);
                 states.oldIntakeState = states.intakeState;
+                openCount = 0;
             }
             openCount++;
             closeCount = 0;
@@ -52,6 +53,7 @@ void stateHandler() {
             if(closeCount > INTAKE_CLOSE_THRESHOLD) {
                 stopIntake(pros::E_MOTOR_BRAKE_HOLD);
                 states.oldIntakeState = states.intakeState;
+                closeCount = 0;
             }
             closeCount++;
             openCount = 0;
@@ -63,7 +65,7 @@ void stateHandler() {
     if(states.puncherStateChanged()) {
         if(states.puncherStateIs(stateMachine::puncher_state::FIVE_MOTOR_MODE)) {
            if(states.puncherStateIs(stateMachine::puncher_state::FIRE)) {
-
+            
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
                 // need pullback to be asynchronous
@@ -134,6 +136,7 @@ void stateHandler() {
             rightParkingBrake.set_value(false);
         }
         else if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_ON)) {
+            states.setDriveState(stateMachine::drive_state::OFF);
             leftParkingBrake.set_value(true);
             rightParkingBrake.set_value(true);
         }

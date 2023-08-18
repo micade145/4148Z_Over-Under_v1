@@ -39,4 +39,5 @@ pros::ADIDigitalOut leftWing('D', false);
 pros::ADIDigitalOut rightWing('E', false);
 pros::ADIDigitalOut leftParkingBrake('F', false);
 pros::ADIDigitalOut rightParkingBrake('G', false);
+pros::ADIDigitalOut stick('H', false);
 

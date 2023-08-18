@@ -21,7 +21,13 @@ void splitArcade() {
     // Deadzone
     if(fabs(forwardPower) <= 15) { forwardPower = 0;}
     if(fabs(turnPower) <= 15) { turnPower = 0;}
-    setDrive(forwardPower + turnPower, forwardPower - turnPower);
+    // if(!(states.parkingBrakeStateIs(stateMachine::parking_brake_state::READY)) && (turnPower < 15 || forwardPower < 15)) {
+    //     states.setParkingBrakeState(stateMachine::parking_brake_state::READY);
+    // }
+
+    if(!states.driveStateIs(stateMachine::drive_state::OFF)) {
+        setDrive(forwardPower + turnPower, forwardPower - turnPower);
+    }
 }
 
 void curveSplitArcade() {
@@ -30,7 +36,7 @@ void curveSplitArcade() {
 
 // PTO function
 bool sixMotorMode = false;
-void drivePTOControl() {
+void drivePtoOpControl() {
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
         sixMotorMode = !sixMotorMode;
     }
