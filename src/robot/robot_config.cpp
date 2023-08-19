@@ -8,6 +8,7 @@ bool isRed = false;
 
 // Robot
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
+pros::Controller controller2(pros::E_CONTROLLER_PARTNER);
 
 // Drive Motors
 pros::Motor leftFrontDrive(9, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);
@@ -21,7 +22,8 @@ pros::Motor rightFrontDrive(10, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENC
 // pros::Motor_Group leftDrive({leftFrontDrive, leftMidDrive, leftBackDrive});
 // pros::Motor_Group rightDrive({rightFrontDrive, rightMidDrive, rightBackDrive});
 
-// Misc Motors
+// Other motors
+pros::Motor puncher(11, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_COUNTS);
 pros::Motor rightIntake(8, false);
 pros::Motor leftIntake(7, true);
 

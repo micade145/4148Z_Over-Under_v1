@@ -10,6 +10,7 @@ extern bool isRed;
 
 // Robot
 extern pros::Controller controller;
+extern pros::Controller controller2;
 
 // Drive Motors
 extern pros::Motor leftFrontDrive;
@@ -23,7 +24,8 @@ extern pros::Motor rightBackDrive;
 extern pros::Motor_Group leftDrive;
 extern pros::Motor_Group rightDrive;
 
-// Misc Motors
+// Other motors
+extern pros::Motor puncher;
 extern pros::Motor rightIntake;
 extern pros::Motor leftIntake;
 

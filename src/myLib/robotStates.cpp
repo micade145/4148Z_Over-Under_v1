@@ -65,7 +65,7 @@ void stateHandler() {
     if(states.puncherStateChanged()) {
         if(states.puncherStateIs(stateMachine::puncher_state::FIVE_MOTOR_MODE)) {
            if(states.puncherStateIs(stateMachine::puncher_state::FIRE)) {
-            
+
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
                 // need pullback to be asynchronous
