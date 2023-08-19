@@ -2,13 +2,14 @@
 #define INTAKE_H
 #include "main.h"
 
+// Constants
+extern int INTAKE_CLOSE_THRESHOLD;
+extern int INTAKE_OPEN_THRESHOLD;
+
 // Variables
 extern int openCount;
 extern int closeCount;
 
-// Constants
-extern int INTAKE_CLOSE_THRESHOLD;
-extern int INTAKE_OPEN_THRESHOLD;
 
 // Spin intake
 /*! @param intakeVolt Intake voltage from 127 to -127 */

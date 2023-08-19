@@ -23,7 +23,7 @@ pros::Motor rightFrontDrive(10, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENC
 // pros::Motor_Group rightDrive({rightFrontDrive, rightMidDrive, rightBackDrive});
 
 // Other motors
-pros::Motor puncher(11, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor puncher(6, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_COUNTS);
 pros::Motor rightIntake(8, false);
 pros::Motor leftIntake(7, true);
 

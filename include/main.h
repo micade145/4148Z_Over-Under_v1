@@ -41,6 +41,7 @@
 #include "robot_h/drive.h"
 #include "robot_h/intake.h"
 #include "robot_h/misc.h"
+#include "robot_h/puncher.h"
 
 #include "myLib_h/constants.h"
 #include "myLib_h/robotStates.h"

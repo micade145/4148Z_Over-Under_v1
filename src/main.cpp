@@ -26,6 +26,8 @@ void initialize() {
 	// pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
 
+	puncher.tare_position();
+	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	// pros::lcd::register_btn1_cb(on_center_button);
 }
 
@@ -73,8 +75,15 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+pros::Task superstruct(stateHandler);
+// pros::Task puncherStateTask(puncherTask);
 void opcontrol() {
-	pros::Task superstruct(stateHandler);
+	// states.setPuncherState(stateMachine::puncher_state::SHORT_PULLBACK);
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
+	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+	states.setPuncherState(states.defaultPullback);
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
 	while (true) {
 		// Drive controls
 		splitArcade();
@@ -83,11 +92,15 @@ void opcontrol() {
 		// Intake controls
 		intakeOpControl();
 
+		// Puncher controls
+		puncherOpControl();
+		puncherAngleOpControl();
+
 		// Wing toggle
-		// wingOpControl();
+		wingOpControl();
 
 		// Parking Brake toggle
-		// parkingBrakeOpControl();
+		parkingBrakeOpControl();
 
 		pros::delay(20);
 	}

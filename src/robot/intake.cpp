@@ -1,12 +1,12 @@
 #include "robot_h/intake.h"
 
-// Variables
-int openCount = 0;
-int closeCount = 0;
-
 // Constants
 int INTAKE_CLOSE_THRESHOLD = 15;
 int INTAKE_OPEN_THRESHOLD = 15;
+
+// Variables
+int openCount = 0;
+int closeCount = 0;
 
 // Intake helper functions
 void spinIntake(int intakeVolt) {
@@ -37,21 +37,17 @@ void intakeOpControl() {
     else {
         if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
             intakeClosed = !intakeClosed;
-            // if(intakeClosed) {
-            //     intakeClosed = false;
-            // } else {intakeClosed = true;}
         }
 
         if(intakeClosed) {
             states.setIntakeState(stateMachine::intake_state::CLOSED); 
-            pros::screen::print(TEXT_MEDIUM_CENTER, 6, "SHOULD BE CLOSE");
+            // pros::screen::print(TEXT_MEDIUM_CENTER, 6, "SHOULD BE CLOSE");
         }
         else {
             states.setIntakeState(stateMachine::intake_state::OPEN);
-            pros::screen::print(TEXT_MEDIUM_CENTER, 6, "SHOULD BE OPEN");
+            // pros::screen::print(TEXT_MEDIUM_CENTER, 6, "SHOULD BE OPEN");
         }
     }
-
 }
 
 

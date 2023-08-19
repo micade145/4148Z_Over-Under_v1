@@ -4,8 +4,8 @@
 void setDrive(int leftVolt, int rightVolt) {
     if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
         // only two motors
-        // leftFrontDrive.move(leftVolt);
-        // rightFrontDrive.move(rightVolt);
+        leftFrontDrive.move(leftVolt);
+        rightFrontDrive.move(rightVolt);
     }
     else {
         // all motors
@@ -25,9 +25,10 @@ void splitArcade() {
     //     states.setParkingBrakeState(stateMachine::parking_brake_state::READY);
     // }
 
-    if(!states.driveStateIs(stateMachine::drive_state::OFF)) {
-        setDrive(forwardPower + turnPower, forwardPower - turnPower);
-    }
+    setDrive(forwardPower + turnPower, forwardPower - turnPower);
+    // if(!states.driveStateIs(stateMachine::drive_state::OFF)) {
+        // setDrive(forwardPower + turnPower, forwardPower - turnPower);
+    // }
 }
 
 void curveSplitArcade() {
@@ -37,7 +38,7 @@ void curveSplitArcade() {
 // PTO function
 bool sixMotorMode = false;
 void drivePtoOpControl() {
-    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
         sixMotorMode = !sixMotorMode;
     }
     if(sixMotorMode) { 
