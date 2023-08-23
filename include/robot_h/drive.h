@@ -2,6 +2,10 @@
 #define DRIVE_H
 #include "main.h"
 
+// Drive constants 
+extern double TURN_SENS;
+extern double DRIVE_BRAKE_THRESHOLD;
+
 // Helper function
 extern void setDrive(int leftVolt, int rightVolt);
 

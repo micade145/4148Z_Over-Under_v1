@@ -2,6 +2,9 @@
 #define MISC_H
 #include "main.h"
 
+// Parking brake variables
+extern bool brakeReady;
+
 // Wing Opcontrol 
 extern void wingOpControl();
 

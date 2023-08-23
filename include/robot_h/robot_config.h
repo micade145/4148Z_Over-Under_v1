@@ -2,7 +2,7 @@
 #define ROBOT_CONFIG_H
 #include "main.h"
 
-// Alliance color 
+// Alliance color
 extern bool isRed;
 
 // Constants
@@ -21,8 +21,10 @@ extern pros::Motor rightMidDrive;
 extern pros::Motor rightBackDrive;
 
 // Drive Motor Groups
-extern pros::Motor_Group leftDrive;
-extern pros::Motor_Group rightDrive;
+// extern pros::Motor_Group leftFullDrive;
+// extern pros::Motor_Group rightFullDrive;
+extern pros::Motor_Group ptoLeftSide;
+extern pros::Motor_Group ptoRightSide;
 
 // Other motors
 extern pros::Motor puncher;
@@ -30,10 +32,11 @@ extern pros::Motor rightIntake;
 extern pros::Motor leftIntake;
 
 // // Sensors
-// extern pros::Imu inertial;
-// extern pros::Vision vision;
-// extern pros::Rotation frontEnc;
-// extern pros::Rotation sideEnc;
+extern pros::Imu inertial;
+extern pros::Vision vision;
+extern pros::Rotation puncherEnc;
+extern pros::Rotation frontEnc;
+extern pros::Rotation sideEnc;
 
 // // Pneumatics (Digital I/O)
 extern pros::ADIDigitalOut drivePTO;

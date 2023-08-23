@@ -1,5 +1,7 @@
 #include "robot_h/misc.h"
 
+bool brakeReady = false;
+
 // Wing opcontrol
 bool wingsOut = false;
 void wingOpControl() {
@@ -17,21 +19,15 @@ void wingOpControl() {
 // Parking brake opcontrol
 bool parkingBrakeOn = false;
 void parkingBrakeOpControl() {
-    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-        parkingBrakeOn = !parkingBrakeOn;
+    if(brakeReady) {
+        if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+            parkingBrakeOn = !parkingBrakeOn;
+        }
+        if(parkingBrakeOn) {
+            states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_ON);
+        }
+        else {
+            states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
+        }
     }
-    if(parkingBrakeOn && states.parkingBrakeStateIs(stateMachine::parking_brake_state::READY)) {
-        states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_ON);
-    }
-    else {
-        states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_ON);
-    }
-    // if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::READY)) {
-    //     if(parkingBrakeOn) {
-    //         states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_ON);
-    //     }
-        // else {
-        //     states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
-        // }
-    // }
 }

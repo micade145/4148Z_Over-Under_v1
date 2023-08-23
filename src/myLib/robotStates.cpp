@@ -25,10 +25,6 @@ void stateHandler() {
             // Test
             leftFrontDrive.set_voltage_limit(10000);
             rightFrontDrive.set_voltage_limit(10000);
-            // pros::screen::set_eraser(COLOR_BLACK);
-            // pros::screen::erase();
-            // pros::screen::set_pen(COLOR_BLUE);
-            // pros::screen::fill_rect(5,5,240,200);
         }
         states.oldDriveState = states.driveState;
     }
@@ -45,8 +41,8 @@ void stateHandler() {
             spinIntake(-65);
             if(openCount > INTAKE_OPEN_THRESHOLD) {
                 stopIntake(pros::E_MOTOR_BRAKE_HOLD);
-                states.oldIntakeState = states.intakeState;
                 openCount = 0;
+                states.oldIntakeState = states.intakeState;
             }
             openCount++;
             closeCount = 0;
@@ -56,8 +52,8 @@ void stateHandler() {
             spinIntake(65);
             if(closeCount > INTAKE_CLOSE_THRESHOLD) {
                 stopIntake(pros::E_MOTOR_BRAKE_HOLD);
-                states.oldIntakeState = states.intakeState;
                 closeCount = 0;
+                states.oldIntakeState = states.intakeState;
             }
             closeCount++;
             openCount = 0;
@@ -89,14 +85,7 @@ void stateHandler() {
                     puncher.brake();
                     puncher.tare_position();
                     puncherCloseCount = puncherOpenCount = puncherPauseCount = 0;
-                    // if(states.defaultPullback == stateMachine::puncher_state::SHORT_PULLBACK) {
-                    //     states.setPuncherState(stateMachine::puncher_state::SHORT_PULLBACK);
-                    // }
-                    // else if(states.defaultPullback == stateMachine::puncher_state::MID_PULLBACK) {
-                    //     states.setPuncherState(stateMachine::puncher_state::MID_PULLBACK);
-                    // }
                     states.setPuncherState(states.defaultPullback);
-                    
                 }
                 // if(!firstPuncherLoop) {
                 //     puncher.move_absolute(-300, 100);
@@ -116,6 +105,7 @@ void stateHandler() {
             if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "SHORT PULLBACK");
                 puncher.move_absolute(SHORT_PULLBACK_TICKS, 100);
+                // setPuncher(127);
                 if(puncher.get_position() > (SHORT_PULLBACK_TICKS - 5)) {
                     puncher.brake();
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
@@ -124,6 +114,7 @@ void stateHandler() {
             else if(states.puncherStateIs(stateMachine::puncher_state::MID_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "MID PULLBACK");
                 puncher.move_absolute(MID_PULLBACK_TICKS, 100);
+                // setPuncher(127);
                 if(puncher.get_position() > (MID_PULLBACK_TICKS - 5)) {
                     puncher.brake();
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
@@ -132,6 +123,7 @@ void stateHandler() {
             else if(states.puncherStateIs(stateMachine::puncher_state::LONG_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "LONG PULLBACK");
                 puncher.move_absolute(LONG_PULLBACK_TICKS, 100);
+                // setPuncher(127);
                 if(puncher.get_position() > (LONG_PULLBACK_TICKS - 5)) {
                     puncher.brake();
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
@@ -193,13 +185,19 @@ void stateHandler() {
         }
         else if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_ON)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");
-            // states.setDriveState(stateMachine::drive_state::OFF);
             leftParkingBrake.set_value(true);
             rightParkingBrake.set_value(true);
         }
         states.oldParkingBrakeState = states.parkingBrakeState;
     }
-
+    if((std::abs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::abs(rightFrontDrive.get_actual_velocity() < DRIVE_BRAKE_THRESHOLD))) {
+        brakeReady = true;
+    } 
+    else {
+        brakeReady = false;
+    }
+    pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", leftFrontDrive.get_actual_velocity());
+    pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
     // necessary task delay - do not change
         pros::delay(20);
     }

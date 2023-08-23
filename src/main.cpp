@@ -76,11 +76,9 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 pros::Task superstruct(stateHandler);
-// pros::Task puncherStateTask(puncherTask);
 void opcontrol() {
-	// states.setPuncherState(stateMachine::puncher_state::SHORT_PULLBACK);
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
-	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
 	states.setPuncherState(states.defaultPullback);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
