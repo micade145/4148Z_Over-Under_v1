@@ -28,8 +28,8 @@ extern pros::Motor_Group ptoRightSide;
 
 // Other motors
 extern pros::Motor puncher;
-extern pros::Motor rightIntake;
 extern pros::Motor leftIntake;
+extern pros::Motor rightIntake;
 
 // // Sensors
 extern pros::Imu inertial;

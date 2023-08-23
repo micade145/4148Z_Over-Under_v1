@@ -77,14 +77,16 @@ void autonomous() {}
  */
 pros::Task superstruct(stateHandler);
 void opcontrol() {
-	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
+	states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
 	states.setPuncherState(states.defaultPullback);
-	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
+	states.setWingState(stateMachine::wing_state::STOWED);
+	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
 	while (true) {
 		// Drive controls
-		splitArcade();
+		splitArcade(pros::E_MOTOR_BRAKE_COAST);
 		drivePtoOpControl();
 
 		// Intake controls

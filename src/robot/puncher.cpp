@@ -22,22 +22,23 @@ void setPuncher(int puncherVolt) {
         ptoLeftSide.move(puncherVolt);
         ptoRightSide.move(puncherVolt);
         }
-        
     }
 }
-void stopPuncher(pros::motor_brake_mode_e_t puncherBrakeMode) {
+void setPuncherBrakeMode(pros::motor_brake_mode_e puncherBrakeMode) {
     puncher.set_brake_mode(puncherBrakeMode);
+    if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
+        ptoLeftSide.set_brake_modes(puncherBrakeMode);
+        ptoRightSide.set_brake_modes(puncherBrakeMode);
+    }
+}
+void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode) {
+    setPuncherBrakeMode(puncherBrakeMode);
     puncher.brake();
     if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
         // Stop 4 drive motors alongside puncher motor
-        ptoLeftSide.set_brake_modes(puncherBrakeMode);
-        ptoRightSide.set_brake_modes(puncherBrakeMode);
         ptoLeftSide.brake();
         ptoRightSide.brake();
     }
-    // else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
-    //     // Stop only puncher motor
-    // }
 }
 
 void firePuncher(int numTimes) {

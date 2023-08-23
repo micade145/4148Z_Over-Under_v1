@@ -18,7 +18,8 @@ extern int puncherPauseCount;
 
 // Helper functions
 extern void setPuncher(int puncherVolt);
-extern void stopPuncher(pros::motor_brake_mode_e_t puncherBrakeMode);
+extern void setPuncherBrakeMode(pros::motor_brake_mode_e puncherBrakeMode);
+extern void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode);
 
 // Puncher 
 extern void puncherTask();

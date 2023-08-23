@@ -38,9 +38,9 @@ void stateHandler() {
             states.oldIntakeState = states.intakeState;
         }
         else if(states.intakeStateIs(stateMachine::intake_state::OPEN)) {
-            spinIntake(-65);
+            spinIntake(-85);    // -65
             if(openCount > INTAKE_OPEN_THRESHOLD) {
-                stopIntake(pros::E_MOTOR_BRAKE_HOLD);
+                stopIntake(pros::E_MOTOR_BRAKE_BRAKE);
                 openCount = 0;
                 states.oldIntakeState = states.intakeState;
             }
@@ -49,9 +49,9 @@ void stateHandler() {
             pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE OPEN");
         }
         else if(states.intakeStateIs(stateMachine::intake_state::CLOSED)) {
-            spinIntake(65);
+            spinIntake(85); //65
             if(closeCount > INTAKE_CLOSE_THRESHOLD) {
-                stopIntake(pros::E_MOTOR_BRAKE_HOLD);
+                stopIntake(pros::E_MOTOR_BRAKE_BRAKE);
                 closeCount = 0;
                 states.oldIntakeState = states.intakeState;
             }
@@ -104,28 +104,31 @@ void stateHandler() {
             
             if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "SHORT PULLBACK");
-                puncher.move_absolute(SHORT_PULLBACK_TICKS, 100);
-                // setPuncher(127);
+                // puncher.move_absolute(SHORT_PULLBACK_TICKS, 100);
+                setPuncher(127);
                 if(puncher.get_position() > (SHORT_PULLBACK_TICKS - 5)) {
-                    puncher.brake();
+                    // puncher.brake();
+                    stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::MID_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "MID PULLBACK");
-                puncher.move_absolute(MID_PULLBACK_TICKS, 100);
-                // setPuncher(127);
+                // puncher.move_absolute(MID_PULLBACK_TICKS, 100);
+                setPuncher(127);
                 if(puncher.get_position() > (MID_PULLBACK_TICKS - 5)) {
-                    puncher.brake();
+                    // puncher.brake();
+                    stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::LONG_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "LONG PULLBACK");
-                puncher.move_absolute(LONG_PULLBACK_TICKS, 100);
-                // setPuncher(127);
+                // puncher.move_absolute(LONG_PULLBACK_TICKS, 100);
+                setPuncher(127);
                 if(puncher.get_position() > (LONG_PULLBACK_TICKS - 5)) {
-                    puncher.brake();
+                    // puncher.brake();
+                    stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
             }

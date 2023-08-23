@@ -8,12 +8,13 @@ extern double DRIVE_BRAKE_THRESHOLD;
 
 // Helper function
 extern void setDrive(int leftVolt, int rightVolt);
+extern void setDriveBrakeMode(pros::motor_brake_mode_e driveBrakeMode);
+extern void stopDrive(pros::motor_brake_mode_e driveBrakeMode);
 
 // Opcontrol functions 
-extern void splitArcade();
+extern void splitArcade(pros::motor_brake_mode_e driveBrakeMode);
 extern void curveSplitArcade();
 // PTO 
-extern bool sixMotorMode;
 extern void drivePtoOpControl();
 
 // Drive brake modes
