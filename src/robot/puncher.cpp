@@ -74,8 +74,8 @@ void puncherOpControl() {
         }
     }
 
-    pros::screen::print(TEXT_MEDIUM_CENTER, 9, "punchPullback: %d", punchPullback);
-    pros::screen::print(TEXT_MEDIUM_CENTER, 10, "lastPunchPullback: %d", lastPunchPullback);
+    pros::screen::print(TEXT_MEDIUM_CENTER, 9, "punchPullback: %d, last: %d", punchPullback, lastPunchPullback);
+
     // Assigns puncher pullback to respective punchPullback (1 = (Default) SHORT, 2 = MID, 3 = LONG)
     if(lastPunchPullback != punchPullback) {
         if(punchPullback == 2) {

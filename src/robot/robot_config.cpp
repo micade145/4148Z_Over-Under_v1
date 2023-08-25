@@ -14,7 +14,7 @@ pros::Controller controller2(pros::E_CONTROLLER_PARTNER);
 pros::Motor leftFrontDrive(2, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_COUNTS);    // BASE DRIVE
 pros::Motor leftMidDrive(3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);     // PTO
 pros::Motor leftBackDrive(4, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_COUNTS);    // PTO
-pros::Motor rightFrontDrive(9, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);   // BASE DRIVE
+pros::Motor rightFrontDrive(9, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);   // BASE DRIVE
 pros::Motor rightMidDrive(8, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_COUNTS);    // PTO
 pros::Motor rightBackDrive(7, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);   // PTO
 
@@ -30,10 +30,10 @@ pros::Motor leftIntake(1, true);
 pros::Motor rightIntake(10, false);
 
 // // Sensors
-pros::Imu inertial(16);
+pros::Imu inertial(5);
 // pros::Vision vision;
 pros::Rotation puncherEnc(17, false);
-pros::Rotation frontEnc(18, false);
+pros::Rotation frontEnc(16, false);
 // pros::Rotation sideEnc;
 
 // // Pneumatics (Digital I/O)
