@@ -193,13 +193,13 @@ void stateHandler() {
         }
         states.oldParkingBrakeState = states.parkingBrakeState;
     }
-    if((std::abs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::abs(rightFrontDrive.get_actual_velocity() < DRIVE_BRAKE_THRESHOLD))) {
+    if((std::fabs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::fabs(rightFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD)) {
         brakeReady = true;
     } 
     else {
         brakeReady = false;
     }
-    pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", leftFrontDrive.get_actual_velocity());
+    pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
     pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
     // necessary task delay - do not change
         pros::delay(20);

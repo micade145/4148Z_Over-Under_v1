@@ -6,9 +6,18 @@
 extern double DRIVE_INCH_TO_DEG;
 extern double DRIVE_DEG_TO_INCH;
 
+// Global variables
+extern double drive_target;
+extern int max_drive_power;
+extern double turn_target;
+extern int max_turn_power;
+
+extern void setDrivePID(double target, int maxDrivePower, double turnTarget, int maxTurnPower);
+
 // Auto movement
-extern void Move(double driveTarget, double maxDrivePower, double turnTarget, double maxTurnPower, 
-          int maxTime, bool driveSlew, bool turnSlew);
+// extern void move(double driveTarget, double maxDrivePower, double turnTarget, double maxTurnPower, 
+//           int maxTime, bool driveSlew, bool turnSlew);
+extern void move();
 
 extern void Turn(double targetAngle, double maxTurnPower, int maxTime);
 

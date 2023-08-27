@@ -6,14 +6,14 @@
 // extern double SIDE_ENC_OFFSET;
 // extern double LEFT_ENC_OFFSET;
 
-// // Point class
+// Point class
 // class Point {
 //   public:
 //     double x;
 //     double y;
 //     double theta;
 
-//     void setPoint(double new_x, double new_y, double new_theta) {
+//    void setPoint(double new_x, double new_y, double new_theta) {
 //     x = new_x;
 //     y = new_y;
 //     theta = new_theta;

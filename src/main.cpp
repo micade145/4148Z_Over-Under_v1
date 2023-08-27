@@ -60,7 +60,9 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -76,14 +78,20 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 pros::Task superstruct(stateHandler);
+pros::Task driveTask(move);
 void opcontrol() {
-	states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
 	states.setPuncherState(states.defaultPullback);
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
 	states.setWingState(stateMachine::wing_state::STOWED);
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
+	pros::delay(2000);
+	// move(5000, 100, 0, 0, 5000, false, false);
+	setDrivePID(2000, 100, 0, 0);
+	pros::delay(5000);
 	while (true) {
 		// Drive controls
 		splitArcade(pros::E_MOTOR_BRAKE_COAST);
