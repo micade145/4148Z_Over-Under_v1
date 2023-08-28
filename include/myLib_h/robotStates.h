@@ -12,7 +12,9 @@ public:
     enum puncher_angle_state {STEEP, MID, FLAT, DOWN} puncherAngleState, oldPuncherAngleState;
     enum wing_state {OUT, STOWED} wingState, oldWingState;
     enum parking_brake_state {BRAKE_ON, BRAKE_OFF} parkingBrakeState, oldParkingBrakeState;
-    // Misc states
+    // Drive auto states
+    enum drive_auto_state{MOVE, TURN, MOVE_TO_POINT} driveAutoState;
+    // Alliance color
     enum alliance_color {RED_ALLIANCE, BLUE_ALLIANCE} allianceColor, oldAllianceColor; 
 
     // Drive
@@ -50,7 +52,11 @@ public:
     // int getParkingBrakeState() {return parkingBrakeState;}
     bool parkingBrakeStateIs(parking_brake_state s) {return(s == parkingBrakeState);}
     bool parkingBrakeStateChanged() {return(oldParkingBrakeState != parkingBrakeState);}
-        
+    
+    // Drive auto states
+    void setDriveAutoState(drive_auto_state s) {driveAutoState = s;}
+    bool driveAutoStateIs(drive_auto_state s) {return(s == driveAutoState);}
+
     // Alliance color
     void setAllianceColor(alliance_color s) {allianceColor = s;}
     bool allianceColorIs(alliance_color s) {return(s == allianceColor);}

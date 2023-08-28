@@ -81,10 +81,43 @@ PID turnPID(1, 0);
 //         pros::delay(20);
 //     }
 // }
+void autoMovement() {
+    while(true) {
+        if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE)) {
+            move();
+        }
+        else if(states.driveAutoStateIs(stateMachine::drive_auto_state::TURN)) {
+            turn();
+        }
+        else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE_TO_POINT)) {
+            moveToPoint();
+        }
+        pros::delay(20);
+    }
+}
+
+void turn();
+void moveToPoint();
+
 double drive_target;
 int max_drive_power;
 double turn_target;
 int max_turn_power;
+
+void setMoveTarget(double target, int maxDrivePower, double turnTarget, int maxTurnPower) {
+    states.setDriveAutoState(stateMachine::drive_auto_state::MOVE);
+    rightFrontDrive.tare_position();
+    drive_target = target;
+    max_drive_power = maxDrivePower;
+    turn_target = turnTarget;
+    max_turn_power = maxTurnPower;
+}
+void setTurnTarget(double targetAngle, double maxTurnPower, int maxTime) {
+
+}
+void setMoveToPointTarget(double targetX, double targetY, double endOrientation, double maxTranslatePower, double maxRotatePower, double maxOrientPower, int maxTime) {
+    
+}
 
 void setDrivePID(double target, int maxDrivePower, double turnTarget, int maxTurnPower) {
     rightFrontDrive.tare_position();

@@ -17,7 +17,10 @@ extern void setDrivePID(double target, int maxDrivePower, double turnTarget, int
 // Auto movement
 // extern void move(double driveTarget, double maxDrivePower, double turnTarget, double maxTurnPower, 
 //           int maxTime, bool driveSlew, bool turnSlew);
+extern void autoMovement();
 extern void move();
+extern void turn();
+extern void moveToPoint();
 
 extern void Turn(double targetAngle, double maxTurnPower, int maxTime);
 
