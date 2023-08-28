@@ -78,7 +78,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 pros::Task superstruct(stateHandler);
-pros::Task driveTask(auto_chassis::autoMovementTask);
+pros::Task driveTask(autoMovementTask);
 void opcontrol() {
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
@@ -89,7 +89,7 @@ void opcontrol() {
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
 	pros::delay(2000);
-	auto_chassis::setMove(2000, 100, 0, 0, 5000, false, false);
+	setMove(2000, 100, 0, 0, 5000, false, false);
 	pros::delay(5000);
 	while (true) {
 		// Drive controls

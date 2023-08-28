@@ -27,7 +27,8 @@ double max_translate_power;
 double max_rotate_power;
 double max_orient_power;
 
-// Universal max time
+// Universal variables 
+bool driveSettled = false;
 int max_time;
 
 
@@ -42,9 +43,10 @@ void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTu
     max_turn_power = maxTurnPower;
     max_time = maxTime;
     // Set slew
-    drive_slew = driveSlew;
-    turn_slew = turnSlew;
+    driveSlew ? drive_slew = true : drive_slew = false;
+    turnSlew  ? turn_slew = true : turn_slew = false;
     // Set state
+    driveSettled = false;
     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE);
 }
 void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew) {
@@ -55,8 +57,9 @@ void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew)
     max_turn_power = maxTurnPower;
     max_time = maxTime;
     // Set slew
-    turn_slew = turnSlew;
+    turnSlew  ? turn_slew = true : turn_slew = false;
     // Set state
+    driveSettled = false;
     states.setDriveAutoState(stateMachine::drive_auto_state::TURN);
 }
 void setMoveToPoint(double targetX, double targetY, double endOrientation, double maxTranslatePower, 
@@ -72,6 +75,7 @@ void setMoveToPoint(double targetX, double targetY, double endOrientation, doubl
     max_orient_power = maxOrientPower;
     max_time = maxTime;
     // Set state
+    driveSettled = false;
     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
 }   
 
@@ -102,7 +106,6 @@ void move() {
     int startTime = pros::c::millis();
     int driveTimer;
     // Local variables 
-    bool driveSettled = false;
     int driveError, turnError;
     int drivePower, turnPower;
     int driveSlewRate, turnSlewRate, tempDriveMax, tempTurnMax;
@@ -168,8 +171,14 @@ void move() {
         pros::delay(20);
     }
 }
-void turn();
-void moveToPoint();
+
+void turn() {
+
+}
+
+void moveToPoint() {
+
+}
 
 
 // the archive :(

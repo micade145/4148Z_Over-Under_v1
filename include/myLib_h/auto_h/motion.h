@@ -2,14 +2,14 @@
 #define MOTION_H
 #include "main.h"
 
-namespace auto_chassis {
+// namespace auto_chassis {
 // Constants //
 extern double DRIVE_INCH_TO_DEG;
 extern double DRIVE_DEG_TO_INCH;
 
-// PID objects //
-extern PID drivePID;
-extern PID turnPID;
+// // PID objects (doesn't work)
+// extern PID drivePID;
+// extern PID turnPID;
 
 // Movement variables //
 // move() variables
@@ -23,12 +23,12 @@ extern int max_drive_power;
 extern int max_turn_power;
 
 // moveToPoint() variables
-double target_x;
-double target_y;
-double end_orientation;
-double max_translate_power;
-double max_rotate_power;
-double max_orient_power;
+extern double target_x;
+extern double target_y;
+extern double end_orientation;
+extern double max_translate_power;
+extern double max_rotate_power;
+extern double max_orient_power;
 
 // Universal max time
 extern int max_time;
@@ -46,7 +46,7 @@ extern void autoMovementTask();
 extern void move();
 extern void turn();
 extern void moveToPoint();
-}
+// }
 
 // extern void move(double driveTarget, double maxDrivePower, double turnTarget, double maxTurnPower, 
 //           int maxTime, bool driveSlew, bool turnSlew);
