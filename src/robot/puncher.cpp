@@ -73,7 +73,6 @@ void puncherOpControl() {
             punchPullback ++;
         }
     }
-
     pros::screen::print(TEXT_MEDIUM_CENTER, 9, "punchPullback: %d, last: %d", punchPullback, lastPunchPullback);
 
     // Assigns puncher pullback to respective punchPullback (1 = (Default) SHORT, 2 = MID, 3 = LONG)
@@ -101,11 +100,16 @@ void puncherOpControl() {
 
 int punchAngle = 1;
 int lastPunchAngle = 1;
+int maxPunchAngle = 4;
 void puncherAngleOpControl() {
     // Buttons to increment punchAngle up and down
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-        punchAngle ++;
-        if(punchAngle > 4) {punchAngle = 4;}
+        // Limit max puncher angle 
+        punchPullback == 3 ? maxPunchAngle = 3 : maxPunchAngle = 4;
+        // Only increment if punch anlge it will be less than / equal to max 
+        if((punchAngle + 1) <= maxPunchAngle) {
+            punchAngle ++;
+        }
     }
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         punchAngle --;
