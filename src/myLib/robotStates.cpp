@@ -3,6 +3,7 @@
 stateMachine states;
 bool firstPuncherLoop = false;
 bool puncherClosePhase = false;
+
 void stateHandler() {
     while(true) {
     // Drive state handler
