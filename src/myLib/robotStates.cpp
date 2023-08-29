@@ -12,8 +12,8 @@ void stateHandler() {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "TWO MOTOR DRIVE");
             drivePTO.set_value(false);  // piston retracted, 2 motor mode
             // Test
-            leftFrontDrive.set_voltage_limit(1000);
-            rightFrontDrive.set_voltage_limit(1000);
+            // leftFrontDrive.set_voltage_limit(1000);
+            // rightFrontDrive.set_voltage_limit(1000);
 
             // pros::screen::set_eraser(COLOR_BLACK);
             // pros::screen::erase();
@@ -24,8 +24,8 @@ void stateHandler() {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "SIX MOTOR DRIVE");
             drivePTO.set_value(true);   // piston expanded, 6 motor mode
             // Test
-            leftFrontDrive.set_voltage_limit(10000);
-            rightFrontDrive.set_voltage_limit(10000);
+            // leftFrontDrive.set_voltage_limit(10000);
+            // rightFrontDrive.set_voltage_limit(10000);
         }
         states.oldDriveState = states.driveState;
     }

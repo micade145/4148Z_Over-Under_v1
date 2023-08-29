@@ -13,7 +13,7 @@ public:
     enum wing_state {OUT, STOWED} wingState, oldWingState;
     enum parking_brake_state {BRAKE_ON, BRAKE_OFF} parkingBrakeState, oldParkingBrakeState;
     // Drive auto states
-    enum drive_auto_state{MOVE, TURN, MOVE_TO_POINT} driveAutoState;
+    enum drive_auto_state{MOVE, TURN, MOVE_TO_POINT, OFF} driveAutoState;
     // Alliance color
     enum alliance_color {RED_ALLIANCE, BLUE_ALLIANCE} allianceColor, oldAllianceColor; 
 

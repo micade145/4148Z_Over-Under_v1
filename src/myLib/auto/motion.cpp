@@ -3,6 +3,10 @@
 // Constants 
 double DRIVE_INCH_TO_DEG;
 double DRIVE_DEG_TO_INCH;
+int DRIVE_SLEW_RATE = 5;    // change later
+int TURN_SLEW_RATE = 5;
+double DRIVE_SETTLE_THRESHOLD = 5;  // tune later (inches or degrees or counts??)
+double TURN_SETTLE_THRESHOLD = 3;   // Degrees
 
 // Drive PID objects
 PID drivePID(1, 0);
@@ -77,25 +81,37 @@ void setMoveToPoint(double targetX, double targetY, double endOrientation, doubl
     // Set state
     driveSettled = false;
     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
-}   
-
+}
 
 // Auto movement task
 void autoMovementTask() {
     while(true) {
-        if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE)) {
-            move();
-        }
-        else if(states.driveAutoStateIs(stateMachine::drive_auto_state::TURN)) {
-            turn();
-        }
-        else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE_TO_POINT)) {
-            moveToPoint();
+        if(!states.driveAutoStateIs(stateMachine::drive_auto_state::OFF)) {
+           if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE)) {
+                move();
+            }
+            else if(states.driveAutoStateIs(stateMachine::drive_auto_state::TURN)) {
+                turn();
+            }
+            else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE_TO_POINT)) {
+                moveToPoint();
+            } 
         }
         pros::delay(20);
     }
 }
-
+// Wait for drive completion
+void waitUntilSettled(int msecDelay) {
+    while(!driveSettled) {
+        pros::delay(20);
+    }
+    pros::delay(20);
+    driveSettled = false;
+    states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+    drive_target = turn_target = 0;
+    target_x = target_x = end_orientation = 0;
+    pros::delay(msecDelay);
+}
 
 // Auto movement functions //
 void move() {
@@ -108,7 +124,8 @@ void move() {
     // Local variables 
     int driveError, turnError;
     int drivePower, turnPower;
-    int driveSlewRate, turnSlewRate, tempDriveMax, tempTurnMax;
+    int tempDriveMax, tempTurnMax;
+    bool stopLoop = false;
     // Slew conditionals
     while(!driveSettled) {
         // driveTimer = pros::c::millis() - startTime;
@@ -128,7 +145,7 @@ void move() {
         if(drive_slew) {
             // Only increment if temp drive power is less than max drive power
             if(tempDriveMax <= max_drive_power) {
-                tempDriveMax += driveSlewRate;
+                tempDriveMax += DRIVE_SLEW_RATE;
                 drivePower = constrainValue(drivePower, tempDriveMax, -tempDriveMax);
             }
             else {
@@ -139,7 +156,7 @@ void move() {
         if(turn_slew) { 
             // Only increment if temp turn power is less than max turn power
             if(tempTurnMax <= max_turn_power) {
-                tempTurnMax += turnSlewRate;
+                tempTurnMax += TURN_SLEW_RATE;
                 turnPower = constrainValue(turnPower, tempTurnMax, -tempTurnMax);
             }
             else {
@@ -154,15 +171,37 @@ void move() {
         
         pros::screen::erase_line(0, 1, 200, 1);
         pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %i, Error: %i, Output: %i", int(drive_target), driveError, drivePower);
+        pros::screen::erase_line(0, 3, 200, 3);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Tgt: %i, Err: %i, Output: %i", int(turn_target), turnError, turnPower);
         
         // Output to drive
         setDrive(drivePower + turnPower, drivePower - turnPower);
-        // rightFrontDrive.move(drivePower);
 
-        // Exit condition 
-        if(driveSettled || (pros::c::millis() - startTime) > max_time) {
+        // Exit conditions
+        // If drive only, check drive error
+        if(std::fabs(drive_target) > 0 && turn_target == 0) {
+            if(std::fabs(driveError) <= DRIVE_SETTLE_THRESHOLD) {
+                stopLoop = true;
+            }
+        }
+        // If turn only, check turn error
+        if(std::fabs(turn_target) > 0 && drive_target == 0) {
+            if(std::fabs(turnError) <= TURN_SETTLE_THRESHOLD) {
+                stopLoop = true;
+            }
+        }
+        // If both drive & turn, check both errors
+        if(std::fabs(drive_target) > 0 && std::fabs(turn_target) > 0) {
+            if(std::fabs(driveError) <= DRIVE_SETTLE_THRESHOLD && std::fabs(turnError) <= TURN_SETTLE_THRESHOLD) {
+                stopLoop = true;
+            }
+        }
+        if(stopLoop || (pros::c::millis() - startTime) >= max_time) {
             stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
+            driveError = turnError = drivePower = turnPower = 0;
+            drive_target = turn_target = 0;
             drivePID.reset();
+            turnPID.reset();
             driveSettled = true;
             // break;
         }
@@ -173,7 +212,33 @@ void move() {
 }
 
 void turn() {
+    int turnError;
+    int turnPower;
+    int startTime = pros::c::millis();
+    while(!driveSettled) {
+        // Calculate and constrain error
+        // turnError = turn_target - inertial.get_heading();
+        turnError = constrainAngle180(turn_target - inertial.get_heading());
+        
+        // Calculate and constrain turn power
+        turnPower = turnPID.calculateOutput(turnError);
+        turnPower = constrainValue(turnPower, max_turn_power, -max_turn_power);
 
+        // Exit conditions
+        // if(std::fabs(turnError) <= TURN_SETTLE_THRESHOLD || (pros::c::millis() - startTime) > max_time) {
+        //     stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
+        //     turnPID.reset();
+        //     driveSettled = true;
+        // }
+
+        rightFrontDrive.move(turnPower);
+
+        pros::screen::erase_line(0, 3, 300, 3);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Target: %i, Error: %i, Output: %i", turn_target, turnError, turnPower);
+
+        // necessary delay - do not change
+        pros::delay(20);
+    }
 }
 
 void moveToPoint() {

@@ -16,6 +16,7 @@ void on_center_button() {
 	}
 }
 
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -25,9 +26,15 @@ void on_center_button() {
 void initialize() {
 	// pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
-
-	puncher.tare_position();
+	// Initialize default states
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
+	states.setWingState(stateMachine::wing_state::STOWED);
+	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
+	// Initialize puncher
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	puncher.tare_position();
 	// pros::lcd::register_btn1_cb(on_center_button);
 }
 
@@ -60,11 +67,23 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
+// Initialize tasks
+pros::Task superstruct(stateHandler);
 pros::Task driveTask(autoMovementTask);
 void autonomous() {
+	inertial.reset();
+	states.setPuncherState(states.defaultPullback);
+	
 	pros::delay(2000);
 	setMove(2000, 100, 0, 0, 5000, false, false);
-	pros::delay(5000);
+	waitUntilSettled(1000);
+	// setTurn(60, 10, 5000, false);
+	setMove(-3000, 100, 0, 0, 5000, false, false);
+	waitUntilSettled(20);
+	setMove(0, 0, 60, 100, 50000, false, false);
+	waitUntilSettled(500);
+	setMove(0, 0, -60, 100, 50000, false, false);
+	// setTurn(60, 100, 5000, false);
 }
 
 /**
@@ -80,17 +99,10 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-pros::Task superstruct(stateHandler);
-
 void opcontrol() {
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
-	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
-	states.setPuncherState(states.defaultPullback);
-	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
-	states.setWingState(stateMachine::wing_state::STOWED);
-	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
+	states.setPuncherState(states.defaultPullback);
 	driveTask.suspend();
 	while (true) {
 		// Drive controls

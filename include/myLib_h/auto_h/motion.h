@@ -35,12 +35,14 @@ extern int max_time;
 
 // Setters for auto functions //
 extern void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTurnPower, int maxTime, bool driveSlew, bool turnSlew);
-extern void setTurn(double turnTarget, double maxTurnPower, int maxTime);
+extern void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew);
 extern void setMoveToPoint(double targetX, double targetY, double endOrientation, double maxTranslatePower, 
         double maxRotatePower, double maxOrientPower, int maxTime);   
 
 // Auto movement task //
 extern void autoMovementTask();
+// Wait function for drive
+void waitUntilSettled(int msecDelay);
 
 // Auto movement functions //
 extern void move();
