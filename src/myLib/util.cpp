@@ -1,5 +1,8 @@
 #include "myLib_h/util.h"
-// #include <math.h>
+#include <cmath>
+
+// // Math constants (why doesn't cmath work??)
+// double M_PI = 3.14159265358979323846;
 
 // Conversion rates
 double PCT_TO_VOLT = 12.7 / 100;

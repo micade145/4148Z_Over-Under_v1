@@ -73,7 +73,7 @@ pros::Task driveTask(autoMovementTask);
 void autonomous() {
 	inertial.reset();
 	states.setPuncherState(states.defaultPullback);
-	
+
 	pros::delay(2000);
 	setMove(2000, 100, 0, 0, 5000, false, false);
 	waitUntilSettled(1000);

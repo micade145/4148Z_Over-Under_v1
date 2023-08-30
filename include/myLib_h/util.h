@@ -2,6 +2,9 @@
 #define UTIL_H
 #include "main.h"
 
+// // Math constants
+// extern double PI;
+
 // Conversion rates
 extern double PCT_TO_VOLT;
 extern double VOLT_TO_PCT;

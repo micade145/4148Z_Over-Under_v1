@@ -1,11 +1,11 @@
 #include "myLib_h/auto_h/motion.h"
 
 // Constants 
-double DRIVE_INCH_TO_DEG;
-double DRIVE_DEG_TO_INCH;
+double DRIVE_INCH_TO_DEG = 360 / (2.75 * M_PI);
+double DRIVE_DEG_TO_INCH = (2.75 * M_PI) / 360;
 int DRIVE_SLEW_RATE = 5;    // change later
 int TURN_SLEW_RATE = 5;
-double DRIVE_SETTLE_THRESHOLD = 5;  // tune later (inches or degrees or counts??)
+double DRIVE_SETTLE_THRESHOLD = 5;  // tune later (decide on inches/deg/counts)
 double TURN_SETTLE_THRESHOLD = 3;   // Degrees
 
 // Drive PID objects
@@ -16,12 +16,10 @@ PID turnPID(1, 0);
 // move() variables
 double drive_target;
 double turn_target;
-bool drive_slew = false;
-bool turn_slew = false;
-
-// turn() variables
 int max_drive_power;
 int max_turn_power;
+bool drive_slew = false;
+bool turn_slew = false;
 
 // moveToPoint() variables
 double target_x;
@@ -33,11 +31,11 @@ double max_orient_power;
 
 // Universal variables 
 bool driveSettled = false;
-int max_time;
+int max_time = 3000;
 
 
 // Setters for auto functions //
-void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTurnPower, int maxTime, bool driveSlew, bool turnSlew) {
+void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTurnPower, int maxTime = 3000, bool driveSlew = false, bool turnSlew = false) {
     // Reset relative position
     rightFrontDrive.tare_position();
     // Set targets
@@ -53,19 +51,10 @@ void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTu
     driveSettled = false;
     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE);
 }
-void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew) {
-    // Reset relative position
-    rightFrontDrive.tare_position();
-    // Set targets
-    turn_target = turnTarget;
-    max_turn_power = maxTurnPower;
-    max_time = maxTime;
-    // Set slew
-    turnSlew  ? turn_slew = true : turn_slew = false;
-    // Set state
-    driveSettled = false;
-    states.setDriveAutoState(stateMachine::drive_auto_state::TURN);
+void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTurnPower, int maxTime = 3000) {
+    setMove(driveTarget, maxDrivePower, turnTarget, maxTurnPower, maxTime, false, false);
 }
+
 void setMoveToPoint(double targetX, double targetY, double endOrientation, double maxTranslatePower, 
         double maxRotatePower, double maxOrientPower, int maxTime) {
     // Reset relative position
@@ -83,15 +72,12 @@ void setMoveToPoint(double targetX, double targetY, double endOrientation, doubl
     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
 }
 
-// Auto movement task
+// Auto movement task //
 void autoMovementTask() {
     while(true) {
         if(!states.driveAutoStateIs(stateMachine::drive_auto_state::OFF)) {
            if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE)) {
                 move();
-            }
-            else if(states.driveAutoStateIs(stateMachine::drive_auto_state::TURN)) {
-                turn();
             }
             else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE_TO_POINT)) {
                 moveToPoint();
@@ -100,6 +86,7 @@ void autoMovementTask() {
         pros::delay(20);
     }
 }
+
 // Wait for drive completion
 void waitUntilSettled(int msecDelay) {
     while(!driveSettled) {
@@ -211,6 +198,10 @@ void move() {
     }
 }
 
+void moveToPoint() {
+
+}
+
 void turn() {
     int turnError;
     int turnPower;
@@ -225,11 +216,11 @@ void turn() {
         turnPower = constrainValue(turnPower, max_turn_power, -max_turn_power);
 
         // Exit conditions
-        // if(std::fabs(turnError) <= TURN_SETTLE_THRESHOLD || (pros::c::millis() - startTime) > max_time) {
-        //     stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
-        //     turnPID.reset();
-        //     driveSettled = true;
-        // }
+        if(std::fabs(turnError) <= TURN_SETTLE_THRESHOLD || (pros::c::millis() - startTime) > max_time) {
+            stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
+            turnPID.reset();
+            driveSettled = true;
+        }
 
         rightFrontDrive.move(turnPower);
 
@@ -241,37 +232,27 @@ void turn() {
     }
 }
 
-void moveToPoint() {
 
-}
 
 
 // the archive :(
 
-// void setMoveTarget(double target, int maxDrivePower, double turnTarget, int maxTurnPower) {
-//     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE);
+// Old turn setter
+// void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew) {
+//     // Reset relative position
 //     rightFrontDrive.tare_position();
-//     drive_target = target;
-//     max_drive_power = maxDrivePower;
+//     // Set targets
 //     turn_target = turnTarget;
 //     max_turn_power = maxTurnPower;
-// }
-// void setTurnTarget(double targetAngle, double maxTurnPower, int maxTime) {
-
-// }
-// void setMoveToPointTarget(double targetX, double targetY, double endOrientation, double maxTranslatePower, double maxRotatePower, double maxOrientPower, int maxTime) {
-    
-// }
-
-// void setDrivePID(double target, int maxDrivePower, double turnTarget, int maxTurnPower) {
-//     rightFrontDrive.tare_position();
-//     drive_target = target;
-//     max_drive_power = maxDrivePower;
-//     turn_target = turnTarget;
-//     max_turn_power = maxTurnPower;
+//     max_time = maxTime;
+//     // Set slew
+//     turnSlew  ? turn_slew = true : turn_slew = false;
+//     // Set state
+//     driveSettled = false;
+//     states.setDriveAutoState(stateMachine::drive_auto_state::TURN);
 // }
 
-
+// move() as a function
 // void move(double driveTarget, double maxDrivePower, double turnTarget, double maxTurnPower, int maxDriveTime, bool driveSlew, bool turnSlew) {
 //     // Reset drive encoder 
 //     frontEnc.reset_position();
@@ -345,10 +326,5 @@ void moveToPoint() {
 //     }
 // }
 
-// void Turn(double targetAngle, double maxTurnPower, int maxTime) {
-
-// }
-
-// void MoveToPoint(double targetX, double targetY, double endOrientation, double maxTranslatePower, double maxRotatePower, double maxOrientPower, int maxTime) {
-
-// }
+// void Turn(double targetAngle, double maxTurnPower, int maxTime) {}
+// void MoveToPoint(double targetX, double targetY, double endOrientation, double maxTranslatePower, double maxRotatePower, double maxOrientPower, int maxTime) {}
