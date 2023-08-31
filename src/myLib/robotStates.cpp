@@ -10,11 +10,8 @@ void stateHandler() {
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "TWO MOTOR DRIVE");
-            drivePTO.set_value(false);  // piston retracted, 2 motor mode
-            // Test
-            // leftFrontDrive.set_voltage_limit(1000);
-            // rightFrontDrive.set_voltage_limit(1000);
-
+            drivePTO.set_value(true);  // piston retracted, 2 motor mode
+            // Colored box for debugging
             // pros::screen::set_eraser(COLOR_BLACK);
             // pros::screen::erase();
             // pros::screen::set_pen(COLOR_RED);
@@ -22,10 +19,7 @@ void stateHandler() {
         }
         else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "SIX MOTOR DRIVE");
-            drivePTO.set_value(true);   // piston expanded, 6 motor mode
-            // Test
-            // leftFrontDrive.set_voltage_limit(10000);
-            // rightFrontDrive.set_voltage_limit(10000);
+            drivePTO.set_value(false);   // piston expanded, 6 motor mode
         }
         states.oldDriveState = states.driveState;
     }
@@ -88,47 +82,28 @@ void stateHandler() {
                     puncherCloseCount = puncherOpenCount = puncherPauseCount = 0;
                     states.setPuncherState(states.defaultPullback);
                 }
-                // if(!firstPuncherLoop) {
-                //     puncher.move_absolute(-300, 100);
-                //     firstPuncherLoop = true;
-                // }
-                // if(puncher.get_position() < -298) {
-                //     puncher.move_absolute(5, 100);
-                //     pros::delay(5);
-                // }
-                // if(puncher.get_position() > 3) {
-                //     puncher.brake();
-                //     puncher.tare_position();
-                //     states.setPuncherState(stateMachine::puncher_state::SHORT_PULLBACK);
-                // }
             }
             
             if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "SHORT PULLBACK");
-                // puncher.move_absolute(SHORT_PULLBACK_TICKS, 100);
                 setPuncher(127);
-                if(puncher.get_position() > (SHORT_PULLBACK_TICKS - 5)) {
-                    // puncher.brake();
+                if(puncherEnc.get_position() > (SHORT_PULLBACK_TICKS - 5)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::MID_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "MID PULLBACK");
-                // puncher.move_absolute(MID_PULLBACK_TICKS, 100);
                 setPuncher(127);
-                if(puncher.get_position() > (MID_PULLBACK_TICKS - 5)) {
-                    // puncher.brake();
+                if(puncherEnc.get_position() > (MID_PULLBACK_TICKS - 5)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::LONG_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "LONG PULLBACK");
-                // puncher.move_absolute(LONG_PULLBACK_TICKS, 100);
                 setPuncher(127);
-                if(puncher.get_position() > (LONG_PULLBACK_TICKS - 5)) {
-                    // puncher.brake();
+                if(puncherEnc.get_position() > (LONG_PULLBACK_TICKS - 5)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }

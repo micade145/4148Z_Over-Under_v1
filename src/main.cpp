@@ -69,9 +69,8 @@ void competition_initialize() {}
  */
 // Initialize tasks
 pros::Task superstruct(stateHandler);
-pros::Task driveTask(autoMovementTask);
+pros::Task autoMovement(autoMovementTask);
 void autonomous() {
-	inertial.reset();
 	states.setPuncherState(states.defaultPullback);
 
 	pros::delay(2000);
@@ -103,7 +102,15 @@ void opcontrol() {
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
 	states.setPuncherState(states.defaultPullback);
-	driveTask.suspend();
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	autoMovement.suspend();
+
+	pros::Task odom(updatePosition);
+	inertial.reset(true);
+	resetOdomSensors();
+	pros::delay(100);
+	globalPose.setPoint(0,0,0);
+
 	while (true) {
 		// Drive controls
 		splitArcade(pros::E_MOTOR_BRAKE_COAST);

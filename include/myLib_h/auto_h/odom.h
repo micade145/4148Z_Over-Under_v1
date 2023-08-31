@@ -2,22 +2,25 @@
 #define ODOM_H
 #include "main.h"
 
-// Front encoder distance from tracking center
-extern double frontEncOffset;
+// Front encoder distance in inches from tracking center
+extern double FRONT_ENC_OFFSET;
+
+// Side encoder distance in inches from tracking center
+extern double SIDE_ENC_OFFSET;
 
 /**
  * @brief Class that creates a point with x,y coordinates and an orientation
 */
 class Point {
-  private:
+    private:
+    public:
     double x;
     double y;
     double theta;
-
-    public:
-    double getX() {return(x);}
-    double getY() {return(y);}
-    double getTheta() {return(theta);}
+    
+    // double getX() {return(x);}
+    // double getY() {return(y);}
+    // double getTheta() {return(theta);}
 
     /**
      * @brief Sets the coordinates of the point 

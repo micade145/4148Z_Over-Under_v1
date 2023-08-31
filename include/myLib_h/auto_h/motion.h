@@ -28,9 +28,9 @@ extern bool turn_slew;
 extern double target_x;
 extern double target_y;
 extern double end_orientation;
-extern double max_translate_power;
-extern double max_rotate_power;
-extern double max_orient_power;
+extern int max_translate_power;
+extern int max_rotate_power;
+extern int max_orient_power;
 
 // Universal variables 
 extern bool driveSettled;
@@ -41,8 +41,8 @@ extern int max_time;
 extern void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTurnPower, int maxTime, bool driveSlew, bool turnSlew);
 // no slew rate
 extern void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTurnPower, int maxTime);
-extern void setMoveToPoint(double targetX, double targetY, double endOrientation, double maxTranslatePower, 
-        double maxRotatePower, double maxOrientPower, int maxTime);   
+extern void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
+        int maxRotatePower, int maxOrientPower, int maxTime);   
 // extern void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew);
 
 // Auto movement task //

@@ -25,9 +25,9 @@ bool turn_slew = false;
 double target_x;
 double target_y;
 double end_orientation;
-double max_translate_power;
-double max_rotate_power;
-double max_orient_power;
+int max_translate_power;
+int max_rotate_power;
+int max_orient_power;
 
 // Universal variables 
 bool driveSettled = false;
@@ -55,8 +55,8 @@ void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTu
     setMove(driveTarget, maxDrivePower, turnTarget, maxTurnPower, maxTime, false, false);
 }
 
-void setMoveToPoint(double targetX, double targetY, double endOrientation, double maxTranslatePower, 
-        double maxRotatePower, double maxOrientPower, int maxTime) {
+void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
+        int maxRotatePower, int maxOrientPower, int maxTime) {
     // Reset relative position
     rightFrontDrive.tare_position();
     // Set targets
@@ -157,9 +157,9 @@ void move() {
         turnPower = constrainValue(turnPower, max_turn_power, -max_turn_power);
         
         pros::screen::erase_line(0, 1, 200, 1);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %i, Error: %i, Output: %i", int(drive_target), driveError, drivePower);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %5.1f, Err: %5.1f, Out: %3d", drive_target, driveError, drivePower);
         pros::screen::erase_line(0, 3, 200, 3);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Tgt: %i, Err: %i, Output: %i", int(turn_target), turnError, turnPower);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Tgt: %3.1f, Err: %3.1f, Out: %3d", turn_target, turnError, turnPower);
         
         // Output to drive
         setDrive(drivePower + turnPower, drivePower - turnPower);
