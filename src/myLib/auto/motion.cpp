@@ -5,6 +5,7 @@ double DRIVE_INCH_TO_DEG = 360 / (2.75 * M_PI);
 double DRIVE_DEG_TO_INCH = (2.75 * M_PI) / 360;
 int DRIVE_SLEW_RATE = 5;    // change later
 int TURN_SLEW_RATE = 5;
+int SETTLE_THRESHOLD = 6;   // In 20 msec * number
 double DRIVE_SETTLE_THRESHOLD = 5;  // tune later (decide on inches/deg/counts)
 double TURN_SETTLE_THRESHOLD = 3;   // Degrees
 
@@ -113,6 +114,7 @@ void move() {
     int drivePower, turnPower;
     int tempDriveMax, tempTurnMax;
     bool stopLoop = false;
+    int settleCount = 0;
     // Slew conditionals
     while(!driveSettled) {
         // driveTimer = pros::c::millis() - startTime;
@@ -168,22 +170,28 @@ void move() {
         // If drive only, check drive error
         if(std::fabs(drive_target) > 0 && turn_target == 0) {
             if(std::fabs(driveError) <= DRIVE_SETTLE_THRESHOLD) {
-                stopLoop = true;
+                settleCount++;
+                // stopLoop = true;
             }
+            else {settleCount = 0;}
         }
         // If turn only, check turn error
         if(std::fabs(turn_target) > 0 && drive_target == 0) {
             if(std::fabs(turnError) <= TURN_SETTLE_THRESHOLD) {
-                stopLoop = true;
+                settleCount++;
+                // stopLoop = true;
             }
+            else {settleCount = 0;}
         }
         // If both drive & turn, check both errors
         if(std::fabs(drive_target) > 0 && std::fabs(turn_target) > 0) {
             if(std::fabs(driveError) <= DRIVE_SETTLE_THRESHOLD && std::fabs(turnError) <= TURN_SETTLE_THRESHOLD) {
-                stopLoop = true;
+                settleCount++;
+                // stopLoop = true;
             }
+            else {settleCount = 0;}
         }
-        if(stopLoop || (pros::c::millis() - startTime) >= max_time) {
+        if((settleCount >= SETTLE_THRESHOLD) || (pros::c::millis() - startTime) >= max_time) {
             stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
             driveError = turnError = drivePower = turnPower = 0;
             drive_target = turn_target = 0;

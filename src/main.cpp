@@ -76,10 +76,10 @@ void autonomous() {
 
 	// pros::delay(2000);
 	setMove(2000, 100, 0, 0, 5000, false, false);
-	waitUntilSettled(1000);
+	waitUntilSettled(0);
 	// setTurn(60, 10, 5000, false);
 	setMove(-3000, 100, 0, 0, 5000, false, false);
-	waitUntilSettled(20);
+	waitUntilSettled(0);
 	setMove(0, 0, 60, 100, 50000, false, false);
 	waitUntilSettled(500);
 	setMove(0, 0, -60, 100, 50000, false, false);
