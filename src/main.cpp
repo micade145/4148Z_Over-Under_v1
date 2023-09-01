@@ -35,6 +35,7 @@ void initialize() {
 	// Initialize puncher
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
+
 	// pros::lcd::register_btn1_cb(on_center_button);
 }
 
@@ -69,7 +70,7 @@ void competition_initialize() {}
  */
 // Initialize tasks
 pros::Task superstruct(stateHandler);
-pros::Task autoMovement(autoMovementTask);
+// pros::Task autoMovement(autoMovementTask);
 void autonomous() {
 	states.setPuncherState(states.defaultPullback);
 
@@ -101,15 +102,15 @@ void autonomous() {
 void opcontrol() {
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
-	states.setPuncherState(states.defaultPullback);
+	// states.setPuncherState(states.defaultPullback);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
-	autoMovement.suspend();
+	// autoMovement.suspend();
 
-	pros::Task odom(updatePosition);
-	inertial.reset(true);
-	resetOdomSensors();
-	pros::delay(100);
-	globalPose.setPoint(0,0,0);
+	// pros::Task odom(updatePosition);
+	// inertial.reset(true);
+	// resetOdomSensors();
+	// pros::delay(100);
+	// globalPose.setPoint(0,0,0);
 
 	while (true) {
 		// Drive controls

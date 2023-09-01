@@ -79,6 +79,7 @@ void stateHandler() {
                 if(puncherPauseCount > 0) {
                     puncher.brake();
                     puncher.tare_position();
+                    puncherEnc.reset();
                     puncherCloseCount = puncherOpenCount = puncherPauseCount = 0;
                     states.setPuncherState(states.defaultPullback);
                 }
@@ -87,7 +88,7 @@ void stateHandler() {
             if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "SHORT PULLBACK");
                 setPuncher(127);
-                if(puncherEnc.get_position() > (SHORT_PULLBACK_TICKS - 5)) {
+                if(puncherEnc.get_position() > (SHORT_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
@@ -95,7 +96,7 @@ void stateHandler() {
             else if(states.puncherStateIs(stateMachine::puncher_state::MID_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "MID PULLBACK");
                 setPuncher(127);
-                if(puncherEnc.get_position() > (MID_PULLBACK_TICKS - 5)) {
+                if(puncherEnc.get_position() > (MID_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
@@ -103,7 +104,7 @@ void stateHandler() {
             else if(states.puncherStateIs(stateMachine::puncher_state::LONG_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "LONG PULLBACK");
                 setPuncher(127);
-                if(puncherEnc.get_position() > (LONG_PULLBACK_TICKS - 5)) {
+                if(puncherEnc.get_position() > (LONG_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
@@ -177,7 +178,9 @@ void stateHandler() {
     }
     pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
     pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
+    pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Puncher Enc: %d", puncherEnc.get_position());
+    
     // necessary task delay - do not change
-        pros::delay(20);
+    pros::delay(20);
     }
 }

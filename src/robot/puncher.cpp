@@ -1,11 +1,15 @@
 #include "robot_h/puncher.h"
 
 // Puncher pullback constants
-int SHORT_PULLBACK_TICKS = 2500;    // Puncher just behind 5by structure
-int MID_PULLBACK_TICKS = 3900;
-int LONG_PULLBACK_TICKS = 5250;
+// int SHORT_PULLBACK_TICKS = 2500;    // Puncher just behind 5by structure
+// int MID_PULLBACK_TICKS = 3900;
+// int LONG_PULLBACK_TICKS = 5250;
+int SHORT_PULLBACK_TICKS = 120000;    // Puncher just behind 5by structure
+int MID_PULLBACK_TICKS = 175000;
+int LONG_PULLBACK_TICKS = 230000;
 int PUNCHER_OPEN_THRESHOLD = 15;    // Iterations to release puncher (every loop is 20ms)
 int PUNCHER_CLOSE_THRESHOLD = 2;    // Iterations to close puncher (every loop is 20ms)
+int PUNCHER_PULLBACK_THRESHOLD = 2500;
 
 // Puncher variables
 int puncherOpenCount = 0;
