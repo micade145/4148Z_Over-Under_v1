@@ -109,7 +109,7 @@ void move() {
     int startTime = pros::c::millis();
     int driveTimer;
     // Local variables 
-    int driveError, turnError;
+    int driveError, turnError = 0;
     int drivePower, turnPower;
     int tempDriveMax, tempTurnMax;
     bool stopLoop = false;
@@ -117,15 +117,15 @@ void move() {
     while(!driveSettled) {
         // driveTimer = pros::c::millis() - startTime;
         // driveError = driveTarget - (frontEnc.get_position() * DRIVE_DEG_TO_INCH);
-        turnError = turn_target - inertial.get_heading();
-        driveError = drive_target - rightFrontDrive.get_position();
+        turnError = int(turn_target - inertial.get_heading());
+        driveError = int(drive_target - rightFrontDrive.get_position());
 
         // Constrain relative turn from 180 to -180
         if(turnError > 180) {turnError -= 360;}
         if(turnError < -180) {turnError += 360;}
 
         // Calculate PID outputs 
-        drivePower = drivePID.calculateOutput(driveError);
+        drivePower = drivePID.calculateOutput(double(driveError));
         turnPower = turnPID.calculateOutput(turnError);
 
         // Slew rate logic
@@ -153,11 +153,11 @@ void move() {
         }
 
         // Constrain PID outputs
-        drivePower = constrainValue(drivePower, max_drive_power, -max_drive_power);
-        turnPower = constrainValue(turnPower, max_turn_power, -max_turn_power);
+        drivePower = constrainVoltage(drivePower, max_drive_power, -max_drive_power);
+        turnPower = constrainVoltage(turnPower, max_turn_power, -max_turn_power);
         
         pros::screen::erase_line(0, 1, 200, 1);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %5.1f, Err: %5.1f, Out: %3d", drive_target, driveError, drivePower);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %5.1f, Err: %5d, Out: %3d", drive_target, driveError, drivePower);
         pros::screen::erase_line(0, 3, 200, 3);
         pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Tgt: %3.1f, Err: %3.1f, Out: %3d", turn_target, turnError, turnPower);
         

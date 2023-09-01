@@ -70,11 +70,11 @@ void competition_initialize() {}
  */
 // Initialize tasks
 pros::Task superstruct(stateHandler);
-// pros::Task autoMovement(autoMovementTask);
+pros::Task autoMovement(autoMovementTask);
 void autonomous() {
-	states.setPuncherState(states.defaultPullback);
+	// states.setPuncherState(states.defaultPullback);
 
-	pros::delay(2000);
+	// pros::delay(2000);
 	setMove(2000, 100, 0, 0, 5000, false, false);
 	waitUntilSettled(1000);
 	// setTurn(60, 10, 5000, false);
@@ -102,9 +102,9 @@ void autonomous() {
 void opcontrol() {
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
-	// states.setPuncherState(states.defaultPullback);
+	states.setPuncherState(states.defaultPullback);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
-	// autoMovement.suspend();
+	autoMovement.suspend();
 
 	// pros::Task odom(updatePosition);
 	// inertial.reset(true);
