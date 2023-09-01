@@ -71,10 +71,7 @@ void updatePosition() {
     globalPose.x += deltaPose.x;
     globalPose.y += deltaPose.y;
 
-    // double m_pi = 5;
-
     pros::screen::print(TEXT_MEDIUM_CENTER, 1, "x: %3.2f, y: %3.2f, theta: %3.2f", globalPose.x, globalPose.y, globalPose.theta*RAD_TO_DEG);
-    pros::screen::print(TEXT_MEDIUM_CENTER, 3, "pi: %1.5f", M_PI);
 
     pros::delay(10);
     }

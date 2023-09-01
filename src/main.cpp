@@ -72,17 +72,26 @@ void competition_initialize() {}
 pros::Task superstruct(stateHandler);
 pros::Task autoMovement(autoMovementTask);
 void autonomous() {
+	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+	inertial.reset(true);
+	pros::Task odom(updatePosition);
+	resetOdomSensors();
+	pros::delay(100);
+	globalPose.setPoint(0.0, 0.0, 0.0);
+	pros::delay(100);
+	// pros::delay(3000);
 	// states.setPuncherState(states.defaultPullback);
 
 	// pros::delay(2000);
-	setMove(2000, 100, 0, 0, 5000, false, false);
-	waitUntilSettled(0);
-	// setTurn(60, 10, 5000, false);
-	setMove(-3000, 100, 0, 0, 5000, false, false);
-	waitUntilSettled(0);
-	setMove(0, 0, 60, 100, 50000, false, false);
+	// setMove(2000, 100, 0, 0, 5000, false, false);
+	setMoveToPoint(5, 5, 0, 0, 100, 0, 10000);
+	// waitUntilSettled(0);
+	// // setTurn(60, 10, 5000, false);
+	// setMove(-2000, 100, 0, 0, 5000, false, false);
+	// waitUntilSettled(0);
+	// setMove(0, 0, 60, 50, 10000, false, false);
 	waitUntilSettled(500);
-	setMove(0, 0, -60, 100, 50000, false, false);
+	// setMove(0, 0, -60, 100, 10000, false, false);
 	// setTurn(60, 100, 5000, false);
 }
 
