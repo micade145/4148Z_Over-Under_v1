@@ -13,12 +13,12 @@ private:
   double output = 0;
   
 public:
-  PID(double m_kP, double m_kD) {
-    kP = m_kP;
-    kD = m_kD;
+  PID(double new_kP, double new_kD) {
+    kP = new_kP;
+    kD = new_kD;
   }
-  double calculateOutput(double m_error);
-  double calculate(double pidTarget, double pidCurrent);
+  double calculateOutput(double new_error);
+  double calculate(double new_target, double new_current);
   double getError();
   void reset();
 };

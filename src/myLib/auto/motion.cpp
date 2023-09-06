@@ -13,6 +13,7 @@ double TURN_SETTLE_THRESHOLD = 2;   // Degrees
 
 // Drive PID objects
 PID drivePID(.2, 0);
+PID translationPID(10, 0);
 PID turnPID(4, 0);
 
 // Auto movement variables //
@@ -61,7 +62,7 @@ void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTu
 void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
         int maxRotatePower, int maxOrientPower, int maxTime = 3000) {
     // Reset relative position
-    rightFrontDrive.tare_position();
+    // rightFrontDrive.tare_position();
     // Set targets
     target_x = targetX;
     target_y = targetY;
@@ -210,7 +211,7 @@ void move() {
 
 void moveToPoint() {
     // Reset drive encoder 
-    frontEnc.reset_position();
+    // frontEnc.reset_position();
     rightFrontDrive.tare_position();
     // Initialize timer
     int startTime = pros::c::millis();
@@ -219,28 +220,32 @@ void moveToPoint() {
     double translationError, targetAngle, rotationError, orientationError;
     int translationPower, rotationPower, orientationPower;
     double movementScaleFactor;
-    double xError, yError;
+    double xError = 0.0;
+    double yError = 0.0;
     int settleCount = 0;
     bool onTarget = false;
-    // Calculate point errors
+    while(!driveSettled) {
+        // Calculate point errors
         xError = target_x - globalPose.x;
         yError = target_y - globalPose.y;
-        targetAngle = fmod(((M_PI_2 - atan2(yError, xError)) * RAD_TO_DEG), 360);
-    while(!driveSettled) {
-        
+        targetAngle = fmod((90 - (atan2(yError, xError) * RAD_TO_DEG)), 360);
+        // targetAngle = 90 - (atan2(yError, xError) * RAD_TO_DEG);
+
         // Calculate movement errors
         translationError = hypot(xError, yError);
         rotationError = targetAngle - (globalPose.theta * RAD_TO_DEG);
 
         // Scale factor to prioritize turning
-        movementScaleFactor = cos(fmod(rotationError, 90) * DEG_TO_RAD);
+        // movementScaleFactor = cos(fmod(rotationError, 90) * DEG_TO_RAD);
 
         // Calculate outputs
-        translationPower = drivePID.calculateOutput(translationError) * movementScaleFactor;
+        // translationPower = drivePID.calculateOutput(translationError) * movementScaleFactor;
+        translationPower = round(translationPID.calculateOutput(translationError));
         rotationPower = turnPID.calculateOutput(rotationError);
 
         // Constrain outputs
-        translationPower = constrainVoltage(translationPower, std::fabs(movementScaleFactor) * max_translate_power, -std::fabs(movementScaleFactor) * max_translate_power);
+        // translationPower = constrainVoltage(translationPower, std::fabs(movementScaleFactor) * max_translate_power, -std::fabs(movementScaleFactor) * max_translate_power);
+        translationPower = constrainVoltage(translationPower, max_translate_power, -max_translate_power);
         if(translationError <= NEAR_TARGET_THRESHOLD) {
             rotationPower = 0;
         }
@@ -248,13 +253,12 @@ void moveToPoint() {
 
         // Exit condition
         
-
-        setDrive(translationPower - rotationPower, translationPower + rotationPower); // CHANGE LATER
+        setDrive(-translationPower - rotationPower, -translationPower + rotationPower); // CHANGE LATER
         
         pros::screen::erase_line(0, 0, 200, 0);
         pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Tgt: x: %3.1f, y: %3.1f, theta: %3.1f", target_x, target_y, targetAngle);
-        pros::screen::erase_line(0, 3, 200, 3);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "dist err: %3.1f, volt: %3d, angle err: %3.1f, volt: %3d", translationError, translationPower, rotationError, rotationPower);
+        pros::screen::erase_line(0, 4, 200, 4);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 4, "dist err: %3.1f, volt: %3d, angle err: %3.1f, volt: %3d", translationError, translationPower, rotationError, rotationPower);
 
         pros::delay(20);
     }

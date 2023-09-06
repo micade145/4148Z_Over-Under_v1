@@ -1,8 +1,8 @@
 #include "myLib_h/auto_h/pid.h"
 
-double PID::calculateOutput(double m_error) {
+double PID::calculateOutput(double new_error) {
     // Calculate error
-    error = m_error;
+    error = new_error;
     // Calculate derivative
     derivative = (error - lastError);
     // Output 
@@ -13,8 +13,8 @@ double PID::calculateOutput(double m_error) {
     return output;
 }
 
-double PID::calculate(double pidTarget, double pidCurrent) {
-    return calculateOutput(pidTarget - pidCurrent);
+double PID::calculate(double new_target, double new_current) {
+    return calculateOutput(new_target - new_current);
 }
 
 double PID::getError() {

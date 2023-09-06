@@ -74,9 +74,10 @@ pros::Task autoMovement(autoMovementTask);
 void autonomous() {
 	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
 	inertial.reset(true);
-	pros::Task odom(updatePosition);
 	resetOdomSensors();
+	// frontEnc.reset_position();
 	pros::delay(100);
+	pros::Task odom(updatePosition);
 	globalPose.setPoint(0.0, 0.0, 0.0);
 	pros::delay(100);
 	// pros::delay(3000);
@@ -84,7 +85,7 @@ void autonomous() {
 
 	// pros::delay(2000);
 	// setMove(2000, 100, 0, 0, 5000, false, false);
-	setMoveToPoint(5, 5, 0, 0, 100, 0, 10000);
+	setMoveToPoint(12, 12, 0, 50, 50, 0, 15000);
 	// waitUntilSettled(0);
 	// // setTurn(60, 10, 5000, false);
 	// setMove(-2000, 100, 0, 0, 5000, false, false);
