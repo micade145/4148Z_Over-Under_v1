@@ -7,14 +7,14 @@ double DRIVE_DEG_TO_INCH = (2.75 * M_PI) / 360;
 int DRIVE_SLEW_RATE = 5;    // change later
 int TURN_SLEW_RATE = 5;
 int SETTLE_THRESHOLD = 6;   // In 20 msec * number
-int NEAR_TARGET_THRESHOLD = 1;  // In inches
+int NEAR_TARGET_THRESHOLD = 2;  // In inches
 double DRIVE_SETTLE_THRESHOLD = 1;  // tune later (decide on inches/deg/counts)
 double TURN_SETTLE_THRESHOLD = 2;   // Degrees
 
 // Drive PID objects
 PID drivePID(.2, 0);
-PID translationPID(10, 0);
-PID turnPID(4, 0);
+PID translationPID(14, 4);
+PID turnPID(1.65, 5.5);
 
 // Auto movement variables //
 // move() variables
@@ -226,33 +226,48 @@ void moveToPoint() {
     bool onTarget = false;
     while(!driveSettled) {
         // Calculate point errors
-        xError = target_x - globalPose.x;
-        yError = target_y - globalPose.y;
+        xError = round(target_x - globalPose.x);
+        yError = round(target_y - globalPose.y);
         targetAngle = fmod((90 - (atan2(yError, xError) * RAD_TO_DEG)), 360);
         // targetAngle = 90 - (atan2(yError, xError) * RAD_TO_DEG);
 
         // Calculate movement errors
         translationError = hypot(xError, yError);
         rotationError = targetAngle - (globalPose.theta * RAD_TO_DEG);
+        // rotationError = constrainAngle180(rotationError);
+        if(rotationError > 180) {rotationError -= 360;}
+        if(rotationError < -180) {rotationError += 360;}
 
         // Scale factor to prioritize turning
-        // movementScaleFactor = cos(fmod(rotationError, 90) * DEG_TO_RAD);
+        movementScaleFactor = cos(fmod(rotationError, 90) * DEG_TO_RAD);
 
         // Calculate outputs
-        // translationPower = drivePID.calculateOutput(translationError) * movementScaleFactor;
-        translationPower = round(translationPID.calculateOutput(translationError));
-        rotationPower = turnPID.calculateOutput(rotationError);
+        translationPower = round(translationPID.calculateOutput(translationError) * movementScaleFactor);
+        // translationPower = round(translationPID.calculateOutput(translationError));
+        rotationPower = round(turnPID.calculateOutput(rotationError));
 
         // Constrain outputs
-        // translationPower = constrainVoltage(translationPower, std::fabs(movementScaleFactor) * max_translate_power, -std::fabs(movementScaleFactor) * max_translate_power);
-        translationPower = constrainVoltage(translationPower, max_translate_power, -max_translate_power);
+        translationPower = constrainVoltage(translationPower, std::fabs(movementScaleFactor) * max_translate_power, -std::fabs(movementScaleFactor) * max_translate_power);
+        // translationPower = constrainVoltage(translationPower, max_translate_power, -max_translate_power);
         if(translationError <= NEAR_TARGET_THRESHOLD) {
             rotationPower = 0;
         }
         rotationPower = constrainVoltage(rotationPower, max_rotate_power, -max_rotate_power);
 
         // Exit condition
-        
+        // if(translationError <= NEAR_TARGET_THRESHOLD - .5) {
+        //     settleCount++;
+        // }
+        // else {
+        //     settleCount = 0;
+        // }
+
+        if((translationError <= .5) || (pros::c::millis() - startTime) >= max_time) {
+            stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
+            translationError = translationPower = rotationError = rotationPower = 0;
+            driveSettled = true;
+        }
+
         setDrive(-translationPower - rotationPower, -translationPower + rotationPower); // CHANGE LATER
         
         pros::screen::erase_line(0, 0, 200, 0);

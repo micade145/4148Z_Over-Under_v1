@@ -43,16 +43,16 @@
 #include "robot_h/puncher.h"
 #include "robot_h/misc.h"
 
-// My Lib
+//        myLib        //
 #include "myLib_h/util.h"
 #include "myLib_h/robotStates.h"
-
+// myLib/auto_h
 #include "myLib_h/auto_h/pid.h"
 #include "myLib_h/auto_h/motion.h"
 #include "myLib_h/auto_h/odom.h"
 #include "myLib_h/auto_h/autoselector.h"
 
-
+#include "autos.h"
 
 /**
  * You should add more #includes here

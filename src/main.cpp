@@ -82,18 +82,7 @@ void autonomous() {
 	pros::delay(100);
 	// pros::delay(3000);
 	// states.setPuncherState(states.defaultPullback);
-
-	// pros::delay(2000);
-	// setMove(2000, 100, 0, 0, 5000, false, false);
-	setMoveToPoint(12, 12, 0, 50, 50, 0, 15000);
-	// waitUntilSettled(0);
-	// // setTurn(60, 10, 5000, false);
-	// setMove(-2000, 100, 0, 0, 5000, false, false);
-	// waitUntilSettled(0);
-	// setMove(0, 0, 60, 50, 10000, false, false);
-	waitUntilSettled(500);
-	// setMove(0, 0, -60, 100, 10000, false, false);
-	// setTurn(60, 100, 5000, false);
+	odomBoxTest();
 }
 
 /**

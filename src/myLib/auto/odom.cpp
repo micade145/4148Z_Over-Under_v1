@@ -32,7 +32,7 @@ void updatePosition() {
     // deltaSideEncValue = sideEncValue - lastSideEncValue;
 
     // Update global theta in radians
-    globalPose.theta = inertial.get_rotation() * DEG_TO_RAD;
+    globalPose.theta = inertial.get_heading() * DEG_TO_RAD;
     deltaPose.theta = globalPose.theta - lastHeading;
 
     // Update previous values
@@ -46,7 +46,7 @@ void updatePosition() {
         localPose.y = deltaFrontEncValue;
     }
     else {
-        localPose.x = (2 * sin(deltaPose.theta / 2)) * ((deltaSideEncValue / deltaPose.theta) + SIDE_ENC_OFFSET);
+        localPose.x = (2 * sin(deltaPose.theta / 2)) * ((deltaSideEncValue / deltaPose.theta));
         localPose.y = (2 * sin(deltaPose.theta / 2)) * ((deltaFrontEncValue / deltaPose.theta));
     }
 
@@ -73,7 +73,7 @@ void updatePosition() {
 
     pros::screen::print(TEXT_MEDIUM_CENTER, 1, "x: %3.2f, y: %3.2f, theta: %3.2f", globalPose.x, globalPose.y, globalPose.theta*RAD_TO_DEG);
 
-    pros::delay(10);
+    pros::delay(20);
     }
 }
 
