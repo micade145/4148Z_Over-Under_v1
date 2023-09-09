@@ -1,4 +1,4 @@
-#include "robot_h/robot_config.h"
+#include "robot_config.h"
 
 // Alliance color 
 bool isRed = false;
@@ -32,7 +32,7 @@ pros::Motor rightIntake(10, false);
 // // Sensors
 pros::Imu inertial(5);
 // pros::Vision vision;
-pros::Rotation puncherEnc(18, false);
+pros::Rotation puncherEnc(18, true);
 pros::Rotation frontEnc(16, false);
 pros::Rotation sideEnc(17, false);
 

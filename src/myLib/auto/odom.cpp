@@ -9,6 +9,14 @@ Point globalPose;
 Point localPose;
 Point deltaPose;
 
+void Point::setPoint(double new_x, double new_y, double new_theta) {
+    x = new_x;
+    y = new_y;
+    theta = new_theta;
+    inertial.set_heading(new_theta);
+}
+
+// odom variables //
 double frontEncValue;
 double lastFrontEncValue;
 double deltaFrontEncValue;

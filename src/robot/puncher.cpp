@@ -4,12 +4,14 @@
 // int SHORT_PULLBACK_TICKS = 2500;    // Puncher just behind 5by structure
 // int MID_PULLBACK_TICKS = 3900;
 // int LONG_PULLBACK_TICKS = 5250;
-int SHORT_PULLBACK_TICKS = 120000;    // Puncher just behind 5by structure
-int MID_PULLBACK_TICKS = 175000;
-int LONG_PULLBACK_TICKS = 230000;
-int PUNCHER_OPEN_THRESHOLD = 15;    // Iterations to release puncher (every loop is 20ms)
-int PUNCHER_CLOSE_THRESHOLD = 2;    // Iterations to close puncher (every loop is 20ms)
-int PUNCHER_PULLBACK_THRESHOLD = 2500;
+int SHORT_PULLBACK_TICKS = 30000;   // In centidegrees (100 * degrees)
+int MID_PULLBACK_TICKS = 50000;     // In centidegrees (100 * degrees)
+int LONG_PULLBACK_TICKS = 80000;    // In centidegrees (100 * degrees)
+
+int PUNCHER_OPEN_THRESHOLD = 10;    // Iterations to release puncher (every loop is 20ms)
+int PUNCHER_PAUSE_THRESHOLD = 10;   // Iterations to pause puncher when open (every loop is 20ms)
+int PUNCHER_CLOSE_THRESHOLD = 7;    // Iterations to close puncher (every loop is 20ms)
+int PUNCHER_PULLBACK_THRESHOLD = 2500;  // How close we want to get to the pullback value before stopping the puncher (to mitigate overshoot)
 
 // Puncher variables
 int puncherOpenCount = 0;

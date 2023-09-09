@@ -6,15 +6,15 @@ double DRIVE_INCH_TO_DEG = 360 / (2.75 * M_PI);
 double DRIVE_DEG_TO_INCH = (2.75 * M_PI) / 360;
 int DRIVE_SLEW_RATE = 5;    // change later
 int TURN_SLEW_RATE = 5;
-int SETTLE_THRESHOLD = 6;   // In 20 msec * number
-int NEAR_TARGET_THRESHOLD = 2;  // In inches
+int SETTLE_THRESHOLD = 10;   // In 20 msec * number
+int NEAR_TARGET_THRESHOLD = 1.3;  // In inches
 double DRIVE_SETTLE_THRESHOLD = 1;  // tune later (decide on inches/deg/counts)
-double TURN_SETTLE_THRESHOLD = 2;   // Degrees
+double TURN_SETTLE_THRESHOLD = 1;   // Degrees
 
 // Drive PID objects
 PID drivePID(.2, 0);
 PID translationPID(14, 4);
-PID turnPID(1.65, 5.5);
+PID turnPID(2.1, 2.1);
 
 // Auto movement variables //
 // move() variables

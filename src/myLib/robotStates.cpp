@@ -10,7 +10,9 @@ void stateHandler() {
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "TWO MOTOR DRIVE");
-            drivePTO.set_value(true);  // piston retracted, 2 motor mode
+            drivePTO.set_value(true);  // piston retracted: 2m drive, 5m puncher
+            PUNCHER_PULLBACK_THRESHOLD = 6000;  // higher threshold to prevent overshoot
+            
             // Colored box for debugging
             // pros::screen::set_eraser(COLOR_BLACK);
             // pros::screen::erase();
@@ -19,7 +21,8 @@ void stateHandler() {
         }
         else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "SIX MOTOR DRIVE");
-            drivePTO.set_value(false);   // piston expanded, 6 motor mode
+            drivePTO.set_value(false);   // piston expanded: 6m drive, 1m puncher
+            PUNCHER_PULLBACK_THRESHOLD = 2500;  // default threshold
         }
         states.oldDriveState = states.driveState;
     }
@@ -60,28 +63,28 @@ void stateHandler() {
     if(states.puncherStateChanged()) {
            if(states.puncherStateIs(stateMachine::puncher_state::FIRE)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PUNCHER FIRED");
-                if(!puncherClosePhase) {
+                if(!puncherClosePhase) {    // Open (release)
                     puncher.move(-127);
                     puncherOpenCount++;
                 }
-                if(puncherOpenCount > PUNCHER_OPEN_THRESHOLD) {
+                if(puncherOpenCount >= PUNCHER_OPEN_THRESHOLD) {
                     puncherClosePhase = true;
                 }
-                if(puncherClosePhase) {
-                    puncher.move(10);
-                    puncherCloseCount++;
+                if(puncherClosePhase) { // Pause, then close (re-engage)
+                    puncherPauseCount++;
+                    if(puncherPauseCount >= PUNCHER_PAUSE_THRESHOLD) {
+                        puncher.move(80);
+                        puncherCloseCount++;
+                    }
                 }
-                if(puncherCloseCount > PUNCHER_CLOSE_THRESHOLD) {
+                if(puncherCloseCount >= PUNCHER_CLOSE_THRESHOLD) {  // Stop 
                     puncherClosePhase = false;
                     puncher.brake();
-                    puncherPauseCount++;
-                }
-                if(puncherPauseCount > 0) {
-                    puncher.brake();
+                    puncherEnc.reset_position();
                     puncher.tare_position();
-                    puncherEnc.reset();
                     puncherCloseCount = puncherOpenCount = puncherPauseCount = 0;
-                    states.setPuncherState(states.defaultPullback);
+                    states.setPuncherState(states.defaultPullback); // auto pullback to default pullbacak
+                    // states.setPuncherState(stateMachine::puncher_state::PULLED_BACK); // for testing release
                 }
             }
             
@@ -113,7 +116,7 @@ void stateHandler() {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PULLED BACK");
                 firstPuncherLoop = false;
                 states.oldPuncherState = states.puncherState;
-            } 
+            }
     }
 
     // Puncher Angle state handler
@@ -178,7 +181,7 @@ void stateHandler() {
     }
     pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
     pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
-    // pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Puncher Enc: %d", puncherEnc.get_position());
+    pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Puncher Enc: %d", puncherEnc.get_position());
     
     // necessary task delay - do not change
     pros::delay(20);

@@ -28,11 +28,7 @@ class Point {
      * @param new_y New y coordinate
      * @param new_theta New orientation in degrees
     */
-    void setPoint(double new_x, double new_y, double new_theta) {
-        x = new_x;
-        y = new_y;
-        theta = new_theta;
-    }
+    void setPoint(double new_x, double new_y, double new_theta);
 
     /**
      * @brief Sets x, y, and theta to 0

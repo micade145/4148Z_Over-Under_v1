@@ -25,18 +25,20 @@ void on_center_button() {
  */
 void initialize() {
 	// pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
+	// pros::lcd::set_text(1, "Hello PROS User!");
+	// pros::lcd::register_btn1_cb(on_center_button);
+
+	inertial.reset();
 	// Initialize default states
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
 	states.setWingState(stateMachine::wing_state::STOWED);
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
+	
 	// Initialize puncher
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
-
-	// pros::lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -73,16 +75,20 @@ pros::Task superstruct(stateHandler);
 pros::Task autoMovement(autoMovementTask);
 void autonomous() {
 	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-	inertial.reset(true);
 	resetOdomSensors();
+	// inertial.reset(true);
 	// frontEnc.reset_position();
-	pros::delay(100);
+	pros::delay(20);
 	pros::Task odom(updatePosition);
-	globalPose.setPoint(0.0, 0.0, 0.0);
+	pros::delay(20);
+	globalPose.setPoint(0.0, 0.0, 0);
 	pros::delay(100);
-	// pros::delay(3000);
-	// states.setPuncherState(states.defaultPullback);
 	odomBoxTest();
+	// states.setPuncherState(states.defaultPullback);
+
+	// setMove(0, 0, 90, 100, 3000);
+	// waitUntilSettled(20);
+	// setMove(0, 0, 270, 100, 3000);
 }
 
 /**
@@ -99,11 +105,13 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
-	states.setPuncherState(states.defaultPullback);
-	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	autoMovement.suspend();
+	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+	superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
+	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+	states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
+	// states.setPuncherState(states.defaultPullback);
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 
 	// pros::Task odom(updatePosition);
 	// inertial.reset(true);
