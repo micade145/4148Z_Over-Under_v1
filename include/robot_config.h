@@ -5,9 +5,6 @@
 // Alliance color
 extern bool isRed;
 
-// Constants
-// extern double SIDE_ENC_OFFSET;
-
 // Robot
 extern pros::Controller controller;
 extern pros::Controller controller2;
@@ -31,14 +28,14 @@ extern pros::Motor puncher;
 extern pros::Motor leftIntake;
 extern pros::Motor rightIntake;
 
-// // Sensors
+// Sensors
 extern pros::Imu inertial;
 extern pros::Vision vision;
-extern pros::Rotation puncherEnc;
 extern pros::Rotation frontEnc;
-extern pros::Rotation sideEnc;
+// extern pros::Rotation sideEnc;
+extern pros::Rotation puncherEnc;
 
-// // Pneumatics (Digital I/O)
+// Digital I/O
 extern pros::ADIDigitalOut drivePTO;
 extern pros::ADIDigitalOut verticalAngler;
 extern pros::ADIDigitalOut tilterAngler;
@@ -47,6 +44,7 @@ extern pros::ADIDigitalOut leftWing;
 extern pros::ADIDigitalOut rightWing;
 extern pros::ADIDigitalOut leftParkingBrake;
 extern pros::ADIDigitalOut rightParkingBrake;
-extern pros::ADIDigitalOut stick;
+extern pros::ADIDigitalIn puncherLimitSwitch;
+// extern pros::ADIDigitalOut stick;
 
 #endif

@@ -10,7 +10,7 @@ void stateHandler() {
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "TWO MOTOR DRIVE");
-            drivePTO.set_value(true);  // piston retracted: 2m drive, 5m puncher
+            drivePTO.set_value(false);  // piston retracted: 2m drive, 5m puncher
             PUNCHER_PULLBACK_THRESHOLD = 6000;  // higher threshold to prevent overshoot
             
             // Colored box for debugging
@@ -21,7 +21,7 @@ void stateHandler() {
         }
         else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "SIX MOTOR DRIVE");
-            drivePTO.set_value(false);   // piston expanded: 6m drive, 1m puncher
+            drivePTO.set_value(true);   // piston expanded: 6m drive, 1m puncher
             PUNCHER_PULLBACK_THRESHOLD = 2500;  // default threshold
         }
         states.oldDriveState = states.driveState;
@@ -181,7 +181,7 @@ void stateHandler() {
     }
     pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
     pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
-    pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Puncher Enc: %d", puncherEnc.get_position());
+    // pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Puncher Enc: %d", puncherEnc.get_position());
     
     // necessary task delay - do not change
     pros::delay(20);

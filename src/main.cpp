@@ -28,7 +28,8 @@ void initialize() {
 	// pros::lcd::set_text(1, "Hello PROS User!");
 	// pros::lcd::register_btn1_cb(on_center_button);
 
-	inertial.reset();
+	inertial.reset(false);
+
 	// Initialize default states
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
@@ -74,21 +75,37 @@ void competition_initialize() {}
 pros::Task superstruct(stateHandler);
 pros::Task autoMovement(autoMovementTask);
 void autonomous() {
-	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+	pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
-	// inertial.reset(true);
-	// frontEnc.reset_position();
-	pros::delay(20);
-	pros::Task odom(updatePosition);
-	pros::delay(20);
 	globalPose.setPoint(0.0, 0.0, 0);
-	pros::delay(100);
-	odomBoxTest();
-	// states.setPuncherState(states.defaultPullback);
-
-	// setMove(0, 0, 90, 100, 3000);
+	pros::delay(20);
+	// states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+	
+	waitUntilSettled(20);
+	// odomBoxTest();
+    // setMoveToPoint(20, 20, 0, 100, 100, 0, 4000);
+	// // waitUntilSettled(20);
+	// pros::delay(700);
+	// setMoveToPoint(40, 0, 0, 100, 100, 0, 4000);
 	// waitUntilSettled(20);
-	// setMove(0, 0, 270, 100, 3000);
+	// setMoveToPoint(0, 0, 0, 100, 100, 0, 4000);
+	// waitUntilSettled(500);
+
+	setMove(1600, 45, 100, 80, 3000, false, false);
+	pros::delay(750);
+	setMove(1600, 315, 100, 80, 3000, false, false);
+	pros::delay(750);
+	setMove(1600, 45, 100, 80, 3000, false, false);
+	pros::delay(500);
+	setMove(800, 0, 100, 80, 3000, false, false);
+	waitUntilSettled(20);
+	setMoveToPoint(0, 0, 0, 100, 100, 0, 3000);
+	waitUntilSettled(50);
+
+	pros::delay(1000);
+
+
+	// trackPosition.suspend();
 }
 
 /**
@@ -107,7 +124,7 @@ void autonomous() {
 void opcontrol() {
 	autoMovement.suspend();
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-	superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
+	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
 	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
 	states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
 	// states.setPuncherState(states.defaultPullback);

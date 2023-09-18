@@ -2,7 +2,7 @@
 
 // Constants
 double FRONT_ENC_OFFSET = 0.0;
-double SIDE_ENC_OFFSET = 2.5;
+// double SIDE_ENC_OFFSET = 2.5;
 
 // Points 
 Point globalPose;
@@ -29,9 +29,10 @@ double polarLength;
 double finalPolarAngle;
 
 void updatePosition() {
+    // resetOdomSensors();
     while(true) {
     // Update front encoder in inches
-    frontEncValue = (frontEnc.get_position()/100)* DRIVE_DEG_TO_INCH; // (2.75 * M_PI) / 360
+    frontEncValue = (frontEnc.get_position() / 100)* DRIVE_DEG_TO_INCH_275; // (2.75 * M_PI) / 360
     deltaFrontEncValue = frontEncValue - lastFrontEncValue;
     
     // Update side encoder in inches
@@ -54,7 +55,7 @@ void updatePosition() {
         localPose.y = deltaFrontEncValue;
     }
     else {
-        localPose.x = (2 * sin(deltaPose.theta / 2)) * ((deltaSideEncValue / deltaPose.theta));
+        localPose.x = (2 * sin(deltaPose.theta / 2)) * ((deltaSideEncValue / deltaPose.theta)); // + SIDE_ENC_OFFSET
         localPose.y = (2 * sin(deltaPose.theta / 2)) * ((deltaFrontEncValue / deltaPose.theta));
     }
 
@@ -87,5 +88,5 @@ void updatePosition() {
 
 void resetOdomSensors() {
     frontEnc.reset_position();
-    sideEnc.reset_position();
+    // frontEnc.reset();
 }

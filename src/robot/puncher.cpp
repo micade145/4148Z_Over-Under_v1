@@ -1,13 +1,16 @@
 #include "robot_h/puncher.h"
 
-// Puncher pullback constants
+// Motor encoder pullback constants
 // int SHORT_PULLBACK_TICKS = 2500;    // Puncher just behind 5by structure
-// int MID_PULLBACK_TICKS = 3900;
-// int LONG_PULLBACK_TICKS = 5250;
+// int MID_PULLBACK_TICKS = 3900;      // Midway between short and long
+// int LONG_PULLBACK_TICKS = 5250;     // Puncher on last few rack teeth
+
+// Rotation sensor pullback constants
 int SHORT_PULLBACK_TICKS = 30000;   // In centidegrees (100 * degrees)
 int MID_PULLBACK_TICKS = 50000;     // In centidegrees (100 * degrees)
 int LONG_PULLBACK_TICKS = 80000;    // In centidegrees (100 * degrees)
 
+// Threshold constants
 int PUNCHER_OPEN_THRESHOLD = 10;    // Iterations to release puncher (every loop is 20ms)
 int PUNCHER_PAUSE_THRESHOLD = 10;   // Iterations to pause puncher when open (every loop is 20ms)
 int PUNCHER_CLOSE_THRESHOLD = 7;    // Iterations to close puncher (every loop is 20ms)
@@ -47,13 +50,15 @@ void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode) {
     }
 }
 
-void firePuncher(int numTimes) {
+void firePuncher(int numTimes, stateMachine::puncher_state newPullback) {
+    states.defaultPullback = newPullback;
     for(int i = 0; i < numTimes; i++) {
         states.setPuncherState(stateMachine::puncher_state::FIRE);
         while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
             pros::delay(5);
         }
     }
+    // states.defaultPullback = this->states.defaultPullback;
 }
 
 // Opcontrol functions

@@ -8,11 +8,11 @@
 // extern PID turnPID;
 
 // Constants //
-extern double DRIVE_INCH_TO_DEG;
-extern double DRIVE_DEG_TO_INCH;
+extern double DRIVE_INCH_TO_DEG_275;
+extern double DRIVE_DEG_TO_INCH_275;
 extern int DRIVE_SLEW_RATE;
 extern int TURN_SLEW_RATE;
-extern double DRIVE_SETTLE_THRESHOLD;
+extern double DISTANCE_SETTLE_THRESHOLD;
 extern double TURN_SETTLE_THRESHOLD;
 
 // Movement variables //
@@ -38,9 +38,9 @@ extern int max_time;
 
 // Setters for auto functions //
 // all parameters
-extern void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTurnPower, int maxTime, bool driveSlew, bool turnSlew);
+extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime, bool driveSlew, bool turnSlew);
 // no slew rate
-extern void setMove(double driveTarget, int maxDrivePower, double turnTarget, int maxTurnPower, int maxTime);
+// extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime);
 extern void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
         int maxRotatePower, int maxOrientPower, int maxTime);   
 // extern void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew);

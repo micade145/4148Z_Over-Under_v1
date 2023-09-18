@@ -24,14 +24,14 @@ double constrainVoltage(int input, int max, int min) {
 }
 extern double constrainAngle180(double input) {
     while(!(input >= 0 && input < 360)) {
-        if( input < 0 ) { input += 360; }
+        if(input < 0) { input += 360; }
         if(input >= 360) { input -= 360; }
     }
     return(input);
 }
 extern double constrainAngle90(double input) {
     while(!(input >= -90 && input < 90)) {
-        if( input < -90 ) { input += 180; }
+        if(input < -90) { input += 180; }
         if(input >= 90) { input -= 180; }
     }
     return(input);
