@@ -16,6 +16,7 @@ void on_center_button() {
 	}
 }
 
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -24,11 +25,21 @@ void on_center_button() {
  */
 void initialize() {
 	// pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
-
-	puncher.tare_position();
-	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	// pros::lcd::set_text(1, "Hello PROS User!");
 	// pros::lcd::register_btn1_cb(on_center_button);
+
+	inertial.reset(false);
+
+	// Initialize default states
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
+	states.setWingState(stateMachine::wing_state::STOWED);
+	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
+	
+	// Initialize puncher
+	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+	puncher.tare_position();
 }
 
 /**
@@ -60,7 +71,42 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+// Initialize tasks
+pros::Task superstruct(stateHandler);
+pros::Task autoMovement(autoMovementTask);
+void autonomous() {
+	pros::Task trackPosition(updatePosition);
+	resetOdomSensors();
+	globalPose.setPoint(0.0, 0.0, 0);
+	pros::delay(20);
+	// states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+	
+	waitUntilSettled(20);
+	// odomBoxTest();
+    // setMoveToPoint(20, 20, 0, 100, 100, 0, 4000);
+	// // waitUntilSettled(20);
+	// pros::delay(700);
+	// setMoveToPoint(40, 0, 0, 100, 100, 0, 4000);
+	// waitUntilSettled(20);
+	// setMoveToPoint(0, 0, 0, 100, 100, 0, 4000);
+	// waitUntilSettled(500);
+
+	setMove(1600, 45, 100, 80, 3000, false, false);
+	pros::delay(750);
+	setMove(1600, 315, 100, 80, 3000, false, false);
+	pros::delay(750);
+	setMove(1600, 45, 100, 80, 3000, false, false);
+	pros::delay(500);
+	setMove(800, 0, 100, 80, 3000, false, false);
+	waitUntilSettled(20);
+	setMoveToPoint(0, 0, 0, 100, 100, 0, 3000);
+	waitUntilSettled(50);
+
+	pros::delay(1000);
+
+
+	// trackPosition.suspend();
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -75,15 +121,21 @@ void autonomous() {}
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-pros::Task superstruct(stateHandler);
 void opcontrol() {
-	states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
-	states.setPuncherState(states.defaultPullback);
-	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
-	states.setWingState(stateMachine::wing_state::STOWED);
-	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
+	autoMovement.suspend();
+	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
+	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+	states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
+	// states.setPuncherState(states.defaultPullback);
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+
+	// pros::Task odom(updatePosition);
+	// inertial.reset(true);
+	// resetOdomSensors();
+	// pros::delay(100);
+	// globalPose.setPoint(0,0,0);
+
 	while (true) {
 		// Drive controls
 		splitArcade(pros::E_MOTOR_BRAKE_COAST);

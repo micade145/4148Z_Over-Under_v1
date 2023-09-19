@@ -1,11 +1,20 @@
 #include "robot_h/puncher.h"
 
-// Puncher pullback constants
-int SHORT_PULLBACK_TICKS = 2500;    // Puncher just behind 5by structure
-int MID_PULLBACK_TICKS = 3900;
-int LONG_PULLBACK_TICKS = 5250;
-int PUNCHER_OPEN_THRESHOLD = 15;    // Iterations to release puncher (every loop is 20ms)
-int PUNCHER_CLOSE_THRESHOLD = 2;    // Iterations to close puncher (every loop is 20ms)
+// Motor encoder pullback constants
+// int SHORT_PULLBACK_TICKS = 2500;    // Puncher just behind 5by structure
+// int MID_PULLBACK_TICKS = 3900;      // Midway between short and long
+// int LONG_PULLBACK_TICKS = 5250;     // Puncher on last few rack teeth
+
+// Rotation sensor pullback constants
+int SHORT_PULLBACK_TICKS = 30000;   // In centidegrees (100 * degrees)
+int MID_PULLBACK_TICKS = 50000;     // In centidegrees (100 * degrees)
+int LONG_PULLBACK_TICKS = 80000;    // In centidegrees (100 * degrees)
+
+// Threshold constants
+int PUNCHER_OPEN_THRESHOLD = 10;    // Iterations to release puncher (every loop is 20ms)
+int PUNCHER_PAUSE_THRESHOLD = 10;   // Iterations to pause puncher when open (every loop is 20ms)
+int PUNCHER_CLOSE_THRESHOLD = 7;    // Iterations to close puncher (every loop is 20ms)
+int PUNCHER_PULLBACK_THRESHOLD = 2500;  // How close we want to get to the pullback value before stopping the puncher (to mitigate overshoot)
 
 // Puncher variables
 int puncherOpenCount = 0;
@@ -41,13 +50,15 @@ void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode) {
     }
 }
 
-void firePuncher(int numTimes) {
+void firePuncher(int numTimes, stateMachine::puncher_state newPullback) {
+    states.defaultPullback = newPullback;
     for(int i = 0; i < numTimes; i++) {
         states.setPuncherState(stateMachine::puncher_state::FIRE);
         while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
             pros::delay(5);
         }
     }
+    // states.defaultPullback = this->states.defaultPullback;
 }
 
 // Opcontrol functions
@@ -73,7 +84,6 @@ void puncherOpControl() {
             punchPullback ++;
         }
     }
-
     pros::screen::print(TEXT_MEDIUM_CENTER, 9, "punchPullback: %d, last: %d", punchPullback, lastPunchPullback);
 
     // Assigns puncher pullback to respective punchPullback (1 = (Default) SHORT, 2 = MID, 3 = LONG)
@@ -101,11 +111,16 @@ void puncherOpControl() {
 
 int punchAngle = 1;
 int lastPunchAngle = 1;
+int maxPunchAngle = 4;
 void puncherAngleOpControl() {
     // Buttons to increment punchAngle up and down
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-        punchAngle ++;
-        if(punchAngle > 4) {punchAngle = 4;}
+        // Limit max puncher angle 
+        punchPullback == 3 ? maxPunchAngle = 3 : maxPunchAngle = 4;
+        // Only increment if punch anlge it will be less than / equal to max 
+        if((punchAngle + 1) <= maxPunchAngle) {
+            punchAngle ++;
+        }
     }
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         punchAngle --;

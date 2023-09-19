@@ -3,17 +3,17 @@
 stateMachine states;
 bool firstPuncherLoop = false;
 bool puncherClosePhase = false;
+
 void stateHandler() {
     while(true) {
     // Drive state handler
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "TWO MOTOR DRIVE");
-            drivePTO.set_value(false);  // piston retracted, 2 motor mode
-            // Test
-            leftFrontDrive.set_voltage_limit(1000);
-            rightFrontDrive.set_voltage_limit(1000);
-
+            drivePTO.set_value(false);  // piston retracted: 2m drive, 5m puncher
+            PUNCHER_PULLBACK_THRESHOLD = 6000;  // higher threshold to prevent overshoot
+            
+            // Colored box for debugging
             // pros::screen::set_eraser(COLOR_BLACK);
             // pros::screen::erase();
             // pros::screen::set_pen(COLOR_RED);
@@ -21,10 +21,8 @@ void stateHandler() {
         }
         else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "SIX MOTOR DRIVE");
-            drivePTO.set_value(true);   // piston expanded, 6 motor mode
-            // Test
-            leftFrontDrive.set_voltage_limit(10000);
-            rightFrontDrive.set_voltage_limit(10000);
+            drivePTO.set_value(true);   // piston expanded: 6m drive, 1m puncher
+            PUNCHER_PULLBACK_THRESHOLD = 2500;  // default threshold
         }
         states.oldDriveState = states.driveState;
     }
@@ -65,69 +63,51 @@ void stateHandler() {
     if(states.puncherStateChanged()) {
            if(states.puncherStateIs(stateMachine::puncher_state::FIRE)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PUNCHER FIRED");
-                if(!puncherClosePhase) {
+                if(!puncherClosePhase) {    // Open (release)
                     puncher.move(-127);
                     puncherOpenCount++;
                 }
-                if(puncherOpenCount > PUNCHER_OPEN_THRESHOLD) {
+                if(puncherOpenCount >= PUNCHER_OPEN_THRESHOLD) {
                     puncherClosePhase = true;
                 }
-                if(puncherClosePhase) {
-                    puncher.move(10);
-                    puncherCloseCount++;
+                if(puncherClosePhase) { // Pause, then close (re-engage)
+                    puncherPauseCount++;
+                    if(puncherPauseCount >= PUNCHER_PAUSE_THRESHOLD) {
+                        puncher.move(80);
+                        puncherCloseCount++;
+                    }
                 }
-                if(puncherCloseCount > PUNCHER_CLOSE_THRESHOLD) {
+                if(puncherCloseCount >= PUNCHER_CLOSE_THRESHOLD) {  // Stop 
                     puncherClosePhase = false;
                     puncher.brake();
-                    puncherPauseCount++;
-                }
-                if(puncherPauseCount > 0) {
-                    puncher.brake();
+                    puncherEnc.reset_position();
                     puncher.tare_position();
                     puncherCloseCount = puncherOpenCount = puncherPauseCount = 0;
-                    states.setPuncherState(states.defaultPullback);
+                    states.setPuncherState(states.defaultPullback); // auto pullback to default pullbacak
+                    // states.setPuncherState(stateMachine::puncher_state::PULLED_BACK); // for testing release
                 }
-                // if(!firstPuncherLoop) {
-                //     puncher.move_absolute(-300, 100);
-                //     firstPuncherLoop = true;
-                // }
-                // if(puncher.get_position() < -298) {
-                //     puncher.move_absolute(5, 100);
-                //     pros::delay(5);
-                // }
-                // if(puncher.get_position() > 3) {
-                //     puncher.brake();
-                //     puncher.tare_position();
-                //     states.setPuncherState(stateMachine::puncher_state::SHORT_PULLBACK);
-                // }
             }
             
             if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "SHORT PULLBACK");
-                // puncher.move_absolute(SHORT_PULLBACK_TICKS, 100);
                 setPuncher(127);
-                if(puncher.get_position() > (SHORT_PULLBACK_TICKS - 5)) {
-                    // puncher.brake();
+                if(puncherEnc.get_position() > (SHORT_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::MID_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "MID PULLBACK");
-                // puncher.move_absolute(MID_PULLBACK_TICKS, 100);
                 setPuncher(127);
-                if(puncher.get_position() > (MID_PULLBACK_TICKS - 5)) {
-                    // puncher.brake();
+                if(puncherEnc.get_position() > (MID_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::LONG_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "LONG PULLBACK");
-                // puncher.move_absolute(LONG_PULLBACK_TICKS, 100);
                 setPuncher(127);
-                if(puncher.get_position() > (LONG_PULLBACK_TICKS - 5)) {
-                    // puncher.brake();
+                if(puncherEnc.get_position() > (LONG_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD)) {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
@@ -136,7 +116,7 @@ void stateHandler() {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PULLED BACK");
                 firstPuncherLoop = false;
                 states.oldPuncherState = states.puncherState;
-            } 
+            }
     }
 
     // Puncher Angle state handler
@@ -193,15 +173,17 @@ void stateHandler() {
         }
         states.oldParkingBrakeState = states.parkingBrakeState;
     }
-    if((std::abs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::abs(rightFrontDrive.get_actual_velocity() < DRIVE_BRAKE_THRESHOLD))) {
+    if((std::fabs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::fabs(rightFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD)) {
         brakeReady = true;
     } 
     else {
         brakeReady = false;
     }
-    pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", leftFrontDrive.get_actual_velocity());
+    pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
     pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
+    // pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Puncher Enc: %d", puncherEnc.get_position());
+    
     // necessary task delay - do not change
-        pros::delay(20);
+    pros::delay(20);
     }
 }
