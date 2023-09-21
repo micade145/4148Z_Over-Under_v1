@@ -17,6 +17,7 @@ extern double TURN_SETTLE_THRESHOLD;
 
 // Movement variables //
 // move() variables
+extern double drive_position;
 extern double drive_target;
 extern double turn_target;
 extern int max_drive_power;
@@ -44,6 +45,7 @@ extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, in
 extern void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
         int maxRotatePower, int maxOrientPower, int maxTime);   
 // extern void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew);
+extern void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime);
 
 // Auto movement task //
 extern void autoMovementTask();

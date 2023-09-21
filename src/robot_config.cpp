@@ -22,12 +22,12 @@ pros::Motor_Group ptoLeftSide({leftMidDrive, leftBackDrive});
 pros::Motor_Group ptoRightSide({rightMidDrive, rightBackDrive});
 
 // Other motors
-pros::Motor puncher(12, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_COUNTS);
+pros::Motor puncher(13, pros::E_MOTOR_GEAR_RED, false, pros::E_MOTOR_ENCODER_COUNTS);
 pros::Motor leftIntake(1, true);
 pros::Motor rightIntake(10, false);
 
 // Sensors
-pros::Imu inertial(19);
+pros::Imu inertial(20);
 // pros::Vision vision;
 pros::Rotation frontEnc(16, false);       // 6, reversed
 // pros::Rotation sideEnc(17, false);      // not in use

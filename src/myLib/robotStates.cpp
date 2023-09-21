@@ -80,14 +80,15 @@ void stateHandler() {
                 if(puncherCloseCount >= PUNCHER_CLOSE_THRESHOLD) {  // Stop 
                     puncherClosePhase = false;
                     puncher.brake();
+                    // puncher.move(10);
                     puncherEnc.reset_position();
                     puncher.tare_position();
                     puncherCloseCount = puncherOpenCount = puncherPauseCount = 0;
-                    states.setPuncherState(states.defaultPullback); // auto pullback to default pullbacak
+                    states.setPuncherState(states.defaultPullback); // auto pullback to default pullback
                     // states.setPuncherState(stateMachine::puncher_state::PULLED_BACK); // for testing release
                 }
             }
-            
+
             if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
                 pros::screen::print(TEXT_MEDIUM_CENTER, 5, "SHORT PULLBACK");
                 setPuncher(127);
@@ -181,7 +182,7 @@ void stateHandler() {
     }
     pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
     pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
-    // pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Puncher Enc: %d", puncherEnc.get_position());
+    pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Puncher Enc: %d", puncherEnc.get_position());
     
     // necessary task delay - do not change
     pros::delay(20);

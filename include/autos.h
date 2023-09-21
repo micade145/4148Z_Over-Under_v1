@@ -7,4 +7,6 @@
 extern void odomBoxTest();
 extern void odomTriangleTest();
 
+extern void squigglesTest();
+
 #endif

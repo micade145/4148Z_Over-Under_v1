@@ -83,6 +83,8 @@ void autonomous() {
 	
 	waitUntilSettled(20);
 	// odomBoxTest();
+
+		// Test: chaining together moveToPoints to run a path
     // setMoveToPoint(20, 20, 0, 100, 100, 0, 4000);
 	// // waitUntilSettled(20);
 	// pros::delay(700);
@@ -91,19 +93,17 @@ void autonomous() {
 	// setMoveToPoint(0, 0, 0, 100, 100, 0, 4000);
 	// waitUntilSettled(500);
 
-	setMove(1600, 45, 100, 80, 3000, false, false);
-	pros::delay(750);
-	setMove(1600, 315, 100, 80, 3000, false, false);
-	pros::delay(750);
-	setMove(1600, 45, 100, 80, 3000, false, false);
-	pros::delay(500);
-	setMove(800, 0, 100, 80, 3000, false, false);
+		// Tesing curve logic
+	// setMove(10000, 0, 127, 80, 5000, false, false);
+	// for(int i = 0; i < (360/10) ; i++) {
+	// 	turn_target += 10;
+	// 	pros::delay(100);
+	// }
+	// waitUntilSettled(20);
+
+	setCurve(30, 90, 6, 100, 100, 5000);
 	waitUntilSettled(20);
-	setMoveToPoint(0, 0, 0, 100, 100, 0, 3000);
-	waitUntilSettled(50);
-
 	pros::delay(1000);
-
 
 	// trackPosition.suspend();
 }
@@ -126,7 +126,7 @@ void opcontrol() {
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
 	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
-	states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
+	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
 	// states.setPuncherState(states.defaultPullback);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 

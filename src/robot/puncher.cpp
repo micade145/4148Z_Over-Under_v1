@@ -11,10 +11,10 @@ int MID_PULLBACK_TICKS = 50000;     // In centidegrees (100 * degrees)
 int LONG_PULLBACK_TICKS = 80000;    // In centidegrees (100 * degrees)
 
 // Threshold constants
-int PUNCHER_OPEN_THRESHOLD = 10;    // Iterations to release puncher (every loop is 20ms)
-int PUNCHER_PAUSE_THRESHOLD = 10;   // Iterations to pause puncher when open (every loop is 20ms)
-int PUNCHER_CLOSE_THRESHOLD = 7;    // Iterations to close puncher (every loop is 20ms)
-int PUNCHER_PULLBACK_THRESHOLD = 2500;  // How close we want to get to the pullback value before stopping the puncher (to mitigate overshoot)
+int PUNCHER_OPEN_THRESHOLD = 10;        // 10 - Iterations to release puncher (every loop is 20ms)
+int PUNCHER_PAUSE_THRESHOLD = 10;       // 10 - Iterations to pause puncher when open (every loop is 20ms)
+int PUNCHER_CLOSE_THRESHOLD = 7;        // 7 - Iterations to close puncher (every loop is 20ms)
+int PUNCHER_PULLBACK_THRESHOLD = 2500;  // 2500 - How close we want to get to the pullback value before stopping the puncher (to mitigate overshoot)
 
 // Puncher variables
 int puncherOpenCount = 0;
@@ -26,7 +26,7 @@ void setPuncher(int puncherVolt) {
     puncher.move(puncherVolt);
     // PTO conditional
     if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
-        if(puncherVolt >= 0) { 
+        if(puncherVolt >= 0) {
         // Use 4 PTO motors to pull back puncher but not release
         ptoLeftSide.move(puncherVolt);
         ptoRightSide.move(puncherVolt);

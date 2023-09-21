@@ -18,6 +18,7 @@ PID turnPID(2.1, 2.1);
 
 // Auto movement variables //
 // move() variables
+double drive_position;
 double drive_target;
 double turn_target;
 int max_drive_power;
@@ -84,6 +85,35 @@ void setMoveToPoint(double targetX, double targetY, double endOrientation, int m
     // states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
     pros::delay(20);
 }
+void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
+    int stepCount = 30;
+
+    double arcLength = 2 * M_PI * radius * (endAngle / 360); // should be in inches
+
+    double arcLengthStep = arcLength / stepCount;
+    double tempArcLength = arcLengthStep;
+
+    // double angleError = std::fabs(endAngle - inertial.get_heading());
+    double angleStep = endAngle / stepCount;
+    double tempAngle = angleStep;
+
+//  * returnSign(angleError)
+    setMove(arcLength + distance, tempAngle, maxDrivePower, maxTurnPower, maxTime, false, false);
+    
+    for(int i = 0; i < stepCount - 2; i++) {    // step count - 1, so that we have time to add distance after arc before exiting move function
+        while(drive_position < tempArcLength) {
+            pros::delay(1);
+        }
+        // tempAngle += angleStep;
+		turn_target += angleStep;
+        tempArcLength += arcLengthStep;
+        if(tempArcLength > arcLength) {tempArcLength = arcLength;}
+		pros::delay(5);
+	}
+
+    // drive_target += distance;
+    turn_target = endAngle;
+}
 
 // Auto movement task //
 void autoMovementTask() {
@@ -137,7 +167,7 @@ void move() {
     int startTime = pros::c::millis();
     int driveTimer;
     // Local variables 
-    // double initialPosition = (frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH;
+    double initialPosition = (frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH_275;
     // double currentPosition;
     int driveError, turnError = 0;
     int drivePower, turnPower;
@@ -149,7 +179,10 @@ void move() {
         // driveTimer = pros::c::millis() - startTime;
         // currentPosition = ((frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH) - initialPosition;
         // driveError = driveTarget - (frontEnc.get_position() * DRIVE_DEG_TO_INCH);
-        driveError = int(drive_target - (rightFrontDrive.get_position() * DRIVE_DEG_TO_INCH_275));
+
+        // drive_position = rightFrontDrive.get_position() * DRIVE_DEG_TO_INCH_275;
+        drive_position = ((frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH_275) - initialPosition;
+        driveError = int(drive_target - drive_position);
         // driveError = drive_target - currentPosition;
         turnError = int(turn_target - inertial.get_heading());
 
@@ -222,7 +255,7 @@ void move() {
         if((settleCount >= SETTLE_THRESHOLD) || (pros::c::millis() - startTime) >= max_time) {
             stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
             driveError = turnError = drivePower = turnPower = 0;
-            drive_target = turn_target = 0;
+            drive_position = drive_target = turn_target = 0;
             drivePID.reset();
             turnPID.reset();
             driveSettled = true;
