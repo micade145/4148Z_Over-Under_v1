@@ -9,10 +9,10 @@ void wingOpControl() {
         wingsOut = !wingsOut;
         }
     if(wingsOut) {
-        states.setWingState(stateMachine::wing_state::OUT);
+        states.setWingState(stateMachine::wing_state::WINGS_OUT);
     }
     else {
-        states.setWingState(stateMachine::wing_state::STOWED);
+        states.setWingState(stateMachine::wing_state::WINGS_STOWED);
     }
 }
 
@@ -29,5 +29,12 @@ void parkingBrakeOpControl() {
         else {
             states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
         }
+    }
+}
+
+// Side Climb opcontrol
+void sideClimbOpControl() {
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        sideClimb.set_value(true);
     }
 }

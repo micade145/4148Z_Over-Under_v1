@@ -6,20 +6,22 @@
 // int LONG_PULLBACK_TICKS = 5250;     // Puncher on last few rack teeth
 
 // Rotation sensor pullback constants
-int SHORT_PULLBACK_TICKS = 30000;   // In centidegrees (100 * degrees)
-int MID_PULLBACK_TICKS = 50000;     // In centidegrees (100 * degrees)
-int LONG_PULLBACK_TICKS = 80000;    // In centidegrees (100 * degrees)
+int SHORT_PULLBACK_TICKS = 50000;   // In centidegrees (100 * degrees) // 40000
+int MID_PULLBACK_TICKS = 78000;     // In centidegrees (100 * degrees) // 63000
+int LONG_PULLBACK_TICKS = 110000;    // In centidegrees (100 * degrees) // 80000
 
 // Threshold constants
-int PUNCHER_OPEN_THRESHOLD = 10;        // 10 - Iterations to release puncher (every loop is 20ms)
-int PUNCHER_PAUSE_THRESHOLD = 10;       // 10 - Iterations to pause puncher when open (every loop is 20ms)
-int PUNCHER_CLOSE_THRESHOLD = 7;        // 7 - Iterations to close puncher (every loop is 20ms)
+int PUNCHER_OPEN_THRESHOLD = 2;         // 2 iterations to release puncher (20ms loop * 10 = 200ms)
+int PUNCHER_PAUSE_THRESHOLD = 10;        // 10 iterations to pause puncher when open (20ms loop * 10 = 200ms)
+int PUNCHER_CLOSE_THRESHOLD = 7;        // 7 iterations to close puncher (20ms loop * 7 = 140ms)
 int PUNCHER_PULLBACK_THRESHOLD = 2500;  // 2500 - How close we want to get to the pullback value before stopping the puncher (to mitigate overshoot)
+int PUNCHER_PULLBACK_TIMEOUT = 5000;
 
 // Puncher variables
 int puncherOpenCount = 0;
 int puncherCloseCount = 0;
 int puncherPauseCount = 0;
+int puncherPullbackCount = 0;
 
 // Helper functions
 void setPuncher(int puncherVolt) {
@@ -89,10 +91,12 @@ void puncherOpControl() {
     // Assigns puncher pullback to respective punchPullback (1 = (Default) SHORT, 2 = MID, 3 = LONG)
     if(lastPunchPullback != punchPullback) {
         if(punchPullback == 2) {
+            puncherPullbackCount = 0;
             states.setPuncherState(stateMachine::puncher_state::MID_PULLBACK);
             lastPunchPullback = punchPullback;
         }
         else if(punchPullback == 3) {
+            puncherPullbackCount = 0;
             states.setPuncherState(stateMachine::puncher_state::LONG_PULLBACK);
             lastPunchPullback = punchPullback;
         }
@@ -112,9 +116,10 @@ void puncherOpControl() {
 int punchAngle = 1;
 int lastPunchAngle = 1;
 int maxPunchAngle = 4;
+bool lowAngle = false;
 void puncherAngleOpControl() {
     // Buttons to increment punchAngle up and down
-    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
         // Limit max puncher angle 
         punchPullback == 3 ? maxPunchAngle = 3 : maxPunchAngle = 4;
         // Only increment if punch anlge it will be less than / equal to max 
@@ -125,6 +130,13 @@ void puncherAngleOpControl() {
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         punchAngle --;
         if(punchAngle < 1) {punchAngle = 1;}
+    }
+
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::DOWN)) {
+            lowAngle = true;
+        }
+        
     }
 
     // Assigns puncher angle to respective punchAngle (1 = DOWN, 2 = FLAT, 3 = MID, 4 = STEEP)

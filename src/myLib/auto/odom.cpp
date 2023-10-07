@@ -30,7 +30,8 @@ double finalPolarAngle;
 
 void updatePosition() {
     // resetOdomSensors();
-    while(true) {
+
+    // while(true) {
     // Update front encoder in inches
     frontEncValue = (frontEnc.get_position() / 100)* DRIVE_DEG_TO_INCH_275; // (2.75 * M_PI) / 360
     deltaFrontEncValue = frontEncValue - lastFrontEncValue;
@@ -80,10 +81,11 @@ void updatePosition() {
     globalPose.x += deltaPose.x;
     globalPose.y += deltaPose.y;
 
-    pros::screen::print(TEXT_MEDIUM_CENTER, 1, "x: %3.2f, y: %3.2f, theta: %3.2f", globalPose.x, globalPose.y, globalPose.theta*RAD_TO_DEG);
+    pros::screen::erase_line(0, 0, 200, 1);
+    pros::screen::print(TEXT_MEDIUM_CENTER, 0, "x: %3.2f, y: %3.2f, theta: %3.2f", globalPose.x, globalPose.y, globalPose.theta*RAD_TO_DEG);
 
-    pros::delay(20);
-    }
+    // pros::delay(20);
+    // }
 }
 
 void resetOdomSensors() {

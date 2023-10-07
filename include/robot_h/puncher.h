@@ -10,11 +10,13 @@ extern int PUNCHER_OPEN_THRESHOLD;
 extern int PUNCHER_CLOSE_THRESHOLD;
 extern int PUNCHER_PAUSE_THRESHOLD;
 extern int PUNCHER_PULLBACK_THRESHOLD;
+extern int PUNCHER_PULLBACK_TIMEOUT;
 
 // Puncher variables
 extern int puncherOpenCount;
 extern int puncherCloseCount;
 extern int puncherPauseCount;
+extern int puncherPullbackCount;
 
 // Constants
 

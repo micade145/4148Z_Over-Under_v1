@@ -10,8 +10,9 @@ public:
     enum intake_state {INTAKING, OPEN, CLOSED} intakeState, oldIntakeState;
     enum puncher_state {FIRE, SHORT_PULLBACK, MID_PULLBACK, LONG_PULLBACK, PULLED_BACK} puncherState, oldPuncherState, defaultPullback = SHORT_PULLBACK;
     enum puncher_angle_state {STEEP, MID, FLAT, DOWN} puncherAngleState, oldPuncherAngleState;
-    enum wing_state {OUT, STOWED} wingState, oldWingState;
+    enum wing_state {WINGS_OUT, WINGS_STOWED, LEFT_OUT, RIGHT_OUT} wingState, oldWingState;
     enum parking_brake_state {BRAKE_ON, BRAKE_OFF} parkingBrakeState, oldParkingBrakeState;
+    // enum side_climb_state {CLIMB_OUT, CLIMB_IN} sideClimbState, oldSideClimbState;
     // Drive auto states
     enum drive_auto_state{MOVE, TURN, MOVE_TO_POINT, OFF} driveAutoState;
     // Alliance color

@@ -38,25 +38,62 @@ extern bool driveSettled;
 extern int max_time;
 
 // Setters for auto functions //
-// all parameters
+/**
+ * @brief Setter for the move function: Can set drive only, turn only, or both simultaneously 
+ * @param driveTarget Target position for the drive, in inches
+ * @param turnTarget Target heading for drive
+ * @param maxDrivePower Max power for drive
+ * @param maxTurnPower Max power for turn 
+ * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param driveSlew Boolean for using slew rate for drive
+ * @param turnSlew Boolean for using slew rate for turn
+*/
 extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime, bool driveSlew, bool turnSlew);
-// no slew rate
-// extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime);
+
+/**
+ * @brief Setter for the moveToPoint function
+ * @param targetX Target x coordinate, in inches
+ * @param targetY Target y coordinate, in inches
+ * @param endOrientation End angle after arriving at point
+ * @param maxTranslatePower Max power for driving to target
+ * @param maxRotatePower Max power for turn to target
+ * @param maxOrientPower Max power for end orientation turn
+ * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+*/
 extern void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
         int maxRotatePower, int maxOrientPower, int maxTime);   
-// extern void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew);
+
+/**
+ * @brief Setter for curve function
+ * @param distance Distance to move after finishing arc
+ * @param endAngle End angle for arc; robot will turn left if negative and turn right if positive
+ * @param radius Radius of the arc the robot will travel
+ * @param maxDrivePower Max power for drive
+ * @param maxTurnPower Max power for turn
+ * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+*/
 extern void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime);
 
 // Auto movement task //
 extern void autoMovementTask();
 
-// Wait function for drive
+/**
+ * @brief Delay until movement is finished and drive is settled
+ * @param msecDelay Addition delay after the drive is settled 
+*/
 void waitUntilSettled(int msecDelay);
 
 // Auto movement functions //
 extern void move();
 extern void moveToPoint();
 // extern void turn();
+
+                // archive //
+// setter for turn function
+// extern void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew);
+// simplified setter for move function
+// extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime);
+
 
 // extern void move(double driveTarget, double maxDrivePower, double turnTarget, double maxTurnPower, 
 //           int maxTime, bool driveSlew, bool turnSlew);

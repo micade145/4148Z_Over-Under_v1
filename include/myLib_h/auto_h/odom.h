@@ -9,7 +9,7 @@ extern double FRONT_ENC_OFFSET;
 extern double SIDE_ENC_OFFSET;
 
 /**
- * @brief Class that creates a point with x,y coordinates and an orientation
+ * @brief Class that creates a point with x, y coordinates and an orientation
 */
 class Point {
     private:
@@ -22,6 +22,13 @@ class Point {
     // double getY() {return(y);}
     // double getTheta() {return(theta);}
 
+    Point() {};
+    Point(double point_x, double point_y) {
+        x = point_x;
+        y = point_y;
+        // theta = point_heading;
+    }
+    
     /**
      * @brief Sets the coordinates of the point 
      * @param new_x New x coordinate

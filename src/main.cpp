@@ -28,19 +28,20 @@ void initialize() {
 	// pros::lcd::set_text(1, "Hello PROS User!");
 	// pros::lcd::register_btn1_cb(on_center_button);
 
-	inertial.reset(false);
+	// inertial.reset(false);
 
 	// Initialize default states
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
-	states.setWingState(stateMachine::wing_state::STOWED);
+	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	
 	// Initialize puncher
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
 }
+pros::Task initRobot([] {inertial.reset(true);});
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -75,37 +76,19 @@ void competition_initialize() {}
 pros::Task superstruct(stateHandler);
 pros::Task autoMovement(autoMovementTask);
 void autonomous() {
-	pros::Task trackPosition(updatePosition);
+	// pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
-	pros::delay(20);
+
 	// states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-	
-	waitUntilSettled(20);
-	// odomBoxTest();
+	pros::delay(20);
 
-		// Test: chaining together moveToPoints to run a path
-    // setMoveToPoint(20, 20, 0, 100, 100, 0, 4000);
-	// // waitUntilSettled(20);
-	// pros::delay(700);
-	// setMoveToPoint(40, 0, 0, 100, 100, 0, 4000);
 	// waitUntilSettled(20);
-	// setMoveToPoint(0, 0, 0, 100, 100, 0, 4000);
-	// waitUntilSettled(500);
-
-		// Tesing curve logic
-	// setMove(10000, 0, 127, 80, 5000, false, false);
-	// for(int i = 0; i < (360/10) ; i++) {
-	// 	turn_target += 10;
-	// 	pros::delay(100);
-	// }
-	// waitUntilSettled(20);
-
-	setCurve(30, 90, 6, 100, 100, 5000);
-	waitUntilSettled(20);
-	pros::delay(1000);
-
-	// trackPosition.suspend();
+	defenseAuto(SOLO);
+	defenseAuto(ELIMS);
+	offenseAuto(SAFE);
+	offenseAuto(RISKY);
+	sixBall();
 }
 
 /**

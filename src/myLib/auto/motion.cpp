@@ -12,9 +12,14 @@ double DISTANCE_SETTLE_THRESHOLD = 1;  // 1 inch - tune later
 double TURN_SETTLE_THRESHOLD = 1;   // 1 degree
 
 // Drive PID objects
-PID drivePID(10, 0);
-PID translationPID(20, 2);
-PID turnPID(2.1, 2.1);
+// PID drivePID_6M(8, 12);     // TUNED? PID for 6m drive: error units are in INCHES
+// PID drivePID(6, 10);        // NOT TUNED: PID for 2m drive: error units are in INCHES
+// PID translationPID(20, 2);  // NOT TUNED: Drive PID for moveToPoint: error units are in INCHES
+// PID turnPID(1.5, 4);        // TUNED: Turn PID: error units are in DEGREES
+
+PID drivePID(10, 0);        // MINI BOT
+PID translationPID(20, 2);  // MINI BOT
+PID turnPID(2.1, 2.1);      // MINI BOT 
 
 // Auto movement variables //
 // move() variables
@@ -85,33 +90,61 @@ void setMoveToPoint(double targetX, double targetY, double endOrientation, int m
     // states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
     pros::delay(20);
 }
+
+// void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
+//     int stepCount = 30;
+
+//     double arcLength = 2 * M_PI * radius * (std::fabs(endAngle) / 360); // should be in inches
+
+//     double arcLengthStep = arcLength / stepCount;
+//     double tempArcLength = arcLengthStep;
+
+//     // double angleError = std::fabs(endAngle - inertial.get_heading());
+//     double angleStep = endAngle / stepCount;
+//     double tempAngle = angleStep;
+
+// //  * returnSign(angleError)
+//     setMove(arcLength + distance, tempAngle, maxDrivePower, maxTurnPower, maxTime, false, false);
+    
+//     for(int i = 0; i < stepCount - 2; i++) {    // step count - 1, so that we have time to add distance after arc before exiting move function
+//         while(drive_position < tempArcLength) {
+//             pros::delay(1);
+//         }
+//         // tempAngle += angleStep;
+// 		turn_target += angleStep;
+//         tempArcLength += arcLengthStep;
+//         if(tempArcLength > arcLength) {tempArcLength = arcLength;}
+// 		pros::delay(5);
+// 	}
+
+//     // drive_target += distance;
+//     turn_target = endAngle;
+// }
+
 void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
-    int stepCount = 30;
+    int stepCount = 50; // How many "slices" to divide the arc into
 
-    double arcLength = 2 * M_PI * radius * (endAngle / 360); // should be in inches
+    double angleError = endAngle - inertial.get_heading();  // calculate error to endAngle
+    double arcLength = 2 * M_PI * radius * (std::fabs(angleError) / 360); // use error to endAngle to find arc length to travel
 
-    double arcLengthStep = arcLength / stepCount;
-    double tempArcLength = arcLengthStep;
+    double arcLengthStep = arcLength / stepCount;   // define step for arclength
+    double tempArcLength = arcLengthStep;           // will be used to check when to iterate angle
 
-    // double angleError = std::fabs(endAngle - inertial.get_heading());
-    double angleStep = endAngle / stepCount;
-    double tempAngle = angleStep;
+    double angleStep = angleError / stepCount;      // define step for angle
+    double tempAngle = inertial.get_heading() + angleStep;  // used to get arc started
 
 //  * returnSign(angleError)
     setMove(arcLength + distance, tempAngle, maxDrivePower, maxTurnPower, maxTime, false, false);
     
-    for(int i = 0; i < stepCount - 2; i++) {    // step count - 1, so that we have time to add distance after arc before exiting move function
+    for(int i = 0; i < stepCount - 1; i++) {    // step count - 2, so that we have time to add distance after arc before exiting move function
         while(drive_position < tempArcLength) {
             pros::delay(1);
         }
-        // tempAngle += angleStep;
 		turn_target += angleStep;
         tempArcLength += arcLengthStep;
         if(tempArcLength > arcLength) {tempArcLength = arcLength;}
 		pros::delay(5);
 	}
-
-    // drive_target += distance;
     turn_target = endAngle;
 }
 
@@ -145,13 +178,15 @@ void autoMovementTask() {
 void waitUntilSettled(int msecDelay) {
     while(!driveSettled) {
         pros::delay(20);
-        pros::screen::set_eraser(COLOR_BLACK);
-        pros::screen::erase();
-        pros::screen::set_pen(COLOR_BLUE);
-        pros::screen::fill_rect(20, 20, 400, 400);
+        // pros::screen::set_eraser(COLOR_BLACK);
+        // pros::screen::erase();
+        // pros::screen::set_pen(COLOR_BLUE);
+        // pros::screen::fill_rect(20, 20, 400, 400);
     }
     pros::delay(20);
-    driveSettled = false;
+    driveSettled = false;                   // debug
+    pros::screen::set_eraser(COLOR_BLACK);  // debug
+    pros::screen::erase();
     states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
     drive_target = turn_target = 0;
     target_x = target_x = end_orientation = 0;
@@ -222,30 +257,22 @@ void move() {
         drivePower = constrainVoltage(drivePower, max_drive_power, -max_drive_power);
         turnPower = constrainVoltage(turnPower, max_turn_power, -max_turn_power);
         
-        pros::screen::erase_line(0, 1, 200, 1);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %5.1f, Err: %5d, Out: %3d", drive_target, driveError, drivePower);
-        pros::screen::erase_line(0, 3, 200, 3);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Tgt: %3.1f, Err: %3d, Out: %3d", turn_target, turnError, turnPower);
-
         // Exit conditions
-        // If drive only, check drive error
-        if(std::fabs(drive_target) > 0 && turn_target == 0) {
+        if(std::fabs(drive_target) > 0 && turn_target == 0) {   // If drive only, check drive error
             if(std::fabs(driveError) <= DISTANCE_SETTLE_THRESHOLD) {
                 settleCount++;
                 // stopLoop = true;
             }
             else {settleCount = 0;}
         }
-        // If turn only, check turn error
-        if(std::fabs(turn_target) > 0 && drive_target == 0) {
+        if(std::fabs(turn_target) > 0 && drive_target == 0) {   // If turn only, check turn error
             if(std::fabs(turnError) <= TURN_SETTLE_THRESHOLD) {
                 settleCount++;
                 // stopLoop = true;
             }
             else {settleCount = 0;}
         }
-        // If both drive & turn, check both errors
-        if(std::fabs(drive_target) > 0 && std::fabs(turn_target) > 0) {
+        if(std::fabs(drive_target) > 0 && std::fabs(turn_target) > 0) { // If both drive & turn, check both errors
             if(std::fabs(driveError) <= DISTANCE_SETTLE_THRESHOLD && std::fabs(turnError) <= TURN_SETTLE_THRESHOLD) {
                 settleCount++;
                 // stopLoop = true;
@@ -264,7 +291,14 @@ void move() {
         }
 
         // Output to drive
-        setDrive(-drivePower - turnPower, -drivePower + turnPower); // CHANGE LATER
+        setDrive(drivePower - turnPower, drivePower + turnPower); // MINI BOT
+        // setDrive(drivePower + turnPower, drivePower - turnPower); // NORMAL BOT
+
+        // Debug 
+        pros::screen::erase_line(0, 1, 200, 1);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %5.1f, Err: %5d, Out: %3d", drive_target, driveError, drivePower);
+        pros::screen::erase_line(0, 3, 200, 3);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Tgt: %3.1f, Err: %3d, Out: %3d", turn_target, turnError, turnPower);
 
         // necessary delay - do not change
         pros::delay(20);
@@ -330,8 +364,9 @@ void moveToPoint() {
             states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
         }
 
-        setDrive(-translationPower - rotationPower, -translationPower + rotationPower); // CHANGE LATER
-        
+        setDrive(translationPower - rotationPower, translationPower + rotationPower); // MINI BOT
+        // setDrive(translationPower + rotationPower, translationPower - rotationPower); // NORMAL BOT
+
         pros::screen::erase_line(0, 0, 200, 0);
         pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Tgt: x: %3.1f, y: %3.1f, theta: %3.1f", target_x, target_y, targetAngle);
         pros::screen::erase_line(0, 4, 200, 4);

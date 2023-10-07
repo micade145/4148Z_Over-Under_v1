@@ -45,6 +45,8 @@ extern pros::ADIDigitalOut rightWing;
 extern pros::ADIDigitalOut leftParkingBrake;
 extern pros::ADIDigitalOut rightParkingBrake;
 extern pros::ADIDigitalIn puncherLimitSwitch;
+extern pros::ADIDigitalOut sideClimb;
+
 // extern pros::ADIDigitalOut stick;
 
 #endif
