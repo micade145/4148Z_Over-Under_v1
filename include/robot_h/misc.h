@@ -11,7 +11,8 @@ extern void wingOpControl();
 // Parking Brake Opcontrol
 extern void parkingBrakeOpControl();
 
-// Stick Opcontrol
+// Side Climb Opcontrol
+extern void sideClimbOpControl();
 
 
 #endif

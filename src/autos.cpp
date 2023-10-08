@@ -1,6 +1,6 @@
 #include "autos.h"
 
-// Setpoints
+// ******** Setpoints ******** //
 Point leftTriball1(48, 72);		// Left mid - auto line
 Point leftTriball2(68, 72);		// Left pole - auto line
 Point rightTriball3(76, 72);	// Right pole - auto line
@@ -11,6 +11,7 @@ Point hangBarTriball(72, 12);	// Underneath hang bar
 Point leftMatchload(20, 20);	// In front of left matchload station
 Point rightMatchload(124, 20);	// In front of right matchload station
 
+
 void shakeRobot() {
 	// Help engage PTO
 	setDrive(10, 10);
@@ -20,7 +21,7 @@ void shakeRobot() {
 	stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
 }
 
-// ******* Test Autos ******* //
+// ******** Test Autos ******** //
 void odomBoxTest() {
     globalPose.setPoint(0.0, 0.0, 0);
     setMoveToPoint(0, 24, 0, 100, 100, 0, 3000);
@@ -84,7 +85,7 @@ void curveTuning() {
 	pros::delay(1000);
 }
 
-// ******* Match Autos *******// 
+// ******** Match Autos ********// 
 /**
  * OFFENSIVE ZONE : YOUR GOAL ON YOUR SIDE
  * 
@@ -95,8 +96,12 @@ void curveTuning() {
 void defenseAuto(defense_auto_mode s) {
 	// Init
 	// inertial.set_heading(45);
-	globalPose.setPoint(30.5, 11, 55);
-	pros::delay(60);
+	// globalPose.setPoint(30.5, 11, 55); // Original setpoint
+	globalPose.setPoint(30.5, 6.5, 2);
+	pros::delay(20);
+
+	setCurve(12, 65, 24, 100, 100, 2000);
+	waitUntilSettled(20);
 
 	// First shot
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
@@ -108,23 +113,28 @@ void defenseAuto(defense_auto_mode s) {
 	// Mid Ball - Close
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
-	setMoveToPoint(leftTriball1.x, leftTriball1.y, 0, 100, 80, 0, 3000);
+	setMoveToPoint(leftTriball1.x, leftTriball1.y - 8, 0, 100, 80, 0, 3000);
 	waitUntilSettled(20);
 	states.setIntakeState(stateMachine::intake_state::INTAKING);
-	pros::delay(500);
+	pros::delay(400);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 
-	setMove(-18, inertial.get_heading(), 100, 80, 3000, false, false);
+	setMove(-6, 0, 100, 80, 1000, false, false);
 	waitUntilSettled(20);
-	setMove(0, 90, 0, 80, 2000, false, false);
+	setMove(0, 90, 0, 80, 1000, false, false);
+	waitUntilSettled(20);
 
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
 
 	// Mid Ball - Near Bar
 	states.setWingState(stateMachine::wing_state::WINGS_OUT);
-	setMove(30, 90, 80, 70, 2000, false, false);
+	setMove(30, 90, 100, 70, 1200, false, false);
+	pros::delay(200);
 	
 	states.setPuncherState(stateMachine::puncher_state::FIRE);
+	pros::delay(1000);
+	setMove(-24, 90, 100, 80, 1500, false, false);
+	// pros::delay(500);
 	waitUntilSettled(20);
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 
@@ -132,7 +142,7 @@ void defenseAuto(defense_auto_mode s) {
 		// Back to Matchload zone
 		setMoveToPoint(leftMatchload.x - 6, leftMatchload.y, 0, 100, 80, 0, 3000);
 		waitUntilSettled(20);
-		setMove(0, 135, 0, 80, 3000, false, false);
+		setMove(0, 135, 0, 80, 2000, false, false);
 		waitUntilSettled(20);
 		states.setWingState(stateMachine::wing_state::RIGHT_OUT);
 		pros::delay(100);
@@ -208,7 +218,7 @@ void sixBall() {
 }
 
 
-// ******* AUTO ARCHIVE ******* //
+// ******** AUTO ARCHIVE ******** //
 void defenseElims() {
 
 }

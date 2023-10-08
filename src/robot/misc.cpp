@@ -16,7 +16,7 @@ void wingOpControl() {
     }
 }
 
-// Parking brake opcontrol
+// Parking Brake opcontrol
 bool parkingBrakeOn = false;
 void parkingBrakeOpControl() {
     if(brakeReady) {
@@ -34,7 +34,9 @@ void parkingBrakeOpControl() {
 
 // Side Climb opcontrol
 void sideClimbOpControl() {
+    bool sideClimbState = false;
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-        sideClimb.set_value(true);
+        sideClimbState = !sideClimbState;
     }
+    sideClimb.set_value(sideClimbState);
 }

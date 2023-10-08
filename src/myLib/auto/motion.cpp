@@ -291,7 +291,7 @@ void move() {
         }
 
         // Output to drive
-        setDrive(drivePower - turnPower, drivePower + turnPower); // MINI BOT
+        setDrive(-drivePower - turnPower, -drivePower + turnPower); // MINI BOT
         // setDrive(drivePower + turnPower, drivePower - turnPower); // NORMAL BOT
 
         // Debug 
@@ -364,11 +364,11 @@ void moveToPoint() {
             states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
         }
 
-        setDrive(translationPower - rotationPower, translationPower + rotationPower); // MINI BOT
+        setDrive(-translationPower - rotationPower, -translationPower + rotationPower); // MINI BOT
         // setDrive(translationPower + rotationPower, translationPower - rotationPower); // NORMAL BOT
 
-        pros::screen::erase_line(0, 0, 200, 0);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 0, "Tgt: x: %3.1f, y: %3.1f, theta: %3.1f", target_x, target_y, targetAngle);
+        pros::screen::erase_line(0, 3, 200, 3);
+        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Tgt: x: %3.1f, y: %3.1f, theta: %3.1f", target_x, target_y, targetAngle);
         pros::screen::erase_line(0, 4, 200, 4);
         pros::screen::print(TEXT_MEDIUM_CENTER, 4, "dist err: %3.1f, volt: %3d, angle err: %3.1f, volt: %3d", translationError, translationPower, rotationError, rotationPower);
 

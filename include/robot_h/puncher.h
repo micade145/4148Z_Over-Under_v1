@@ -1,6 +1,7 @@
 #ifndef PUNCHER_H
 #define PUNCHER_H
 #include "main.h"
+#include <string>
 
 // Puncher contstants
 extern int SHORT_PULLBACK_TICKS;
@@ -26,6 +27,9 @@ extern void setPuncherBrakeMode(pros::motor_brake_mode_e puncherBrakeMode);
 extern void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode);
 
 // Puncher 
+extern void firePuncher(int numTimes, int newPullback);
+extern void matchload(int newPullback);
+
 extern void puncherTask();
 
 // Opcontrol function

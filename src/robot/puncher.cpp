@@ -52,8 +52,17 @@ void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode) {
     }
 }
 
-void firePuncher(int numTimes, stateMachine::puncher_state newPullback) {
-    states.defaultPullback = newPullback;
+void firePuncher(int numTimes, int newPullback) {
+    if(newPullback == 1) {
+        states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
+    }
+    else if(newPullback == 2) {
+        states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+    }
+    else {
+        states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
+    }
+
     for(int i = 0; i < numTimes; i++) {
         states.setPuncherState(stateMachine::puncher_state::FIRE);
         while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
@@ -61,6 +70,24 @@ void firePuncher(int numTimes, stateMachine::puncher_state newPullback) {
         }
     }
     // states.defaultPullback = this->states.defaultPullback;
+}
+
+void matchload(int newPullback) {
+    if(newPullback == 1) {
+        states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
+    }
+    else if(newPullback == 2) {
+        states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+    }
+    else {
+        states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
+    }
+    while(!controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) || !controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+        states.setPuncherState(stateMachine::puncher_state::FIRE);
+        while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
+            pros::delay(5);
+        }
+    }
 }
 
 // Opcontrol functions

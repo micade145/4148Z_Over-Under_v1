@@ -11,7 +11,7 @@ double VOLT_TO_PCT = 100 / 12.7;
 double RAD_TO_DEG = 180 / M_PI;
 double DEG_TO_RAD = M_PI / 180;
 
-// useful functions
+// Useful functions
 double constrainValue(double input, double max, double min) {
     if(input > max) {input = max;}
     if(input < min) {input = min;}

@@ -83,7 +83,8 @@ void autonomous() {
 	// states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
 	pros::delay(20);
 
-	// waitUntilSettled(20);
+	waitUntilSettled(20);
+
 	defenseAuto(SOLO);
 	defenseAuto(ELIMS);
 	offenseAuto(SAFE);
@@ -137,6 +138,9 @@ void opcontrol() {
 		// Parking Brake toggle
 		parkingBrakeOpControl();
 
+		// Side Climb toggle
+		sideClimbOpControl();
+		
 		pros::delay(20);
 	}
 }
