@@ -46,6 +46,8 @@
 //        myLib        //
 #include "myLib_h/util.h"
 #include "myLib_h/robotStates.h"
+#include "myLib_h/gui.h"
+
 // myLib/auto_h
 #include "myLib_h/auto_h/pid.h"
 #include "myLib_h/auto_h/motion.h"
