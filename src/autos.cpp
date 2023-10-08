@@ -163,7 +163,47 @@ void offenseAuto(offense_auto_mode s) {
 
 void sixBall() {
 	// Init
-	globalPose.setPoint(84, 12, 45);
+	globalPose.setPoint(hangBarTriball.x + 12, hangBarTriball.y, 45);
+
+	// Shoot preload
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
+	pros::delay(200);
+	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+	states.setPuncherState(stateMachine::puncher_state::FIRE);
+	
+
+	// Intake hangBarTriball
+	setMove(0, 270, 0, 100, 1500, false, false);
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
+	states.setIntakeState(stateMachine::intake_state::OPEN);
+	waitUntilSettled(20);
+
+	setMove(12, 270, 80, 60, 1500, false, false);
+	pros::delay(800);
+	states.setIntakeState(stateMachine::intake_state::INTAKING);
+	pros::delay(500);
+
+	setMove(-12, 270, 100, 80, 1500, false, false);
+	waitUntilSettled(20);
+	setMove(0, 45, 0, 100, 1500, false, false);
+	waitUntilSettled(20);
+	states.setPuncherState(stateMachine::puncher_state::FIRE);
+
+	// Knock out matchload triball
+	setMove(0, 90, 0, 80, 1500, false, false);
+	waitUntilSettled(20);
+	setMove(46, 90, 100, 80, 2000, false, false);
+	waitUntilSettled(20);
+	setCurve(30, 1, 12, 100, 100, 2000);
+	states.setWingState(stateMachine::wing_state::RIGHT_OUT);
+	waitUntilSettled(20);
+
+	// Triball from mid
+	setMove(-12, 0, 100, 80, 1500, false, false);
+	waitUntilSettled(20);
+	setMoveToPoint(rightTriball5.x + 6, rightTriball5.y - 6, 0, 100, 80, 0, 2500);
+	states.setIntakeState(stateMachine::intake_state::OPEN);
+
 
 }
 

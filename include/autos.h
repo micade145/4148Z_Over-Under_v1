@@ -35,9 +35,9 @@ extern void defenseAuto(defense_auto_mode s);
 */
 extern void offenseAuto(offense_auto_mode s);
 
-/** @brief Setup: Under Hang Bar of Offensive Zone, facing Triball, 270 deg --
+/** @brief Setup: Under Hang Bar of Offensive Zone, facing goal, ~45 deg --
  * 
- * Shoot preload, intake Triball, shoot to goal; Knock out Matchload triball & push into goal; Score 1 from mid and 2 from auto line
+ * Shoot preload, (turn) intake hangBarTriball, shoot to goal; Knock out Matchload triball & push into goal; Score 1 from mid and 2 from auto line
 */
 extern void sixBall();
 
