@@ -16,6 +16,6 @@
 // https://docs.lvgl.io/8.3/get-started/index.html
 // https://github.com/lvgl/lvgl
 
-extern void initDisplayGUI();
+extern void initGUI();
 
 #endif
