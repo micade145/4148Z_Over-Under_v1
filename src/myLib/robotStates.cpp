@@ -189,11 +189,17 @@ void stateHandler() {
             pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES OFF");
             leftParkingBrake.set_value(false);
             rightParkingBrake.set_value(false);
+            // if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
+            //     states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+            // }
         }
         else if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_ON)) {
             pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");
             leftParkingBrake.set_value(true);
             rightParkingBrake.set_value(true);
+            // if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
+            //     states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+            // }
         }
         states.oldParkingBrakeState = states.parkingBrakeState;
     }

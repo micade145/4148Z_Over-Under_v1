@@ -13,13 +13,13 @@ double TURN_SETTLE_THRESHOLD = 1;   // 1 degree
 
 // Drive PID objects
 // PID drivePID_6M(8, 12);     // TUNED? PID for 6m drive: error units are in INCHES
-// PID drivePID(6, 10);        // NOT TUNED: PID for 2m drive: error units are in INCHES
-// PID translationPID(20, 2);  // NOT TUNED: Drive PID for moveToPoint: error units are in INCHES
-// PID turnPID(1.5, 4);        // TUNED: Turn PID: error units are in DEGREES
+PID drivePID(8, 12);        // NOT TUNED: PID for 2m drive: error units are in INCHES
+PID translationPID(20, 2);  // NOT TUNED: Drive PID for moveToPoint: error units are in INCHES
+PID turnPID(1.5, 4);        // TUNED: Turn PID: error units are in DEGREES
 
-PID drivePID(10, 0);        // MINI BOT
-PID translationPID(20, 2);  // MINI BOT
-PID turnPID(2.1, 2.1);      // MINI BOT 
+// PID drivePID(10, 0);        // MINI BOT
+// PID translationPID(20, 2);  // MINI BOT
+// PID turnPID(2.1, 2.1);      // MINI BOT 
 
 // Auto movement variables //
 // move() variables
@@ -291,8 +291,8 @@ void move() {
         }
 
         // Output to drive
-        setDrive(-drivePower - turnPower, -drivePower + turnPower); // MINI BOT
-        // setDrive(drivePower + turnPower, drivePower - turnPower); // NORMAL BOT
+        // setDrive(-drivePower - turnPower, -drivePower + turnPower); // MINI BOT
+        setDrive(drivePower + turnPower, drivePower - turnPower); // NORMAL BOT
 
         // Debug 
         pros::screen::erase_line(0, 1, 200, 1);
@@ -364,8 +364,8 @@ void moveToPoint() {
             states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
         }
 
-        setDrive(-translationPower - rotationPower, -translationPower + rotationPower); // MINI BOT
-        // setDrive(translationPower + rotationPower, translationPower - rotationPower); // NORMAL BOT
+        // setDrive(-translationPower - rotationPower, -translationPower + rotationPower); // MINI BOT
+        setDrive(translationPower + rotationPower, translationPower - rotationPower); // NORMAL BOT
 
         pros::screen::erase_line(0, 3, 200, 3);
         pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Tgt: x: %3.1f, y: %3.1f, theta: %3.1f", target_x, target_y, targetAngle);

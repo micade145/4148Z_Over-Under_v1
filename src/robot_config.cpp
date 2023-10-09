@@ -29,7 +29,7 @@ pros::Motor rightIntake(10, false);
 // Sensors
 pros::Imu inertial(16);
 // pros::Vision vision;
-pros::Rotation frontEnc(6, false);       // Main bot: 6 - REVERSED; Mini bot: NORMAL
+pros::Rotation frontEnc(6, true);       // Main bot: 6 - REVERSED; Mini bot: NORMAL
 // pros::Rotation sideEnc(17, false);      // not in use
 pros::Rotation puncherEnc(18, true);    // REVERSED
 

@@ -31,15 +31,19 @@ void initialize() {
 	// inertial.reset(false);
 
 	// Initialize default states
-	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
-	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
+	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
+	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
 	
 	// Initialize puncher
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
+
+	initGUI();
 }
 pros::Task initRobot([] {inertial.reset(true);});
 
@@ -84,12 +88,32 @@ void autonomous() {
 	pros::delay(20);
 
 	waitUntilSettled(20);
+	
+	if(autoToRun == 1) {
+		defenseAuto(SOLO);
+	}
+	if(autoToRun == 2) {
+		defenseAuto(ELIMS);
+	}
+	if(autoToRun == 3) {
+		offenseAuto(SAFE);
+	}
+	if(autoToRun == 4) {
+		offenseAuto(RISKY);
+	}
+	if(autoToRun == 5) {
+		sixBall();
+	}
+	if(autoToRun == 6) {
+		progSkills();
+	}
 
-	defenseAuto(SOLO);
-	defenseAuto(ELIMS);
-	offenseAuto(SAFE);
-	offenseAuto(RISKY);
-	sixBall();
+	// defenseAuto(SOLO);
+	// defenseAuto(ELIMS);
+	// offenseAuto(SAFE);
+	// offenseAuto(RISKY);
+	// sixBall();
+	// progSkills();
 }
 
 /**
@@ -121,6 +145,7 @@ void opcontrol() {
 	// globalPose.setPoint(0,0,0);
 
 	while (true) {
+		pros::screen::print(TEXT_MEDIUM_CENTER, 5, "AUTO TO RUN %d", autoToRun);
 		// Drive controls
 		splitArcade(pros::E_MOTOR_BRAKE_COAST);
 		drivePtoOpControl();
