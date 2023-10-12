@@ -76,7 +76,7 @@ void stateHandler() {
                 if(puncherClosePhase) { // Pause, then close (re-engage)
                     puncherPauseCount++;
                     if(puncherPauseCount >= PUNCHER_PAUSE_THRESHOLD) {
-                        puncher.move(90); //80
+                        puncher.move(100); //80
                         puncherCloseCount++;
                     }
                 }
@@ -215,6 +215,37 @@ void stateHandler() {
     if(pros::competition::is_autonomous()) {
         updatePosition();
     }
+
+    // ******** Matchload ******** //
+    while(matchloadState) {
+        // for(int i = 0; i < 48; i++) {
+            // release
+            puncher.move(-127);
+            pros::delay(200);
+            puncher.move(90);
+            pros::delay(200);
+    
+            // pullback
+            puncherEnc.reset_position();
+            setPuncher(127);
+            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD) {
+                pros::delay(5);
+            }
+        // }
+        stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
+        states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+    }
+
+    // if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+    //     matchloadState = !matchloadState;
+    //     while(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { // do I need this?
+    //         pros::delay(5);
+    //     }
+    // }
+
+    // if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+    //     matchloadState = false;
+    // }
 
     // ******** DEBUG ******** //
     pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);

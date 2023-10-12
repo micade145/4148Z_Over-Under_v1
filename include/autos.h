@@ -52,7 +52,7 @@ extern void progSkills();
 
 
 
-// ************* Deprecated autos :( ************* //
+// ************* Deprecated autos !! ************* //
 
 /** @brief Setup: Right side of Matchload Station, 45 deg --
  * 

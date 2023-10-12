@@ -11,9 +11,9 @@ int MID_PULLBACK_TICKS = 78000;     // In centidegrees (100 * degrees) // 63000
 int LONG_PULLBACK_TICKS = 110000;    // In centidegrees (100 * degrees) // 80000
 
 // Threshold constants
-int PUNCHER_OPEN_THRESHOLD = 7;         // 2 iterations to release puncher (20ms loop * 10 = 200ms)
-int PUNCHER_PAUSE_THRESHOLD = 10;        // 10 iterations to pause puncher when open (20ms loop * 10 = 200ms)
-int PUNCHER_CLOSE_THRESHOLD = 7;        // 7 iterations to close puncher (20ms loop * 7 = 140ms)
+int PUNCHER_OPEN_THRESHOLD = 4;         // 2 iterations to release puncher (20ms loop * 10 = 200ms)
+int PUNCHER_PAUSE_THRESHOLD = 5;        // 10 iterations to pause puncher when open (20ms loop * 10 = 200ms)
+int PUNCHER_CLOSE_THRESHOLD = 4;        // 7 iterations to close puncher (20ms loop * 7 = 140ms)
 int PUNCHER_PULLBACK_THRESHOLD = 2500;  // 2500 - How close we want to get to the pullback value before stopping the puncher (to mitigate overshoot)
 int PUNCHER_PULLBACK_TIMEOUT = 2000;
 
@@ -72,21 +72,17 @@ void firePuncher(int numTimes, int newPullback) {
     // states.defaultPullback = this->states.defaultPullback;
 }
 
-void matchload(int newPullback) {
-    if(newPullback == 1) {
-        states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
-    }
-    else if(newPullback == 2) {
-        states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
-    }
-    else {
-        states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
-    }
-    while(!controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) || !controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
-        states.setPuncherState(stateMachine::puncher_state::FIRE);
-        while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
-            pros::delay(5);
-        }
+// while(true) {
+//         states.setPuncherState(stateMachine::puncher_state::FIRE);
+//         while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
+//             pros::delay(5);
+//         }
+//     }
+
+bool matchloadState = false;
+void matchloadOpControl() {
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+        matchloadState = !matchloadState;
     }
 }
 

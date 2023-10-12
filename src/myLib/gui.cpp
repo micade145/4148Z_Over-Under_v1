@@ -1,7 +1,7 @@
 #include "myLib_h/gui.h"
 
 
-int autoToRun = 0;
+int autoToRun = 1;
 lv_res_t act1(lv_obj_t *btnm, const char *txt){
 	//printf("red button: %s released\n", txt);
     // if(strcmp(txt, btnmMap[i]) == 0){

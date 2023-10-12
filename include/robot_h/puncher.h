@@ -28,7 +28,8 @@ extern void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode);
 
 // Puncher 
 extern void firePuncher(int numTimes, int newPullback);
-extern void matchload(int newPullback);
+extern void matchloadOpControl();
+extern bool matchloadState;
 
 extern void puncherTask();
 

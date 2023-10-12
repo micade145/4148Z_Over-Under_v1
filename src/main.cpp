@@ -28,11 +28,11 @@ void initialize() {
 	// pros::lcd::set_text(1, "Hello PROS User!");
 	// pros::lcd::register_btn1_cb(on_center_button);
 
-	// inertial.reset(false);
+	inertial.reset(false);
 
 	// Initialize default states
-	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
-	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
+	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
 	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
@@ -43,9 +43,9 @@ void initialize() {
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
 
-	initGUI();
+	// initGUI();
 }
-pros::Task initRobot([] {inertial.reset(true);});
+// pros::Task initRobot([] {inertial.reset(true);});
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -89,26 +89,26 @@ void autonomous() {
 
 	waitUntilSettled(20);
 	
-	if(autoToRun == 1) {
-		defenseAuto(SOLO);
-	}
-	if(autoToRun == 2) {
-		defenseAuto(ELIMS);
-	}
-	if(autoToRun == 3) {
-		offenseAuto(SAFE);
-	}
-	if(autoToRun == 4) {
-		offenseAuto(RISKY);
-	}
-	if(autoToRun == 5) {
-		sixBall();
-	}
-	if(autoToRun == 6) {
-		progSkills();
-	}
+	// if(autoToRun == 1) {
+	// 	defenseAuto(SOLO);
+	// }
+	// if(autoToRun == 2) {
+	// 	defenseAuto(ELIMS);
+	// }
+	// if(autoToRun == 3) {
+	// 	offenseAuto(SAFE);
+	// }
+	// if(autoToRun == 4) {
+	// 	offenseAuto(RISKY);
+	// }
+	// if(autoToRun == 5) {
+	// 	sixBall();
+	// }
+	// if(autoToRun == 6) {
+	// 	progSkills();
+	// }
 
-	// defenseAuto(SOLO);
+	defenseAuto(SOLO);
 	// defenseAuto(ELIMS);
 	// offenseAuto(SAFE);
 	// offenseAuto(RISKY);
@@ -133,9 +133,10 @@ void opcontrol() {
 	autoMovement.suspend();
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
-	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
-	states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
+	// states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
 	// states.setPuncherState(states.defaultPullback);
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 
 	// pros::Task odom(updatePosition);
@@ -166,6 +167,25 @@ void opcontrol() {
 		// Side Climb toggle
 		sideClimbOpControl();
 		
+		// Matchload
+		// matchloadOpControl();
+
+		// if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+				// 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+				// 	firePuncher(48, 2);
+			
+			// while(true) {
+			// 	// matchload(2);
+			// 	if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A) || controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
+			// 		break;
+			// 	}
+        	// 	states.setPuncherState(stateMachine::puncher_state::FIRE);
+        	// 	while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
+            // 		pros::delay(10);
+        	// 	}		
+			// }
+		// }
+
 		pros::delay(20);
 	}
 }
