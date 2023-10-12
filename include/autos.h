@@ -44,6 +44,12 @@ extern void offenseAuto(offense_auto_mode s);
 */
 extern void sixBall();
 
+/** @brief Setup: In front of matchload station, back to goal, 200 deg --
+ * 
+ * Push preload into goal; Score 1 from mid and 2 from auto line
+*/
+extern void fourBall();
+
 /** @brief Setup: Right side of Matchload Station, 45 deg --
  * 
  * Shoot preloads (44 + 4 [error margin]); move across to other zone; push triballs into goal

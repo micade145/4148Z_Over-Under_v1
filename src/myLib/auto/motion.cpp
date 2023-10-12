@@ -7,14 +7,14 @@ double DRIVE_DEG_TO_INCH_275 = (2.75 * M_PI) / 360; // for 2.75" wheels - (2.75 
 int DRIVE_SLEW_RATE = 5;    // change later
 int TURN_SLEW_RATE = 5;
 int SETTLE_THRESHOLD = 10;   // 10 iterations, 20s each
-int NEAR_TARGET_THRESHOLD = 1.3;  // 1.3 inches
+int NEAR_TARGET_THRESHOLD = 1.5;  // 1.5 inches
 double DISTANCE_SETTLE_THRESHOLD = 1;  // 1 inch - tune later
 double TURN_SETTLE_THRESHOLD = 1;   // 1 degree
 
 // Drive PID objects
 // PID drivePID_6M(8, 12);     // TUNED? PID for 6m drive: error units are in INCHES
 PID drivePID(8, 12);        // NOT TUNED: PID for 2m drive: error units are in INCHES
-PID translationPID(20, 2);  // NOT TUNED: Drive PID for moveToPoint: error units are in INCHES
+PID translationPID(8, 12);  // NOT TUNED: Drive PID for moveToPoint: error units are in INCHES // 20, 2
 PID turnPID(1.5, 4);        // TUNED: Turn PID: error units are in DEGREES
 
 // PID drivePID(10, 0);        // MINI BOT

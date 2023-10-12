@@ -34,6 +34,10 @@ void setPuncher(int puncherVolt) {
         ptoRightSide.move(puncherVolt);
         }
     }
+    // use this if we only want to use 100rpm on pto mode
+    // if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
+    //     puncher.move(puncherVolt);
+    // }
 }
 void setPuncherBrakeMode(pros::motor_brake_mode_e puncherBrakeMode) {
     puncher.set_brake_mode(puncherBrakeMode);

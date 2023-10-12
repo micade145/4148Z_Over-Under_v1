@@ -102,17 +102,18 @@ void autonomous() {
 	// 	offenseAuto(RISKY);
 	// }
 	// if(autoToRun == 5) {
-	// 	sixBall();
+	// 	fourBall();
 	// }
 	// if(autoToRun == 6) {
 	// 	progSkills();
 	// }
 
-	defenseAuto(SOLO);
+	// defenseAuto(SOLO);
 	// defenseAuto(ELIMS);
 	// offenseAuto(SAFE);
 	// offenseAuto(RISKY);
 	// sixBall();
+	fourBall();
 	// progSkills();
 }
 
@@ -168,7 +169,7 @@ void opcontrol() {
 		sideClimbOpControl();
 		
 		// Matchload
-		// matchloadOpControl();
+		matchloadOpControl();
 
 		// if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
 				// 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
