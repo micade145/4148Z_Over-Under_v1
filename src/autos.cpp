@@ -1,5 +1,6 @@
 #include "autos.h"
 
+
 // ******** Setpoints ******** //
 Point leftTriball1(48, 72);		// Left mid - auto line
 Point leftTriball2(68, 72);		// Left pole - auto line
@@ -348,20 +349,47 @@ void progSkills() {
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
 
 	// Fire 44 matchloads + 4 for error
-	setMove(-5, globalPose.theta, 80, 60, 800, false, false);
-	waitUntilSettled(20);
+	// setMove(-5, globalPose.theta, 80, 60, 800, false, false);
+	// waitUntilSettled(20);
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_ON);
 	firePuncher(48, 2);
 	pros::delay(500);
 
-	setMoveToPoint(leftTriball1.x, leftTriball1.y, 0, 100, 100, 0, 2000);
+	// Drive to mid
+	setMoveToPoint(48, 60, 0, 100, 100, 0, 2000);
 	waitUntilSettled(0);
 	setMove(0, 0, 0, 100, 800, false, false);
 	waitUntilSettled(0);
 
+	// Cross barrier
+	setMove(-10, 0, 100, 80, 1500, false, false);
+	waitUntilSettled(0);
+	setMoveToPoint(84, 60, 0, 100, 100, 0, 5000);
+	waitUntilSettled(0);
+
+	// Reset against barrier
+	setMove(-15, 0, 80, 80, 1500, false, false);
+	waitUntilSettled(0);
+	globalPose.setPoint(78.5, 60, 0);
+
+	// Push triballs into goal
+	states.setWingState(stateMachine::wing_state::WINGS_OUT);
+	pros::delay(200);
+	setMove(32, 0, 100, 80, 2000, false, false);
+	waitUntilSettled(0);
+	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
+	setMove(-32, 180, 100, 20, 2000, false, false);
+	waitUntilSettled(0);
+	setMove(0, 120, 0, 100, 1000, false, false);
+	waitUntilSettled(0);
+	states.setWingState(stateMachine::wing_state::WINGS_OUT);
+	setMove(39, 100, 100, 70, 2000, false, false);
+	waitUntilSettled(0);
+	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
+	setMove(-39, 0, 100, 100, 2000, false, false);
+	waitUntilSettled(0);
+
 }
-
-
 
 
 

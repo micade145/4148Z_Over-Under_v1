@@ -4,12 +4,13 @@ stateMachine states;
 bool firstPuncherLoop = false;
 bool puncherClosePhase = false;
 
+
 void stateHandler() {
     while(true) {
     // ******** Drive state handler ******** //
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 2, "TWO MOTOR DRIVE");    
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 2, "TWO MOTOR DRIVE");} 
             drivePTO.set_value(false);  // piston retracted: 2m drive, 5m puncher
 
                 // shake robot to help disengage pto
@@ -22,7 +23,7 @@ void stateHandler() {
             // pros::screen::fill_rect(5,5,240,200);
         }
         else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 2, "SIX MOTOR DRIVE");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 2, "SIX MOTOR DRIVE");}
             drivePTO.set_value(true);   // piston expanded: 6m drive, 1m puncher
                 // shake robot to help engage pto
             PUNCHER_PULLBACK_THRESHOLD = 2500;  // default threshold
@@ -35,7 +36,7 @@ void stateHandler() {
         if(states.intakeStateIs(stateMachine::intake_state::INTAKING)) {
             spinIntake(127);
             closeCount = openCount = 0;
-            pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKING");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKING");}
             states.oldIntakeState = states.intakeState;
         }
         else if(states.intakeStateIs(stateMachine::intake_state::OPEN)) {
@@ -47,7 +48,7 @@ void stateHandler() {
             }
             openCount++;
             closeCount = 0;
-            pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE OPEN");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE OPEN");}
         }
         else if(states.intakeStateIs(stateMachine::intake_state::CLOSED)) {
             spinIntake(85); //65
@@ -58,14 +59,14 @@ void stateHandler() {
             }
             closeCount++;
             openCount = 0;
-            pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE CLOSED");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE CLOSED");}
         }
     }
 
     // ******** Puncher state handler ******** //
     if(states.puncherStateChanged()) {
            if(states.puncherStateIs(stateMachine::puncher_state::FIRE)) {
-                pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PUNCHER FIRED");
+                if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PUNCHER FIRED");}
                 if(!puncherClosePhase) {    // Open (release)
                     puncher.move(-127);
                     puncherOpenCount++;
@@ -93,7 +94,7 @@ void stateHandler() {
             }
 
             if(states.puncherStateIs(stateMachine::puncher_state::SHORT_PULLBACK)) {
-                pros::screen::print(TEXT_MEDIUM_CENTER, 5, "SHORT PULLBACK, Volt: %d", puncher.get_voltage());
+                if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 5, "SHORT PULLBACK, Volt: %d", puncher.get_voltage());}
                 setPuncher(127);
                 if(puncherEnc.get_position() > (SHORT_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD) || puncherPullbackCount >= PUNCHER_PULLBACK_TIMEOUT) {
                     // setPuncher(-5);
@@ -104,7 +105,7 @@ void stateHandler() {
                 puncherPullbackCount += 20;
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::MID_PULLBACK)) {
-                pros::screen::print(TEXT_MEDIUM_CENTER, 5, "MID PULLBACK, Volt: %d", puncher.get_voltage());
+                if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 5, "MID PULLBACK, Volt: %d", puncher.get_voltage());}
                 setPuncher(127);
                 if(puncherEnc.get_position() > (MID_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD) || puncherPullbackCount >= PUNCHER_PULLBACK_TIMEOUT) {
                     // setPuncher(-5);
@@ -115,7 +116,7 @@ void stateHandler() {
                 puncherPullbackCount += 20;
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::LONG_PULLBACK)) {
-                pros::screen::print(TEXT_MEDIUM_CENTER, 5, "LONG PULLBACK, Volt: %d", puncher.get_voltage());
+                if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 5, "LONG PULLBACK, Volt: %d", puncher.get_voltage());}
                 setPuncher(127);
                 if(puncherEnc.get_position() > (LONG_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD) || puncherPullbackCount >= PUNCHER_PULLBACK_TIMEOUT) {
                     // setPuncher(-5);
@@ -126,7 +127,7 @@ void stateHandler() {
                 puncherPullbackCount += 20;
             }
             if(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK)) {
-                pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PULLED BACK");
+                if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PULLED BACK");}
                 puncherPullbackCount = 0;
                 firstPuncherLoop = false;
                 states.oldPuncherState = states.puncherState;
@@ -136,22 +137,22 @@ void stateHandler() {
     // ******** Puncher Angle state handler ******** //
     if(states.puncherAngleStateChanged()) {
         if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::DOWN)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE DOWN");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE DOWN");}
             verticalAngler.set_value(true);
             tilterAngler.set_value(true);
         }
         else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::FLAT)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE FLAT");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE FLAT");}
             verticalAngler.set_value(true);
             tilterAngler.set_value(false);
         }
         else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::MID)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE MID");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE MID");}
             verticalAngler.set_value(false);
             tilterAngler.set_value(true);
         }
         else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::STEEP)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE STEEP");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE STEEP");}
             verticalAngler.set_value(false);
             tilterAngler.set_value(false);
         }
@@ -161,22 +162,22 @@ void stateHandler() {
     // ******** Wing state handler ******** //
     if(states.wingStateChanged()) {
         if(states.wingStateIs(stateMachine::wing_state::WINGS_STOWED)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 7, "WINGS IN");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 7, "WINGS IN");}
             leftWing.set_value(false);
             rightWing.set_value(false);
         }
         else if(states.wingStateIs(stateMachine::wing_state::WINGS_OUT)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 7, "WINGS OUT");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 7, "WINGS OUT");}
             leftWing.set_value(true);
             rightWing.set_value(true);
         }
         else if(states.wingStateIs(stateMachine::wing_state::LEFT_OUT)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 7, "LEFT WING OUT");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 7, "LEFT WING OUT");}
             leftWing.set_value(true);
             rightWing.set_value(false);
         }
         else if(states.wingStateIs(stateMachine::wing_state::RIGHT_OUT)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 7, "RIGHT WING OUT");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 7, "RIGHT WING OUT");}
             leftWing.set_value(false);
             rightWing.set_value(true);
         }
@@ -186,7 +187,7 @@ void stateHandler() {
     // ******** Parking brake state handler ******** //
     if(states.parkingBrakeStateChanged()) {
         if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_OFF)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES OFF");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES OFF");}
             leftParkingBrake.set_value(false);
             rightParkingBrake.set_value(false);
             // if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
@@ -194,7 +195,7 @@ void stateHandler() {
             // }
         }
         else if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_ON)) {
-            pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");}
             leftParkingBrake.set_value(true);
             rightParkingBrake.set_value(true);
             // if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
@@ -248,9 +249,11 @@ void stateHandler() {
     // }
 
     // ******** DEBUG ******** //
+    if(displayInfo) {
     pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
     pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
     pros::screen::print(TEXT_MEDIUM_CENTER, 5, "Puncher Enc: %d", puncherEnc.get_position());
+    }
     
     // necessary task delay - do not change
     pros::delay(20);

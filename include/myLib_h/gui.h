@@ -2,6 +2,7 @@
 #define GUI_H
 #include "main.h"
 
+extern bool displayInfo;
 
 // Nice Tutorial
 // https://team81k.github.io/ProsLVGLTutorial/

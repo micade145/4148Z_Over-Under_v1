@@ -43,7 +43,7 @@ void initialize() {
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
 
-	// initGUI();
+	initGUI();
 }
 // pros::Task initRobot([] {inertial.reset(true);});
 
@@ -83,24 +83,23 @@ void autonomous() {
 	// pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
-
 	// states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
 	pros::delay(20);
-
-	waitUntilSettled(20);
+	waitUntilSettled(0);
 	
-	// if(autoToRun == 1) {
-	// 	defenseAuto(SOLO);
-	// }
-	// if(autoToRun == 2) {
-	// 	defenseAuto(ELIMS);
-	// }
-	// if(autoToRun == 3) {
-	// 	offenseAuto(SAFE);
-	// }
-	// if(autoToRun == 4) {
-	// 	offenseAuto(RISKY);
-	// }
+	// Autoselector 
+	if(autoToRun == 1) {
+		defenseAuto(SOLO);
+	}
+	if(autoToRun == 2) {
+		defenseAuto(ELIMS);
+	}
+	if(autoToRun == 3) {
+		fourBall();
+	}
+	if(autoToRun == 4) {
+		progSkills();
+	}
 	// if(autoToRun == 5) {
 	// 	fourBall();
 	// }
@@ -113,9 +112,23 @@ void autonomous() {
 	// offenseAuto(SAFE);
 	// offenseAuto(RISKY);
 	// sixBall();
-	fourBall();
+	// fourBall();
 	// progSkills();
 }
+
+	// if(autoToRun == 1) {
+	// 	autoName = "Defense Solo";
+	// }
+	// if(autoToRun == 2) {
+	// 	autoName = "Defense Elims";
+	// }
+	// if(autoToRun == 3) {
+	// 	autoName = "Four Ball";
+	// }
+	// if(autoToRun == 4) {
+	// 	autoName = "PROG SKILLS";
+	// }
+	// pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, autoName);
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -131,6 +144,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	displayInfo = false;
 	autoMovement.suspend();
 	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
@@ -147,7 +161,6 @@ void opcontrol() {
 	// globalPose.setPoint(0,0,0);
 
 	while (true) {
-		pros::screen::print(TEXT_MEDIUM_CENTER, 5, "AUTO TO RUN %d", autoToRun);
 		// Drive controls
 		splitArcade(pros::E_MOTOR_BRAKE_COAST);
 		drivePtoOpControl();
@@ -168,7 +181,7 @@ void opcontrol() {
 		// Side Climb toggle
 		sideClimbOpControl();
 		
-		// Matchload
+		// Matchload toggle
 		matchloadOpControl();
 
 		// if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {

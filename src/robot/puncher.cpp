@@ -73,8 +73,16 @@ void firePuncher(int numTimes, int newPullback) {
             pros::delay(5);
         }
     }
-    // states.defaultPullback = this->states.defaultPullback;
 }
+
+// void firePuncher(int numTimes) {
+//     matchloadState = true;
+//     while(firedCount < numTimes) {
+//         pros::delay(5);
+//     }
+//     matchloadState = false;
+//     firedCount = 0;
+// }
 
 // while(true) {
 //         states.setPuncherState(stateMachine::puncher_state::FIRE);
@@ -113,7 +121,7 @@ void puncherOpControl() {
             punchPullback ++;
         }
     }
-    pros::screen::print(TEXT_MEDIUM_CENTER, 9, "punchPullback: %d, last: %d", punchPullback, lastPunchPullback);
+    if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 9, "punchPullback: %d, last: %d", punchPullback, lastPunchPullback);}
 
     // Assigns puncher pullback to respective punchPullback (1 = (Default) SHORT, 2 = MID, 3 = LONG)
     if(lastPunchPullback != punchPullback) {
@@ -143,7 +151,7 @@ void puncherOpControl() {
 int punchAngle = 1;
 int lastPunchAngle = 1;
 int maxPunchAngle = 4;
-bool lowAngle = false;
+bool downAngle = false;
 void puncherAngleOpControl() {
     // Buttons to increment punchAngle up and down
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
@@ -159,11 +167,12 @@ void puncherAngleOpControl() {
         if(punchAngle < 1) {punchAngle = 1;}
     }
 
-    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-        if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::DOWN)) {
-            lowAngle = true;
-        }
-        
+    // Button to switch between 1 (down) and 3 (mid) angles
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+        // If angle is down, then downAngle = true
+        states.puncherAngleStateIs(stateMachine::puncher_angle_state::DOWN) ? downAngle = true : downAngle = false;
+        // If down angle, toggle to mid angle; else toggle to down angle
+        downAngle ? punchAngle = 3 : punchAngle = 1;
     }
 
     // Assigns puncher angle to respective punchAngle (1 = DOWN, 2 = FLAT, 3 = MID, 4 = STEEP)
