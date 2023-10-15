@@ -4,29 +4,35 @@ stateMachine states;
 bool firstPuncherLoop = false;
 bool puncherClosePhase = false;
 
-
 void stateHandler() {
     while(true) {
     // ******** Drive state handler ******** //
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 2, "TWO MOTOR DRIVE");} 
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "TWO MOTOR DRIVE");} 
             drivePTO.set_value(false);  // piston retracted: 2m drive, 5m puncher
-
+            controller.rumble("..");    
+            controller.print(2, 0, "TWO MOTOR DRIVE");
                 // shake robot to help disengage pto
             PUNCHER_PULLBACK_THRESHOLD = 6000;  // higher threshold to prevent overshoot
             
             // Colored box for debugging
-            // pros::screen::set_eraser(COLOR_BLACK);
-            // pros::screen::erase();
-            // pros::screen::set_pen(COLOR_RED);
-            // pros::screen::fill_rect(5,5,240,200);
+            pros::screen::set_eraser(COLOR_BLACK);
+            pros::screen::erase();
+            pros::screen::set_pen(COLOR_RED);
+            pros::screen::fill_rect(0, 0, 1000, 1000);
         }
         else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 2, "SIX MOTOR DRIVE");}
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "SIX MOTOR DRIVE");}
+            controller.rumble("---");
+            controller.print(2, 0, "SIX MOTOR DRIVE");
             drivePTO.set_value(true);   // piston expanded: 6m drive, 1m puncher
                 // shake robot to help engage pto
             PUNCHER_PULLBACK_THRESHOLD = 2500;  // default threshold
+            pros::screen::set_eraser(COLOR_BLACK);
+            pros::screen::erase();
+            pros::screen::set_pen(COLOR_BLUE);
+            pros::screen::fill_rect(0, 0, 1000, 1000);
         }
         states.oldDriveState = states.driveState;
     }
@@ -190,6 +196,7 @@ void stateHandler() {
             if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES OFF");}
             leftParkingBrake.set_value(false);
             rightParkingBrake.set_value(false);
+            controller.rumble(".");
             // if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
             //     states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
             // }
@@ -198,6 +205,7 @@ void stateHandler() {
             if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");}
             leftParkingBrake.set_value(true);
             rightParkingBrake.set_value(true);
+            controller.rumble(".");
             // if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
             //     states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
             // }
@@ -219,22 +227,27 @@ void stateHandler() {
 
     // ******** Matchload ******** //
     while(matchloadState) {
-        // for(int i = 0; i < 48; i++) {
+        while(true) {
             // release
             puncher.move(-127);
             pros::delay(200);
-            puncher.move(90);
-            pros::delay(200);
-    
-            // pullback
-            puncherEnc.reset_position();
+            // puncher.move(127);
             setPuncher(127);
-            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - PUNCHER_PULLBACK_THRESHOLD) {
+            
+            // pullback
+            pros::delay(100);
+            puncherEnc.reset_position();
+            // setPuncher(127);
+            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 14000) {
                 pros::delay(5);
             }
-        // }
-        stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
-        states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+            
+            if(!matchloadState) {
+                stopPuncher(pros::E_MOTOR_BRAKE_BRAKE);
+                states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+                break;
+            }
+        }
     }
 
     // if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {

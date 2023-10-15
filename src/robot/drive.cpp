@@ -55,16 +55,16 @@ void curveSplitArcade() {
 }
 
 // PTO function
-bool sixMotorMode = false;
+bool sixMotorMode = true;
 void drivePtoOpControl() {
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
         sixMotorMode = !sixMotorMode;
     }
     if(sixMotorMode) { 
-        states.setDriveState(states.SIX_MOTOR);
+        states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
     }
     else {
-        states.setDriveState(states.TWO_MOTOR);
+        states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
     }
 }
 

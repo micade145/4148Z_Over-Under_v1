@@ -98,37 +98,9 @@ void autonomous() {
 		fourBall();
 	}
 	if(autoToRun == 4) {
-		progSkills();
+		shootDropProgSkills();
 	}
-	// if(autoToRun == 5) {
-	// 	fourBall();
-	// }
-	// if(autoToRun == 6) {
-	// 	progSkills();
-	// }
-
-	// defenseAuto(SOLO);
-	// defenseAuto(ELIMS);
-	// offenseAuto(SAFE);
-	// offenseAuto(RISKY);
-	// sixBall();
-	// fourBall();
-	// progSkills();
 }
-
-	// if(autoToRun == 1) {
-	// 	autoName = "Defense Solo";
-	// }
-	// if(autoToRun == 2) {
-	// 	autoName = "Defense Elims";
-	// }
-	// if(autoToRun == 3) {
-	// 	autoName = "Four Ball";
-	// }
-	// if(autoToRun == 4) {
-	// 	autoName = "PROG SKILLS";
-	// }
-	// pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, autoName);
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -144,22 +116,18 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	displayInfo = false;
+	displayInfo = true;
 	autoMovement.suspend();
-	// states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
-	// states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
-	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
-	// states.setPuncherState(states.defaultPullback);
-	states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
 
 	// pros::Task odom(updatePosition);
 	// inertial.reset(true);
 	// resetOdomSensors();
 	// pros::delay(100);
 	// globalPose.setPoint(0,0,0);
-
 	while (true) {
 		// Drive controls
 		splitArcade(pros::E_MOTOR_BRAKE_COAST);
@@ -184,6 +152,11 @@ void opcontrol() {
 		// Matchload toggle
 		matchloadOpControl();
 
+		pros::delay(20);
+	}
+}
+
+// old matchload stuff it doesn't work don't even try
 		// if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
 				// 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
 				// 	firePuncher(48, 2);
@@ -200,9 +173,6 @@ void opcontrol() {
 			// }
 		// }
 
-		pros::delay(20);
-	}
-}
 
 // default pros stuff (for reference)
 	// pros::Controller master(pros::E_CONTROLLER_MASTER);

@@ -56,7 +56,9 @@ extern void fourBall();
 */
 extern void progSkills();
 
-
+extern void shootDropProgSkills();
+extern void dropProgSkills();
+extern void shootProgSkills();
 
 // ************* Deprecated autos !! ************* //
 

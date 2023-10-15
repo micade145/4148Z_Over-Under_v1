@@ -6,9 +6,9 @@
 // int LONG_PULLBACK_TICKS = 5250;     // Puncher on last few rack teeth
 
 // Rotation sensor pullback constants
-int SHORT_PULLBACK_TICKS = 50000;   // In centidegrees (100 * degrees) // 40000
-int MID_PULLBACK_TICKS = 78000;     // In centidegrees (100 * degrees) // 63000
-int LONG_PULLBACK_TICKS = 110000;    // In centidegrees (100 * degrees) // 80000
+int SHORT_PULLBACK_TICKS = 50000;   // In centidegrees (100 * degrees) // 50000
+int MID_PULLBACK_TICKS = 78000;     // In centidegrees (100 * degrees) // 78000
+int LONG_PULLBACK_TICKS = 110000;    // In centidegrees (100 * degrees) // 110000
 
 // Threshold constants
 int PUNCHER_OPEN_THRESHOLD = 4;         // 2 iterations to release puncher (20ms loop * 10 = 200ms)
@@ -95,6 +95,7 @@ bool matchloadState = false;
 void matchloadOpControl() {
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
         matchloadState = !matchloadState;
+        controller.rumble("-");
     }
 }
 

@@ -33,8 +33,8 @@ void parkingBrakeOpControl() {
 }
 
 // Side Climb opcontrol
+bool sideClimbState = false;
 void sideClimbOpControl() {
-    bool sideClimbState = false;
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
         sideClimbState = !sideClimbState;
     }

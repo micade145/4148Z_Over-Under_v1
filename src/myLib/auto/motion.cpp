@@ -295,11 +295,13 @@ void move() {
         setDrive(drivePower + turnPower, drivePower - turnPower); // NORMAL BOT
 
         // Debug 
-        pros::screen::erase_line(0, 1, 200, 1);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %5.1f, Err: %5d, Out: %3d", drive_target, driveError, drivePower);
-        pros::screen::erase_line(0, 3, 200, 3);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Tgt: %3.1f, Err: %3d, Out: %3d", turn_target, turnError, turnPower);
-
+        if(!pros::competition::is_disabled()) {
+            pros::screen::erase_line(0, 1, 200, 1);
+            pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %5.1f, Err: %5d, Out: %3d", drive_target, driveError, drivePower);
+            pros::screen::erase_line(0, 3, 200, 3);
+            pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Tgt: %3.1f, Err: %3d, Out: %3d", turn_target, turnError, turnPower);
+        }
+        
         // necessary delay - do not change
         pros::delay(20);
     }
@@ -319,6 +321,7 @@ void moveToPoint() {
     bool onTarget = false;
     while(!driveSettled) {
         // Calculate point errors
+        
         xError = target_x - globalPose.x;
         yError = target_y - globalPose.y;
         targetAngle = fmod((90 - (atan2(yError, xError) * RAD_TO_DEG)), 360);
@@ -367,10 +370,12 @@ void moveToPoint() {
         // setDrive(-translationPower - rotationPower, -translationPower + rotationPower); // MINI BOT
         setDrive(translationPower + rotationPower, translationPower - rotationPower); // NORMAL BOT
 
-        pros::screen::erase_line(0, 3, 200, 3);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Tgt: x: %3.1f, y: %3.1f, theta: %3.1f", target_x, target_y, targetAngle);
-        pros::screen::erase_line(0, 4, 200, 4);
-        pros::screen::print(TEXT_MEDIUM_CENTER, 4, "dist err: %3.1f, volt: %3d, angle err: %3.1f, volt: %3d", translationError, translationPower, rotationError, rotationPower);
+        if(!pros::competition::is_disabled()) {
+            pros::screen::erase_line(0, 3, 200, 3);
+            pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Tgt: x: %3.1f, y: %3.1f, theta: %3.1f", target_x, target_y, targetAngle);
+            pros::screen::erase_line(0, 4, 200, 4);
+            pros::screen::print(TEXT_MEDIUM_CENTER, 4, "dist err: %3.1f, volt: %3d, angle err: %3.1f, volt: %3d", translationError, translationPower, rotationError, rotationPower);
+        }
 
         pros::delay(20);
     }
@@ -398,8 +403,10 @@ void turn() {
 
         rightFrontDrive.move(turnPower);
 
+        if(pros::competition::is_autonomous()) {
         pros::screen::erase_line(0, 3, 300, 3);
         pros::screen::print(TEXT_MEDIUM_CENTER, 3, "Turn Target: %i, Error: %i, Output: %i", turn_target, turnError, turnPower);
+        }
 
         // necessary delay - do not change
         pros::delay(20);
