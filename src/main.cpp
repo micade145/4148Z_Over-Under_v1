@@ -43,7 +43,7 @@ void initialize() {
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
 
-	initGUI();
+	pros::Task GUI(initGUI);
 }
 // pros::Task initRobot([] {inertial.reset(true);});
 
@@ -116,7 +116,7 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	displayInfo = true;
+	// displayInfo = true;
 	autoMovement.suspend();
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
@@ -144,8 +144,8 @@ void opcontrol() {
 		wingOpControl();
 
 		// Parking Brake toggle
-		parkingBrakeOpControl();
-
+		// parkingBrakeOpControl();
+		
 		// Side Climb toggle
 		sideClimbOpControl();
 		

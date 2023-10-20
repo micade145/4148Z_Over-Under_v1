@@ -14,5 +14,5 @@ extern void parkingBrakeOpControl();
 // Side Climb Opcontrol
 extern void sideClimbOpControl();
 
-
+extern void displayTest();
 #endif

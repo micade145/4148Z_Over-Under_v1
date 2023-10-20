@@ -9,30 +9,33 @@ void stateHandler() {
     // ******** Drive state handler ******** //
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "TWO MOTOR DRIVE");} 
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM, 6, "TWO MOTOR DRIVE");} 
             drivePTO.set_value(false);  // piston retracted: 2m drive, 5m puncher
-            controller.rumble("..");    
+            // controller.rumble("..");  
+            controller.clear_line(2);  
             controller.print(2, 0, "TWO MOTOR DRIVE");
                 // shake robot to help disengage pto
             PUNCHER_PULLBACK_THRESHOLD = 6000;  // higher threshold to prevent overshoot
             
             // Colored box for debugging
-            pros::screen::set_eraser(COLOR_BLACK);
-            pros::screen::erase();
-            pros::screen::set_pen(COLOR_RED);
-            pros::screen::fill_rect(0, 0, 1000, 1000);
+            // pros::screen::set_eraser(COLOR_BLACK);
+            // pros::screen::erase();
+            // pros::screen::set_pen(COLOR_RED);
+            // pros::screen::fill_rect(0, 0, 1000, 1000);
         }
         else if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
             if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "SIX MOTOR DRIVE");}
-            controller.rumble("---");
+            controller.rumble("--");
+            controller.clear_line(2);
             controller.print(2, 0, "SIX MOTOR DRIVE");
             drivePTO.set_value(true);   // piston expanded: 6m drive, 1m puncher
                 // shake robot to help engage pto
             PUNCHER_PULLBACK_THRESHOLD = 2500;  // default threshold
-            pros::screen::set_eraser(COLOR_BLACK);
-            pros::screen::erase();
-            pros::screen::set_pen(COLOR_BLUE);
-            pros::screen::fill_rect(0, 0, 1000, 1000);
+
+            // pros::screen::set_eraser(COLOR_BLACK);
+            // pros::screen::erase();
+            // pros::screen::set_pen(COLOR_BLUE);
+            // pros::screen::fill_rect(0, 0, 1000, 1000);
         }
         states.oldDriveState = states.driveState;
     }
@@ -191,34 +194,34 @@ void stateHandler() {
     }
 
     // ******** Parking brake state handler ******** //
-    if(states.parkingBrakeStateChanged()) {
-        if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_OFF)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES OFF");}
-            leftParkingBrake.set_value(false);
-            rightParkingBrake.set_value(false);
-            controller.rumble(".");
-            // if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
-            //     states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-            // }
-        }
-        else if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_ON)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");}
-            leftParkingBrake.set_value(true);
-            rightParkingBrake.set_value(true);
-            controller.rumble(".");
-            // if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
-            //     states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
-            // }
-        }
-        states.oldParkingBrakeState = states.parkingBrakeState;
-    }
+    // if(states.parkingBrakeStateChanged()) {
+    //     if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_OFF)) {
+    //         if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES OFF");}
+    //         leftParkingBrake.set_value(false);
+    //         rightParkingBrake.set_value(false);
+    //         controller.rumble(".");
+    //         // if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
+    //         //     states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+    //         // }
+    //     }
+    //     else if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_ON)) {
+    //         if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");}
+    //         leftParkingBrake.set_value(true);
+    //         rightParkingBrake.set_value(true);
+    //         controller.rumble(".");
+    //         // if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
+    //         //     states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+    //         // }
+    //     }
+    //     states.oldParkingBrakeState = states.parkingBrakeState;
+    // }
     // Drive Check for engaging Parking Brakes
-    if((std::fabs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::fabs(rightFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD)) {
-        brakeReady = true;
-    } 
-    else {
-        brakeReady = false;
-    }
+    // if((std::fabs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::fabs(rightFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD)) {
+    //     brakeReady = true;
+    // } 
+    // else {
+    //     brakeReady = false;
+    // }
 
     // ******** Odometry ******** //
     if(pros::competition::is_autonomous()) {
@@ -230,7 +233,7 @@ void stateHandler() {
         fireCount = 0;
         while(true) {
             // release
-            puncher.move(-127);
+            setPuncher(-127);
             pros::delay(200);
             // puncher.move(127);
             setPuncher(127);
@@ -239,16 +242,16 @@ void stateHandler() {
             pros::delay(100);
             puncherEnc.reset_position();
             // setPuncher(127);
-            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 14000 || puncherLimitSwitch.get_value() == false) {
+            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 16000) { //|| puncherLimitSwitch.get_value() == false
                 pros::delay(5);
             }
             fireCount++;
 
-            if(!matchloadState || fireCount >= fireTarget) {
+            if(!matchloadState) { // || fireCount >= fireTarget
                 stopPuncher(pros::E_MOTOR_BRAKE_BRAKE);
                 states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
-                fireCount = fireTarget = 0;
-                matchloadState = false;
+                // fireCount = fireTarget = 0;
+                // matchloadState = false;
                 break;
             }
         }

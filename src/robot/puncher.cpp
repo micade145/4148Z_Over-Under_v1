@@ -80,11 +80,13 @@ void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode) {
 // }
 
 void setMatchload(int numTimes, bool waitForCompletion) {
+    fireCount = 0;
     fireTarget = numTimes;
     matchloadState = true;
     if(waitForCompletion) 
     {
-        while(matchloadState) {pros::delay(5);}
+        while(fireCount < fireTarget) {pros::delay(5);}
+        matchloadState = false;
         pros::delay(50);
     }
 }
