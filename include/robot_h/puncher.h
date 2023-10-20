@@ -19,6 +19,12 @@ extern int puncherCloseCount;
 extern int puncherPauseCount;
 extern int puncherPullbackCount;
 
+extern int punchPullback;
+
+// Matchload variables
+extern int fireCount;
+extern int fireTarget;
+
 // Constants
 
 // Helper functions
@@ -28,6 +34,7 @@ extern void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode);
 
 // Puncher 
 extern void firePuncher(int numTimes, int newPullback);
+extern void setMatchload(int numTimes, bool waitForCompletion);
 extern void matchloadOpControl();
 extern bool matchloadState;
 

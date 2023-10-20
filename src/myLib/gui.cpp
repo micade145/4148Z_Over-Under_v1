@@ -52,20 +52,44 @@ void initGUI() {
 	lv_theme_set_current(lv_theme_alien_init(349.5, NULL));
 
     // **** DISPLAY INFO **** //
-    lv_obj_t * textBox = lv_label_create(infoTab, NULL);
-    lv_obj_align(textBox, NULL, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_text(textBox, "TEST");
-    // lv_label_set_text(textBox, ("ODOM X: %3.2f, Y: %3.2f, Theta: %3.2f \n"
-    //                         "DRIVE STATE: %s \n"
-    //                         "INTAKE STATE: %s \n"
-    //                         "PUNCHER STATE: %s \n"
-    //                         "PULLBACK: %s \n"
-    //                         "ANGLE STATE: %s \n"
-    //                         "WINGS STATE: %s \n"
-    //                         "BRAKE STATE: %s \n",
-    //                         c_str(globalPose.x), globalPose.y, globalPose.theta, states.driveState, states.intakeState,
-    //                         states.puncherState, "N'A", states.puncherAngleState, states.wingState, states.parkingBrakeState));
+    lv_obj_t * statesHeading = lv_label_create(infoTab, NULL);
+    lv_obj_t * statesText1 = lv_label_create(infoTab, NULL);
+    lv_obj_t * statesText2 = lv_label_create(infoTab, NULL);
+    lv_obj_t * odomText = lv_label_create(infoTab, NULL);
 
+        // Display heading
+    lv_obj_align(statesHeading, NULL, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(statesHeading, "ROBOT STATES");
+
+        // Display first half of robot states
+    lv_obj_align(statesText1, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+    lv_label_set_text(statesText1, ("DRIVE STATE:   %s \n"
+                                    "PUNCHER STATE: %s \n"
+                                    "PULLBACK:      %d \n"
+                                    "ANGLE STATE:   %s \n",
+                                    states.driveStateString[states.driveState], 
+                                    states.puncherStateString[states.puncherState], 
+                                    punchPullback, 
+                                    states.angleStateString[states.puncherAngleState]));
+
+        // Display second half of robot states
+    lv_obj_align(statesText2, NULL, LV_ALIGN_IN_TOP_RIGHT, 0, 0);
+    lv_label_set_text(statesText2, ("INTAKE STATE:  %s \n"
+                                    "WINGS STATE:   %s \n"
+                                    "BRAKE STATE:   %s \n",
+                                    globalPose.x, globalPose.y, globalPose.theta, 
+                                    states.driveStateString[states.driveState], 
+                                    states.intakeStateString[states.intakeState],
+                                    states.puncherStateString[states.puncherState], 
+                                    punchPullback, 
+                                    states.angleStateString[states.puncherAngleState],
+                                    states.wingStateString[states.wingState],
+                                    states.parkingBrakeStateString[states.parkingBrakeState]));
+
+        // Display odom information
+    lv_obj_align(odomText, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
+    lv_label_set_text(odomText, ("ROBOT POSITION:    X: %3.2f,    Y: %3.2f,    Theta: %3.2f \n" "%s",
+                            globalPose.x, globalPose.y, globalPose.theta, ""));
 
     // **** AUTO buttons **** //
     lv_obj_t * defenseSoloBtn;

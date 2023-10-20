@@ -23,6 +23,10 @@ int puncherCloseCount = 0;
 int puncherPauseCount = 0;
 int puncherPullbackCount = 0;
 
+// Matchload variables
+int fireCount = 0;
+int fireTarget = 0;
+
 // Helper functions
 void setPuncher(int puncherVolt) {
     puncher.move(puncherVolt);
@@ -56,32 +60,42 @@ void stopPuncher(pros::motor_brake_mode_e puncherBrakeMode) {
     }
 }
 
-void firePuncher(int numTimes, int newPullback) {
-    if(newPullback == 1) {
-        states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
-    }
-    else if(newPullback == 2) {
-        states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
-    }
-    else {
-        states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
-    }
+// void firePuncher(int numTimes, int newPullback) { // bad
+//     if(newPullback == 1) {
+//         states.defaultPullback = stateMachine::puncher_state::SHORT_PULLBACK;
+//     }
+//     else if(newPullback == 2) {
+//         states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+//     }
+//     else {
+//         states.defaultPullback = stateMachine::puncher_state::LONG_PULLBACK;
+//     }
 
-    for(int i = 0; i < numTimes; i++) {
-        states.setPuncherState(stateMachine::puncher_state::FIRE);
-        while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
-            pros::delay(5);
-        }
+//     for(int i = 0; i < numTimes; i++) {
+//         states.setPuncherState(stateMachine::puncher_state::FIRE);
+//         while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
+//             pros::delay(5);
+//         }
+//     }
+// }
+
+void setMatchload(int numTimes, bool waitForCompletion) {
+    fireTarget = numTimes;
+    matchloadState = true;
+    if(waitForCompletion) 
+    {
+        while(matchloadState) {pros::delay(5);}
+        pros::delay(50);
     }
 }
 
 // void firePuncher(int numTimes) {
 //     matchloadState = true;
-//     while(firedCount < numTimes) {
+//     while(fireCount < numTimes) {
 //         pros::delay(5);
 //     }
 //     matchloadState = false;
-//     firedCount = 0;
+//     fireCount = 0;
 // }
 
 // while(true) {
@@ -89,7 +103,7 @@ void firePuncher(int numTimes, int newPullback) {
 //         while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
 //             pros::delay(5);
 //         }
-//     }
+// }
 
 bool matchloadState = false;
 void matchloadOpControl() {

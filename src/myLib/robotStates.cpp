@@ -227,6 +227,7 @@ void stateHandler() {
 
     // ******** Matchload ******** //
     while(matchloadState) {
+        fireCount = 0;
         while(true) {
             // release
             puncher.move(-127);
@@ -238,13 +239,16 @@ void stateHandler() {
             pros::delay(100);
             puncherEnc.reset_position();
             // setPuncher(127);
-            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 14000) {
+            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 14000 || puncherLimitSwitch.get_value() == false) {
                 pros::delay(5);
             }
-            
-            if(!matchloadState) {
+            fireCount++;
+
+            if(!matchloadState || fireCount >= fireTarget) {
                 stopPuncher(pros::E_MOTOR_BRAKE_BRAKE);
                 states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+                fireCount = fireTarget = 0;
+                matchloadState = false;
                 break;
             }
         }

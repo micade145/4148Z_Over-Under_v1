@@ -1,6 +1,6 @@
 #include "myLib_h/auto_h/pid.h"
 
-double PID::calculateOutput(double new_error) {
+double PID::calculateOutput(double new_error) { //, double upperBound, double lowerBound
     // Calculate error
     error = new_error;
     // Calculate derivative
@@ -9,6 +9,9 @@ double PID::calculateOutput(double new_error) {
     output = (error * kP) + (derivative * kD);
     // Last error
     lastError = error;
+    
+    // if(output > upperBound) {output = upperBound;}
+    // if(output < lowerBound) {output = lowerBound;}
 
     return output;
 }

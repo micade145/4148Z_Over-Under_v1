@@ -341,18 +341,26 @@ void fourBall() {
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 }
 
-void shootDropProgSkills() { // shoot and drop at the same time
+void shootDropProgSkills() { // shoot and drop at the same time // DIDN'T MOVE AFTER SHOOTING??? ALSO SHOOTING TOOK 45 SECONDS
 	// Init
 	globalPose.setPoint(24, 16.5, 330);
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+	states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
 
 	// Fire 26 matchloads
-	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_ON);
-	firePuncher(22, 2);
+	setMove(-10, 330, 20, 100, 20000, false, false); // keep robot against pole ??
+	setMatchload(22, true);
+	
+	// Just in case setMatchload won't allow movement
+	// setMatchload(22, false);
+	// pros::delay(25000);
+	// matchloadState = false;
+	// fireTarget = 0;
 
 	// Cross under to other side
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	shakeRobot();
 	setMove(0, 0, 0, 100, 800, false, false);
 	waitUntilSettled(0);

@@ -1,18 +1,33 @@
 #ifndef ROBOT_STATES_H
 #define ROBOT_STATES_H
 #include "main.h"
+// #include <string>
 
 struct stateMachine{
 private:
 public:
     // Subsystem states
     enum drive_state {TWO_MOTOR, SIX_MOTOR} driveState, oldDriveState;
+    const char* driveStateString[2] = {"TWO MOTOR", "SIX MOTOR"};
+
     enum intake_state {INTAKING, OPEN, CLOSED} intakeState, oldIntakeState;
+    const char* intakeStateString[3] = {"INTAKING", "OPEN", "CLOSED"};
+
     enum puncher_state {FIRE, SHORT_PULLBACK, MID_PULLBACK, LONG_PULLBACK, PULLED_BACK} puncherState, oldPuncherState, defaultPullback = SHORT_PULLBACK;
+   const char* puncherStateString[2] = {"FIRE", "PULLED BACK"};
+   const char* pullbackStateString[3] = {"SHORT", "MID", "LONG"};
+
     enum puncher_angle_state {STEEP, MID, FLAT, DOWN} puncherAngleState, oldPuncherAngleState;
+    const char* angleStateString[4] = {"STEEP", "MID", "FLAT", "DOWN"};
+
     enum wing_state {WINGS_OUT, WINGS_STOWED, LEFT_OUT, RIGHT_OUT} wingState, oldWingState;
+    const char* wingStateString[4] = {"WINGS OUT", "WINGS IN", "LEFT OUT", "RIGHT OUT"};
+
     enum parking_brake_state {BRAKE_ON, BRAKE_OFF} parkingBrakeState, oldParkingBrakeState;
+    const char* parkingBrakeStateString[2] = {"BRAKES ON", "BRAKES OFF"};
+
     // enum side_climb_state {CLIMB_OUT, CLIMB_IN} sideClimbState, oldSideClimbState;
+
     // Drive auto states
     enum drive_auto_state{MOVE, TURN, MOVE_TO_POINT, OFF} driveAutoState;
     // Alliance color
