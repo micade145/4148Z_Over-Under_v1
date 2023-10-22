@@ -100,6 +100,9 @@ void autonomous() {
 	if(autoToRun == 4) {
 		shootDropProgSkills();
 	}
+	if(autoToRun == 5) {
+		defense3Ball();
+	}
 }
 
 /**

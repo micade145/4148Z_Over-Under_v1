@@ -32,6 +32,7 @@ lv_res_t act4(lv_obj_t *btnm, const char *txt){
 
 lv_res_t act5(lv_obj_t *btnm, const char *txt){
     autoToRun = 5;
+    pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "DEFENSE 3 BALL");
 	return LV_RES_OK; // return OK because the button matrix is not deleted
 }
 lv_res_t act6(lv_obj_t *btnm, const char *txt){
@@ -119,7 +120,7 @@ void initGUI() {
     lv_label_set_text(state3, states.puncherStateString[punchPullback]);
     lv_label_set_text(state4, states.angleStateString[states.puncherAngleState]);
     // lv_label_set_text(statesText2, states.driveStateString[states.driveState]);
-    
+
     // lv_label_set_text(statesText1, ("DRIVE STATE:   %s \n"
     //                                 "PUNCHER STATE: %s \n"
     //                                 "PULLBACK:      %d \n"
@@ -147,7 +148,6 @@ void initGUI() {
     // lv_obj_align(odomText, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
     // lv_label_set_text(odomText, ("ROBOT POSITION:    X: %3.2f,    Y: %3.2f,    Theta: %3.2f \n" "%s",
     //                         globalPose.x, globalPose.y, globalPose.theta, ""));
-
 
     lv_btnm_set_action(defenseSoloBtn, act1);
     lv_btnm_set_action(defenseElimsBtn, act2);

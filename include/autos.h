@@ -56,6 +56,8 @@ extern void fourBall();
 */
 extern void progSkills();
 
+extern void defense3Ball();
+
 extern void shootDropProgSkills();
 extern void dropProgSkills();
 extern void shootProgSkills();
