@@ -2,24 +2,30 @@
 #define INTAKE_H
 #include "main.h"
 
-// Constants
+// ******** Intake Constants ******** //
 extern int INTAKE_CLOSE_THRESHOLD;
 extern int INTAKE_OPEN_THRESHOLD;
 
-// Variables
+// ******** Intake Variables ******** //
 extern int openCount;
 extern int closeCount;
 
 
-// Spin intake
-/*! @param intakeVolt Intake voltage from 127 to -127 */
+// ******** Intake Helper Functions ******** //
+/**
+ * @brief Spin intake at a specified voltage
+ * @param intakeVolt Intake voltage from 127 to -127
+*/
 extern void spinIntake(int intakeVolt);
 
-// Stop intake
-/*! @param newIntakeBrakeMode New intake brake mode */
+/**
+ * @brief Stop intake with a specified brake mode
+ * @param newIntakeBrakeMode Brake mode: HOLD, BRAKE, or COAST
+*/
 extern void stopIntake(pros::motor_brake_mode_e_t newIntakeBrakeMode);
 
-// Opcontrol function 
+
+// ******** Intake Opcontrol Function ******** //
 extern void intakeOpControl();
 
 #endif

@@ -25,7 +25,6 @@ extern int punchPullback;
 extern int fireCount;
 extern int fireTarget;
 
-// Constants
 
 // Helper functions
 extern void setPuncher(int puncherVolt);

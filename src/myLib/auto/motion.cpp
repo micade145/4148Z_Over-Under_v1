@@ -1,17 +1,18 @@
 #include "myLib_h/auto_h/motion.h"
 #include <cmath>
 
-// Constants 
-double DRIVE_INCH_TO_DEG_275 = 360 / (2.75 * M_PI); // for 2.75" wheels -  360 / (2.75 * M_PI)
-double DRIVE_DEG_TO_INCH_275 = (2.75 * M_PI) / 360; // for 2.75" wheels - (2.75 * M_PI) / 360
-int DRIVE_SLEW_RATE = 5;    // change later
-int TURN_SLEW_RATE = 5;
-int SETTLE_THRESHOLD = 10;   // 10 iterations, 20s each
-int NEAR_TARGET_THRESHOLD = 1.5;  // 1.5 inches
-double DISTANCE_SETTLE_THRESHOLD = 1;  // 1 inch - tune later
-double TURN_SETTLE_THRESHOLD = 1;   // 1 degree
+// **************** Movement Constants **************** //
 
-// Drive PID objects
+int DRIVE_SLEW_RATE = 5;    // tune later
+int TURN_SLEW_RATE = 5;     // tune later
+int SETTLE_THRESHOLD = 10;   // 200ms: 10 iterations * 20ms loop
+int NEAR_TARGET_THRESHOLD = 1.5;        // 1.5 inches
+double DISTANCE_SETTLE_THRESHOLD = 1;   // 1 inch (tune later)
+double TURN_SETTLE_THRESHOLD = 1;       // 1 degree
+
+
+// **************** PID Objects **************** //
+
 // PID drivePID_6M(8, 12);     // TUNED? PID for 6m drive: error units are in INCHES
 PID drivePID(8, 12);        // NOT TUNED: PID for 2m drive: error units are in INCHES
 PID translationPID(8, 12);  // NOT TUNED: Drive PID for moveToPoint: error units are in INCHES // 20, 2
@@ -21,7 +22,8 @@ PID turnPID(1.5, 4);        // TUNED: Turn PID: error units are in DEGREES
 // PID translationPID(20, 2);  // MINI BOT
 // PID turnPID(2.1, 2.1);      // MINI BOT 
 
-// Auto movement variables //
+
+// **************** Movement Variables **************** //
 // move() variables
 double drive_position;
 double drive_target;
@@ -40,11 +42,12 @@ int max_rotate_power;
 int max_orient_power;
 
 // Universal variables 
-bool driveSettled = false;
+bool driveSettled = true; // false?
 int max_time = 3000;
 
 
-// Setters for auto functions //
+// **************** Setters for Movement Functions **************** //
+
 void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime, bool driveSlew, bool turnSlew) {
     // Reset relative position
     rightFrontDrive.tare_position();
@@ -61,13 +64,15 @@ void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTu
     driveSettled = false;
     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE);
 }
-// void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime) {
-//     setMove(driveTarget, turnTarget, maxDrivePower, maxTurnPower, maxTime, false, false);
-// }
+void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime) {
+    setMove(driveTarget, turnTarget, maxDrivePower, maxTurnPower, maxTime, false, false);
+}
+void setMove(double driveTarget, double turnTarget, int maxTime) {
+    setMove(driveTarget, turnTarget, 100, 100, maxTime, false, false);
+}
 
 void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
-        int maxRotatePower, int maxOrientPower, int maxTime = 3000) {
-    states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
+        int maxRotatePower, int maxOrientPower, int maxTime) {
     // Colored box for debugging
     pros::screen::set_eraser(COLOR_BLACK);
     pros::screen::erase();
@@ -87,8 +92,14 @@ void setMoveToPoint(double targetX, double targetY, double endOrientation, int m
 
     // Set state
     driveSettled = false;
-    // states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
-    pros::delay(20);
+    states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
+    // pros::delay(20);
+}
+void setMoveToPoint(double targetX, double targetY, int maxTranslatePower, int maxRotatePower,  int maxTime) {
+    setMoveToPoint(targetX, targetY, 0, maxTranslatePower, maxRotatePower, 0, maxTime);
+}
+void setMoveToPoint(double targetX, double targetY, int maxTime) {
+    setMoveToPoint(targetX, targetY, 0, 100, 100, 0, maxTime);
 }
 
 // void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
@@ -148,27 +159,28 @@ void setCurve(double distance, double endAngle, double radius, int maxDrivePower
     turn_target = endAngle;
 }
 
-// Auto movement task //
+// **************** Auto Movement Task **************** //
+
 void autoMovementTask() {
     while(true) {
         if(states.driveAutoStateIs(stateMachine::drive_auto_state::OFF)) {
-            pros::delay(20);
+            // while(!states.driveAutoStateChanged) {pros::delay(5);}
         }
         else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE)) {
             move();
         }
         else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE_TO_POINT)) {
-            pros::screen::set_eraser(COLOR_BLACK);
-            pros::screen::erase();
-            pros::screen::set_pen(COLOR_RED);
-            pros::screen::fill_rect(20, 20, 400, 400);
-            pros::delay(20);
+            // pros::screen::set_eraser(COLOR_BLACK);
+            // pros::screen::erase();
+            // pros::screen::set_pen(COLOR_RED);
+            // pros::screen::fill_rect(20, 20, 400, 400);
+            // pros::delay(20);
             moveToPoint();
-            pros::screen::set_eraser(COLOR_BLACK);
-            pros::screen::erase();
-            pros::screen::set_pen(COLOR_YELLOW);
-            pros::screen::fill_rect(20, 20, 400, 400);
-            pros::delay(20);
+            // pros::screen::set_eraser(COLOR_BLACK);
+            // pros::screen::erase();
+            // pros::screen::set_pen(COLOR_YELLOW);
+            // pros::screen::fill_rect(20, 20, 400, 400);
+            // pros::delay(20);
         }
         pros::delay(20);
     }
@@ -193,14 +205,14 @@ void waitUntilSettled(int msecDelay) {
     pros::delay(msecDelay);
 }
 
-// Auto movement functions //
+
+// **************** Movement Functions **************** //
+
 void move() {
     // Reset drive encoder 
-    // frontEnc.reset_position(); // will this mess w/ odom?
     rightFrontDrive.tare_position();
     // Initialize timer
     int startTime = pros::c::millis();
-    int driveTimer;
     // Local variables 
     double initialPosition = (frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH_275;
     // double currentPosition;
@@ -211,7 +223,6 @@ void move() {
     int settleCount = 0;
     // Slew conditionals
     while(!driveSettled) {
-        // driveTimer = pros::c::millis() - startTime;
         // currentPosition = ((frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH) - initialPosition;
         // driveError = driveTarget - (frontEnc.get_position() * DRIVE_DEG_TO_INCH);
 
@@ -226,8 +237,8 @@ void move() {
         if(turnError < -180) {turnError += 360;}
 
         // Calculate PID outputs 
-        drivePower = drivePID.calculateOutput(double(driveError));
-        turnPower = turnPID.calculateOutput(double(turnError));
+        drivePower = drivePID.calculateOutput(double(driveError)); //, max_drive_power, -max_drive_power
+        turnPower = turnPID.calculateOutput(double(turnError)); //, max_turn_power, -max_turn_power
 
         // Slew rate logic
         if(drive_slew) {
@@ -256,7 +267,7 @@ void move() {
         // Constrain PID outputs
         drivePower = constrainVoltage(drivePower, max_drive_power, -max_drive_power);
         turnPower = constrainVoltage(turnPower, max_turn_power, -max_turn_power);
-        
+
         // Exit conditions
         if(std::fabs(drive_target) > 0 && turn_target == 0) {   // If drive only, check drive error
             if(std::fabs(driveError) <= DISTANCE_SETTLE_THRESHOLD) {
@@ -286,8 +297,8 @@ void move() {
             drivePID.reset();
             turnPID.reset();
             driveSettled = true;
-            // states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-            // break;
+            states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+            break;
         }
 
         // Output to drive
@@ -310,7 +321,6 @@ void move() {
 void moveToPoint() {
     // Initialize timer
     int startTime = pros::c::millis();
-    int driveTimer;
     // Local variables 
     double translationError, targetAngle, rotationError, orientationError;
     int translationPower, rotationPower, orientationPower;
@@ -365,6 +375,7 @@ void moveToPoint() {
             turnPID.reset();
             driveSettled = true;
             states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+            break;
         }
 
         // setDrive(-translationPower - rotationPower, -translationPower + rotationPower); // MINI BOT

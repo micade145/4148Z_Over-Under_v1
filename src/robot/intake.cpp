@@ -1,14 +1,15 @@
 #include "robot_h/intake.h"
 
-// Constants
+// ******** Intake Constants ******** //
 int INTAKE_CLOSE_THRESHOLD = 20;
 int INTAKE_OPEN_THRESHOLD = 20;
 
-// Variables
+// ******** Intake Variables ******** //
 int openCount = 0;
 int closeCount = 0;
 
-// Intake helper functions
+
+// ******** Intake Helper Functions ******** //
 void spinIntake(int intakeVolt) {
     leftIntake.move(intakeVolt);
     rightIntake.move(intakeVolt);
@@ -20,7 +21,8 @@ void stopIntake(pros::motor_brake_mode_e_t newIntakeBrakeMode) {
     rightIntake.brake();
 }
 
-// Opcontrol function
+
+// ******** Intake Opcontrol function ******** //
 bool R2 = true;
 bool intakeClosed = false;
 void intakeOpControl() {
@@ -50,22 +52,4 @@ void intakeOpControl() {
     }
 }
 
-
-// int intakeControlTask() {
-//     bool R2 = true;
-//     double intVelo;
-//     int holdCount = 0;
-//     bool intConHeld = false;
-//     bool intClosedYet = false;
-//     bool closed = false;
-    
-//     while(true) {
-//         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-//             R2 = true;
-//         }
-//         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-//             R2 = true;
-//         }
-//     }
-// }
 

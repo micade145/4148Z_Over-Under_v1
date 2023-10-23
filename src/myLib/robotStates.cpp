@@ -1,7 +1,7 @@
 #include "myLib_h/robotStates.h"
 
 stateMachine states;
-bool firstPuncherLoop = false;
+// bool firstPuncherLoop = false;
 bool puncherClosePhase = false;
 
 void stateHandler() {
@@ -138,7 +138,6 @@ void stateHandler() {
             if(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK)) {
                 if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PULLED BACK");}
                 puncherPullbackCount = 0;
-                firstPuncherLoop = false;
                 states.oldPuncherState = states.puncherState;
             }
     }
@@ -256,17 +255,6 @@ void stateHandler() {
             }
         }
     }
-
-    // if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
-    //     matchloadState = !matchloadState;
-    //     while(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { // do I need this?
-    //         pros::delay(5);
-    //     }
-    // }
-
-    // if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
-    //     matchloadState = false;
-    // }
 
     // ******** DEBUG ******** //
     if(displayInfo) {

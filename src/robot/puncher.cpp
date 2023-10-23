@@ -100,12 +100,6 @@ void setMatchload(int numTimes, bool waitForCompletion) {
 //     fireCount = 0;
 // }
 
-// while(true) {
-//         states.setPuncherState(stateMachine::puncher_state::FIRE);
-//         while(!(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK))) {
-//             pros::delay(5);
-//         }
-// }
 
 bool matchloadState = false;
 void matchloadOpControl() {

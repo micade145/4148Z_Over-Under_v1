@@ -3,6 +3,7 @@
 #include "main.h"
 // #include <string>
 
+/** @brief State Machine that holds all subsystem states */
 struct stateMachine{
 private:
 public:
@@ -79,10 +80,10 @@ public:
     bool allianceColorChanged() {return(oldAllianceColor != allianceColor);}
 };
 
-// Main states object
+/** @brief State Machine Object*/
 extern stateMachine states;
 
-// Task to handle all states
+/** @brief Task that handles all subsystem states */
 extern void stateHandler();
 
 #endif

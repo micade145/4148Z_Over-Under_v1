@@ -38,7 +38,7 @@ void initialize() {
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-	
+
 	// Initialize puncher
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
@@ -83,9 +83,11 @@ void autonomous() {
 	// pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
-	// states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-	pros::delay(20);
-	waitUntilSettled(0);
+	
+	// ???
+	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+	// pros::delay(20);
+	// waitUntilSettled(0);
 	
 	// Autoselector 
 	if(autoToRun == 1) {

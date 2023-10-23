@@ -1,10 +1,12 @@
 #include "robot_h/drive.h"
 
-// Drive constants
+// ******** Drive Constants ******** //
 double TURN_SENS = 0.8;
 double DRIVE_BRAKE_THRESHOLD = 45;  // In RPM
 
-// Helper function
+
+// ******** Drive Helper Functions ******** //
+
 void setDrive(int leftVolt, int rightVolt) {
     if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_OFF)) {
         leftFrontDrive.move(leftVolt);
@@ -34,8 +36,7 @@ void stopDrive(pros::motor_brake_mode_e driveBrakeMode) {
     }
 }
 
-
-// Driver control functions 
+// ******** Drive Opcontrol functions ******** //
 void splitArcade(pros::motor_brake_mode_e_t driveBrakeMode) {
     setDriveBrakeMode(pros::E_MOTOR_BRAKE_COAST);
     // Read inputs from joysticks 
@@ -54,7 +55,7 @@ void curveSplitArcade() {
 
 }
 
-// PTO function
+// PTO Opcontrol
 bool sixMotorMode = true;
 void drivePtoOpControl() {
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
@@ -68,16 +69,3 @@ void drivePtoOpControl() {
     }
 }
 
-// Drive brake modes
-void stopDrive() {
-    // write stop drive helper function
-}
-void driveCoast() {
-
-}
-void driveBrake() {
-
-}
-void driveHold() {
-
-}

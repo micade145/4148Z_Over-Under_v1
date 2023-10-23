@@ -9,12 +9,16 @@ Point rightTriball4(96, 72);	// Right mid - auto line
 Point rightTriball5(76, 48);	// Right pole, in line with goal post
 Point hangBarTriball(72, 12);	// Underneath hang bar
 
-Point leftMatchload(20, 20);	// In front of left matchload station
-Point rightMatchload(124, 20);	// In front of right matchload station
+Point leftBottomMatchload(20, 20);		// In front of left bottom matchload station
+Point rightBottomMatchload(124, 20);	// In front of right bottom matchload station
+Point leftTopMatchload(20, 124);		// In front of left top matchload station
+Point rightTopMatchload(124, 124);		// In front of right top matchload station
 
 // double ROBOT_X_OFFSET = 6.5
 // double ROBOT_Y_OFFSET = 6.5;
 
+
+// Shake robot to help engage PTO
 void shakeRobot() {
 	// Help engage PTO
 	setDrive(20, 20);
@@ -87,6 +91,7 @@ void curveTuning() {
 	waitUntilSettled(20);
 	pros::delay(1000);
 }
+
 
 // ******** Match Autos ********// 
 /**
@@ -463,7 +468,7 @@ void fourBall() {
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 }
 
-void shootDropProgSkills() { // shoot and drop at the same time // DIDN'T MOVE AFTER SHOOTING??? ALSO SHOOTING TOOK 45 SECONDS
+void shootDropProgSkills() { // working !!! 
 	// Init
 	globalPose.setPoint(24, 16.5, 330);
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
@@ -567,7 +572,19 @@ void shootDropProgSkills() { // shoot and drop at the same time // DIDN'T MOVE A
 	// }
 
 	// setMove(24, 245, 120, 100, 1300, false, false);
-	// waitUntilSettled(0);0
+	// waitUntilSettled(0);
+}
+
+
+
+
+// ******** AUTO ARCHIVE ******** //
+void defenseElims() {
+
+}
+
+void offenseSafe() {
+
 }
 
 void dropProgSkills() { // no shooting, dropping all triballs
@@ -705,16 +722,5 @@ void shootProgSkills() {
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 	setMove(-39, 0, 100, 100, 2000, false, false);
 	waitUntilSettled(0);
-
-}
-
-
-
-// ******** AUTO ARCHIVE ******** //
-void defenseElims() {
-
-}
-
-void offenseSafe() {
 
 }
