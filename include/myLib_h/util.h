@@ -2,11 +2,11 @@
 #define UTIL_H
 #include "main.h"
 
-// **************** Constants **************** //
+// ******** Constants ******** //
 // extern double PI;
 
 
-// **************** Conversion Rates **************** //
+// ******** Conversion Rates ******** //
 
 /** @brief 127 volt / 100 pct */
 extern double PCT_TO_VOLT;
@@ -27,7 +27,7 @@ extern double DRIVE_INCH_TO_DEG_275;
 extern double DRIVE_DEG_TO_INCH_275;
 
 
-// **************** Util Functions **************** //
+// ******** Util Functions ******** //
 /** 
  * @brief Constrains input as a DOUBLE
  * @return DOUBLE

@@ -4,7 +4,7 @@
 // // Math constants (why doesn't cmath work??)
 // double M_PI = 3.14159265358979323846;
 
-// **************** Conversion Rates **************** //
+// ******** Conversion Rates ******** //
 double PCT_TO_VOLT = 127 / 100;
 double VOLT_TO_PCT = 100 / 127;
 
@@ -15,7 +15,7 @@ double DRIVE_INCH_TO_DEG_275 = 360 / (2.75 * M_PI);
 double DRIVE_DEG_TO_INCH_275 = (2.75 * M_PI) / 360;
 
 
-// **************** Util Functions **************** //
+// ******** Util Functions ******** //
 
 double constrainValue(double input, double max, double min) {
     if(input > max) {input = max;}
