@@ -28,14 +28,23 @@ double constrainVoltage(int input, int max, int min) {
     return(input);
 }
 
-extern double constrainAngle180(double input) {
+double constrainAngle360(double input) {
     while(!(input >= 0 && input < 360)) {
         if(input < 0) { input += 360; }
         if(input >= 360) { input -= 360; }
     }
     return(input);
 }
-extern double constrainAngle90(double input) {
+
+double constrainAngle180(double input) {
+    while(!(input >= -180 && input < 180)) {
+        if(input < -180) { input += 360; }
+        if(input >= 180) { input -= 360; }
+    }
+    return(input);
+}
+
+double constrainAngle90(double input) {
     while(!(input >= -90 && input < 90)) {
         if(input < -90) { input += 180; }
         if(input >= 90) { input -= 180; }
@@ -43,6 +52,6 @@ extern double constrainAngle90(double input) {
     return(input);
 }
 
-extern double getSign(double input) {
+double getSign(double input) {
     return(std::fabs(input) / input);
 }

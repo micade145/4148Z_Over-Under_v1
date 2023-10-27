@@ -11,11 +11,11 @@ int MID_PULLBACK_TICKS = 78000;     // In centidegrees (100 * degrees) // 78000
 int LONG_PULLBACK_TICKS = 110000;    // In centidegrees (100 * degrees) // 110000
 
 // Threshold constants
-int PUNCHER_OPEN_THRESHOLD = 4;         // 2 iterations to release puncher (20ms loop * 10 = 200ms)
-int PUNCHER_PAUSE_THRESHOLD = 5;        // 10 iterations to pause puncher when open (20ms loop * 10 = 200ms)
-int PUNCHER_CLOSE_THRESHOLD = 4;        // 7 iterations to close puncher (20ms loop * 7 = 140ms)
+int PUNCHER_OPEN_THRESHOLD = 80; // 80 ms         // 4 iterations to release puncher (20ms loop * 10 = 200ms)
+int PUNCHER_PAUSE_THRESHOLD = 100; // 100 ms       // 5 iterations to pause puncher when open (20ms loop * 10 = 200ms)
+int PUNCHER_CLOSE_THRESHOLD = 80; // 80 ms       // 4 iterations to close puncher (20ms loop * 7 = 140ms)
+int PUNCHER_PULLBACK_TIMEOUT = 2000; // 2000 ms
 int PUNCHER_PULLBACK_THRESHOLD = 2500;  // 2500 - How close we want to get to the pullback value before stopping the puncher (to mitigate overshoot)
-int PUNCHER_PULLBACK_TIMEOUT = 2000;
 
 // Puncher variables
 int puncherOpenCount = 0;

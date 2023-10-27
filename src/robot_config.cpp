@@ -11,7 +11,7 @@ pros::Controller controller2(pros::E_CONTROLLER_PARTNER);
 pros::Motor leftFrontDrive(2, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_COUNTS);     // BASE DRIVE
 pros::Motor leftMidDrive(3, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);      // PTO MOTOR
 pros::Motor leftBackDrive(4, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_COUNTS);      // PTO MOTOR
-pros::Motor rightFrontDrive(9, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_DEGREES);  // BASE DRIVE
+pros::Motor rightFrontDrive(9, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);  // BASE DRIVE // degrees??
 pros::Motor rightMidDrive(8, pros::E_MOTOR_GEAR_BLUE, true, pros::E_MOTOR_ENCODER_COUNTS);      // PTO MOTOR
 pros::Motor rightBackDrive(7, pros::E_MOTOR_GEAR_BLUE, false, pros::E_MOTOR_ENCODER_COUNTS);    // PTO MOTOR
 

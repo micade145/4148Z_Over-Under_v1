@@ -40,10 +40,20 @@ extern double constrainValue(double input, double max, double min);
 */
 extern double constrainVoltage(int input, int max, int min);
 
+/** @brief Constrains angle between 0 and 360. */
+extern double constrainAngle360(double input);
+
+/** @brief Constrains angle from -180 to 180. 
+ *  Useful for taking the shortest turn to a target
+*/
 extern double constrainAngle180(double input);
+
+/** @brief Constrains angle from -90 to 90. 
+ *  Useful for finding angle when reversing movement
+*/
 extern double constrainAngle90(double input);
 
-/** @brief Returns either 1 or -1 as the sign of the input*/
+/** @brief Returns either 1 or -1 as the sign of the input */
 extern double getSign(double input);
 
 #endif

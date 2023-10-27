@@ -7,11 +7,14 @@
 extern int SHORT_PULLBACK_TICKS;
 extern int MID_PULLBACK_TICKS;
 extern int LONG_PULLBACK_TICKS;
+
+// Thresholds / timeouts
 extern int PUNCHER_OPEN_THRESHOLD;
-extern int PUNCHER_CLOSE_THRESHOLD;
 extern int PUNCHER_PAUSE_THRESHOLD;
-extern int PUNCHER_PULLBACK_THRESHOLD;
+extern int PUNCHER_CLOSE_THRESHOLD;
 extern int PUNCHER_PULLBACK_TIMEOUT;
+extern int PUNCHER_PULLBACK_THRESHOLD;
+
 
 // Puncher variables
 extern int puncherOpenCount;

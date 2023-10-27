@@ -1,10 +1,11 @@
 #include "myLib_h/robotStates.h"
 
 stateMachine states;
-// bool firstPuncherLoop = false;
-bool puncherClosePhase = false;
 
 void stateHandler() {
+    int loopDelay = 10;
+    bool puncherClosePhase = false;
+    // bool firstPuncherLoop = false;
     while(true) {
     // ******** Drive state handler ******** //
     if(states.driveStateChanged()) {
@@ -12,7 +13,7 @@ void stateHandler() {
             if(displayInfo) {pros::screen::print(TEXT_MEDIUM, 6, "TWO MOTOR DRIVE");} 
             drivePTO.set_value(false);  // piston retracted: 2m drive, 5m puncher
             // controller.rumble("..");  
-            controller.clear_line(2);  
+            controller.clear_line(2);
             controller.print(2, 0, "TWO MOTOR DRIVE");
                 // shake robot to help disengage pto
             PUNCHER_PULLBACK_THRESHOLD = 6000;  // higher threshold to prevent overshoot
@@ -55,7 +56,7 @@ void stateHandler() {
                 openCount = 0;
                 states.oldIntakeState = states.intakeState;
             }
-            openCount++;
+            openCount += loopDelay;
             closeCount = 0;
             if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE OPEN");}
         }
@@ -66,7 +67,7 @@ void stateHandler() {
                 closeCount = 0;
                 states.oldIntakeState = states.intakeState;
             }
-            closeCount++;
+            closeCount += loopDelay;
             openCount = 0;
             if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE CLOSED");}
         }
@@ -78,16 +79,16 @@ void stateHandler() {
                 if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PUNCHER FIRED");}
                 if(!puncherClosePhase) {    // Open (release)
                     puncher.move(-127);
-                    puncherOpenCount++;
+                    puncherOpenCount += loopDelay;
                 }
                 if(puncherOpenCount >= PUNCHER_OPEN_THRESHOLD) {
                     puncherClosePhase = true;
                 }
                 if(puncherClosePhase) { // Pause, then close (re-engage)
-                    puncherPauseCount++;
+                    puncherPauseCount += loopDelay;
                     if(puncherPauseCount >= PUNCHER_PAUSE_THRESHOLD) {
                         puncher.move(100); //80
-                        puncherCloseCount++;
+                        puncherCloseCount += loopDelay;
                     }
                 }
                 if(puncherCloseCount >= PUNCHER_CLOSE_THRESHOLD) {  // Stop 
@@ -111,7 +112,7 @@ void stateHandler() {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
-                puncherPullbackCount += 20;
+                puncherPullbackCount += loopDelay;
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::MID_PULLBACK)) {
                 if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 5, "MID PULLBACK, Volt: %d", puncher.get_voltage());}
@@ -122,7 +123,7 @@ void stateHandler() {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
-                puncherPullbackCount += 20;
+                puncherPullbackCount += loopDelay;
             }
             else if(states.puncherStateIs(stateMachine::puncher_state::LONG_PULLBACK)) {
                 if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 5, "LONG PULLBACK, Volt: %d", puncher.get_voltage());}
@@ -133,7 +134,7 @@ void stateHandler() {
                     stopPuncher(pros::E_MOTOR_BRAKE_HOLD);
                     states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 }
-                puncherPullbackCount += 20;
+                puncherPullbackCount += loopDelay;
             }
             if(states.puncherStateIs(stateMachine::puncher_state::PULLED_BACK)) {
                 if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 4, "PULLED BACK");}
@@ -264,6 +265,6 @@ void stateHandler() {
     }
     
     // necessary task delay - do not change
-    pros::delay(20);
+    pros::delay(loopDelay);
     }
 }

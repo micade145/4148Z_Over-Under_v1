@@ -27,6 +27,7 @@ public:
   PID(double new_kP, double new_kD) {
     kP = new_kP;
     kD = new_kD;
+    kI = integralErrorThresh = 0;
   }
   
   /**

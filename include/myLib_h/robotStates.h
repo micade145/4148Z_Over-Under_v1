@@ -15,8 +15,8 @@ public:
     const char* intakeStateString[3] = {"INTAKING", "OPEN", "CLOSED"};
 
     enum puncher_state {FIRE, SHORT_PULLBACK, MID_PULLBACK, LONG_PULLBACK, PULLED_BACK} puncherState, oldPuncherState, defaultPullback = SHORT_PULLBACK;
-   const char* puncherStateString[2] = {"FIRE", "PULLED BACK"};
-   const char* pullbackStateString[3] = {"SHORT", "MID", "LONG"};
+    const char* puncherStateString[2] = {"FIRE", "PULLED BACK"};
+    const char* pullbackStateString[3] = {"SHORT", "MID", "LONG"};
 
     enum puncher_angle_state {STEEP, MID, FLAT, DOWN} puncherAngleState, oldPuncherAngleState;
     const char* angleStateString[4] = {"STEEP", "MID", "FLAT", "DOWN"};

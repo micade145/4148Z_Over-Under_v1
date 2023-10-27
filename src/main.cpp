@@ -43,7 +43,7 @@ void initialize() {
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
 
-	pros::Task GUI(initGUI);
+	// pros::Task GUI(initGUI);
 }
 // pros::Task initRobot([] {inertial.reset(true);});
 
@@ -84,11 +84,66 @@ void autonomous() {
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
 	
-	// ???
-	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-	// pros::delay(20);
+	// prog route
+	// globalPose.setPoint(12, 24, 30);
+	// shakeRobot();
+	// setMoveToPoint(8, 36, 90, 100, 1500);
+	// waitUntilNear(5, 0);
+	// setMoveToPoint(12, 95, 100, 100, 3000);
+	// waitUntilNear(5, 0);
+	// setMoveToPoint(38, 108, 2000);
+	// waitUntilSettled(50000);
+
+
+	// chained move test
+	// setMove(12, 0, 1500);
+	// waitUntilNear(2, 0);
+	// setMove(0, 90, 0, 90, 1500);
 	// waitUntilSettled(0);
-	
+	// setMove(0, 0, 0, 100, 1500);
+	// waitUntilSettled(0);
+	// setMove(-12, 0, 80, 80, 1500);
+	// waitUntilSettled(50000);
+
+	// shakeRobot();
+	// // pushing works??
+	// for(int i=0; i < 3; i++) {
+	// setMove(-8, 0, 120, 80, 1000, true);
+	// pros::delay(1000);
+	// setMoveToPoint(0, 6, 1000);
+	// waitUntilSettled(0);
+	// }
+	// waitUntilSettled(50000);
+
+	// waitUntilNear(5, 0);
+	// setMove(24, 180, 70, 100, 1000, true);
+	// waitUntilSettled(0);
+
+	// setMove(24, 180, 100, 100, 1500, true);
+	// waitUntilNear(5, 0);
+	// setMove(0, 0, 0, 100, 1000);
+	// waitUntilSettled(50000);
+
+
+	// testProg();
+	sixBall();
+	pros::delay(50000);
+
+	// globalPose.setPoint(105, 9, 90);
+	// shakeRobot();
+	// setMove(-6, 90, 100, 100, 1300, true);
+	// waitUntilSettled(0);
+	// setMove(-32, 180, 100, 80, 1500, true);
+	// waitUntilSettled(0);
+	// setMove(6, 180, 100, 100, 1200, true);
+
+	// for(int i=0; i < 3; i++) {
+	// setMove(-8, 180, 120, 80, 1000, true);
+	// pros::delay(1000);
+	// setMoveToPoint(130, 20, 1000);
+	// waitUntilSettled(0);
+	// }
+
 	// Autoselector 
 	if(autoToRun == 1) {
 		defenseAuto(SOLO);
@@ -121,6 +176,10 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	// globalPose.setPoint(27.5, 9, 60); // prog
+	globalPose.setPoint(118.5, 17, 0); // six ball: in line w/ top right corner of tiles next to matchload 
+
+
 	// displayInfo = true;
 	autoMovement.suspend();
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
