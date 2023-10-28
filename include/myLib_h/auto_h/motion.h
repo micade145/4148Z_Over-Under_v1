@@ -32,6 +32,7 @@ extern double end_orientation;
 extern int max_translate_power;
 extern int max_rotate_power;
 extern int max_orient_power;
+extern bool movement_reversed;
 
 // Universal variables 
 extern bool driveSettled;
@@ -85,24 +86,27 @@ extern void setMove(double driveTarget, double turnTarget, int maxTime);
  * @param maxTranslatePower Max power for driving to target @param maxRotatePower Max power for turn to target
  * @param maxOrientPower Max power for end orientation turn
  * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param reversed If true, reverse movement. False (forward) by default
 */
 extern void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
-        int maxRotatePower, int maxOrientPower, int maxTime);
+        int maxRotatePower, int maxOrientPower, int maxTime, bool reversed);
         
 /**
  * @brief Wrapped setter for the moveToPoint function: No end orientation
  * @param targetX Target x coordinate, in inches @param targetY Target y coordinate, in inches
  * @param maxTranslatePower Max power for driving to target @param maxRotatePower Max power for turn to target
  * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param reversed If true, reverse movement. False (forward) by default
 */
-extern void setMoveToPoint(double targetX, double targetY, int maxTranslatePower, int maxRotatePower,  int maxTime);
+extern void setMoveToPoint(double targetX, double targetY, int maxTranslatePower, int maxRotatePower,  int maxTime, bool reversed);
 
 /**
  * @brief Wrapped setter for the moveToPoint function: Only target x, y and timeout
  * @param targetX Target x coordinate, in inches @param targetY Target y coordinate, in inches
  * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param reversed If true, reverse movement. False (forward) by default
 */
-extern void setMoveToPoint(double targetX, double targetY, int maxTime);
+extern void setMoveToPoint(double targetX, double targetY, int maxTime, bool reversed);
 
 
 // ******** Curve Function ******** //

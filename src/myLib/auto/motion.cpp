@@ -6,7 +6,7 @@
 
 int DRIVE_SLEW_RATE = 5;    // tune later
 int TURN_SLEW_RATE = 5;     // tune later
-int SETTLE_THRESHOLD = 5;  // 100ms: 5 iterations * 20ms loop
+int SETTLE_THRESHOLD = 5;  // 500 ms: 5 iterations * 10 ms loop
 int NEAR_TARGET_THRESHOLD = 2;        // 1.7 inches
 double DISTANCE_SETTLE_THRESHOLD = 1;   // 1 inch (tune later)
 double TURN_SETTLE_THRESHOLD = 2;       // 2 degrees
@@ -43,6 +43,7 @@ double end_orientation;
 int max_translate_power;
 int max_rotate_power;
 int max_orient_power;
+bool movement_reversed = false; // drive forward by default
 
 // Universal variables 
 bool driveSettled = true; // false?
@@ -57,6 +58,7 @@ void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTu
     // Reset relative position
     states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
     rightFrontDrive.tare_position();
+    driveSettled = false;
     pros::delay(20);
 
     // Set targets
@@ -76,7 +78,6 @@ void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTu
 
     // Set state
     nearTarget = false;
-    driveSettled = false;
     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE);
 }
 
@@ -93,8 +94,9 @@ void setMove(double driveTarget, double turnTarget, int maxTime) {
 }
 
 void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
-        int maxRotatePower, int maxOrientPower, int maxTime) {
+        int maxRotatePower, int maxOrientPower, int maxTime, bool reversed) {
     states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+    driveSettled = false;
     pros::delay(20);
     // Colored box for debugging
     // pros::screen::set_eraser(COLOR_BLACK);
@@ -116,17 +118,17 @@ void setMoveToPoint(double targetX, double targetY, double endOrientation, int m
 
     // // Movement flag
     // currentMovementFlag = flag;
+    reversed ? movement_reversed = true : movement_reversed = false;
 
     // Set state
     nearTarget = false;
-    driveSettled = false;
     states.setDriveAutoState(stateMachine::drive_auto_state::MOVE_TO_POINT);
 }
-void setMoveToPoint(double targetX, double targetY, int maxTranslatePower, int maxRotatePower,  int maxTime) {
-    setMoveToPoint(targetX, targetY, 0, maxTranslatePower, maxRotatePower, 0, maxTime);
+void setMoveToPoint(double targetX, double targetY, int maxTranslatePower, int maxRotatePower,  int maxTime, bool reversed) {
+    setMoveToPoint(targetX, targetY, 0, maxTranslatePower, maxRotatePower, 0, maxTime, reversed);
 }
-void setMoveToPoint(double targetX, double targetY, int maxTime) {
-    setMoveToPoint(targetX, targetY, 0, 100, 100, 0, maxTime);
+void setMoveToPoint(double targetX, double targetY, int maxTime, bool reversed) {
+    setMoveToPoint(targetX, targetY, 0, 100, 100, 0, maxTime, reversed);
 }
 
 // void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
@@ -199,13 +201,14 @@ void chainMove(std::vector<double> target1, std::vector<double> power1, int maxT
 
 void chainMoveToPoint(std::vector<double> pose1, std::vector<double> power1, int maxTime1, 
                         std::vector<double> pose2, std::vector<double> power2, int maxTime2, double threshold) {
-    setMoveToPoint(pose1[0], pose1[1], power1[0], power1[1], maxTime1);
+    setMoveToPoint(pose1[0], pose1[1], power1[0], power1[1], maxTime1, true);
     waitUntilNear(threshold, 0);
-    setMoveToPoint(pose2[0], pose2[1], power2[0], power2[1], maxTime2);
+    setMoveToPoint(pose2[0], pose2[1], power2[0], power2[1], maxTime2, true);
 }
 
 // ******** Wait Functions ******** //
 void waitUntilSettled(int msecDelay) {
+    pros::delay(400);
     while(!driveSettled) {
         pros::delay(5);
         // debug box
@@ -236,7 +239,7 @@ void waitUntilNear(double threshold, int msecDelay) {
         while(std::fabs(drive_error) > threshold || !driveSettled) {pros::delay(5);}
     }
     else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE_TO_POINT)){ 
-        while(translation_error > threshold || !driveSettled) {pros::delay(5);}
+        while(std::fabs(translation_error) > threshold || !driveSettled) {pros::delay(5);}
     }
     
     pros::delay(msecDelay);
@@ -306,7 +309,7 @@ void move() {
         // driveError = driveTarget - (frontEnc.get_position() * DRIVE_DEG_TO_INCH);
 
         // drive_position = rightFrontDrive.get_position() * DRIVE_DEG_TO_INCH_275;
-        drive_position = ((frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH_275) - initialPosition;
+        drive_position = ((frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH_275) - initialPosition; // in inches
         drive_error = int(drive_target - drive_position);
         // driveError = drive_target - currentPosition;
         turnError = int(turn_target - inertial.get_heading());
@@ -379,13 +382,13 @@ void move() {
         }
         if((settleCount >= SETTLE_THRESHOLD) || (pros::c::millis() - startTime) >= max_time) {
             stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
-            // drive_error = turnError = drivePower = turnPower = 0;
-            // drive_position = drive_target = turn_target = 0;
-            // drivePID.reset();
-            // turnPID.reset();
-            // driveSettled = true;
-            // states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-            // break;
+            drive_error = turnError = drivePower = turnPower = 0;
+            drive_position = drive_target = turn_target = 0;
+            drivePID.reset();
+            turnPID.reset();
+            driveSettled = true;
+            states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+            break;
         }
 
         // Output to drive
@@ -425,13 +428,24 @@ void moveToPoint() {
         // Calculate point errors
         xError = target_x - globalPose.x;
         yError = target_y - globalPose.y;
-        targetAngle = fmod((90 - (atan2(yError, xError) * RAD_TO_DEG)), 360);
+
+        // Calculate distance and angle, check if movement is reversed
+        if(movement_reversed) { //reverse
+            targetAngle = fmod((90 - (atan2(yError, xError) * RAD_TO_DEG)), 360) + 180;
+        }
+        else { // forward
+            targetAngle = fmod((90 - (atan2(yError, xError) * RAD_TO_DEG)), 360);
+        }
         // targetAngle = 90 - (atan2(yError, xError) * RAD_TO_DEG);
 
         // Calculate movement errors
-        translation_error = hypot(xError, yError);
+        if(movement_reversed) { // reversed, add 180 to angle
+            translation_error = -hypot(xError, yError);
+        }
+        else {  // forward
+            translation_error = hypot(xError, yError);
+        }
         rotationError = targetAngle - (globalPose.theta * RAD_TO_DEG);
-        // rotationError = constrainAngle180(rotationError);
         if(rotationError > 180) {rotationError -= 360;}
         if(rotationError < -180) {rotationError += 360;}
 
@@ -444,7 +458,7 @@ void moveToPoint() {
 
         // Rotate power
         // Stop rotating when close to target 
-        translation_error > 2.5 ? rotationPower = round(turnPID.calculateOutput(rotationError)) : rotationPower = 0; 
+        std::fabs(translation_error) > 2.5 ? rotationPower = round(turnPID.calculateOutput(rotationError)) : rotationPower = 0; 
 
         // Constrain outputs
         // translationPower = constrainVoltage(translationPower, max_translate_power, -max_translate_power);
@@ -454,7 +468,7 @@ void moveToPoint() {
         // translation_error <= NEAR_TARGET_THRESHOLD ? nearTarget = true : nearTarget = false;
         
         // Increment settle count if 'on' target (< 0.6 inches)
-        translation_error <= 0.6 ? settleCount++ : settleCount = 0;
+        std::fabs(translation_error) <= 0.6 ? settleCount++ : settleCount = 0;
 
         // Exit condition
         if(settleCount >= SETTLE_THRESHOLD || (pros::c::millis() - startTime) >= max_time) {

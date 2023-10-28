@@ -124,10 +124,16 @@ void autonomous() {
 	// setMove(0, 0, 0, 100, 1000);
 	// waitUntilSettled(50000);
 
+	// reverse moveToPoint test
+	// shakeRobot();
+	// setMoveToPoint(0, -24, 1500, true);
+	// waitUntilSettled(0);
+	// setMoveToPoint(0, 0, 1500, false);
+	// waitUntilSettled(500000);
 
 	// testProg();
 	sixBall();
-	pros::delay(50000);
+	pros::delay(500000);
 
 	// globalPose.setPoint(105, 9, 90);
 	// shakeRobot();

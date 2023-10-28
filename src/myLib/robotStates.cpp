@@ -3,6 +3,8 @@
 stateMachine states;
 
 void stateHandler() {
+    puncherEnc.set_data_rate(5);
+    frontEnc.set_data_rate(5);
     int loopDelay = 10;
     bool puncherClosePhase = false;
     // bool firstPuncherLoop = false;
