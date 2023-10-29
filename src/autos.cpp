@@ -18,13 +18,13 @@ Point rightTopMatchload(124, 124);		// In front of right top matchload  (124, 12
 // double ROBOT_Y_OFFSET = 6.5;
 
 
-// Shake robot to help engage PTO
+// Shake robot to help engage PTO, 400 ms
 void shakeRobot() {
 	// Help engage PTO
-	setDrive(20, 20);
-	pros::delay(250);
-	setDrive(-20, -20);
-	pros::delay(250);
+	setDrive(40, 40);
+	pros::delay(200);
+	setDrive(-40, -40);
+	pros::delay(200);
 	stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
 }
 
@@ -468,53 +468,61 @@ void sixBall() {
 	// **** Rush Mid **** //
 	// setMoveToPoint(118.5, 26, 128, 128, 500);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
-	// pros::delay(480);
-	setMoveToPoint(rightTriball3.x + 13, rightTriball3.y - 8, 119, 128, 1500, false);
+	setMoveToPoint(rightTriball3.x + 13, rightTriball3.y - 8, 119, 128, 1450, false); // 1500ms
 	// setMoveToPoint(87, 63, 128, 128, 1400);
 	waitUntilSettled(0);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
-	pros::delay(400);
+	// pros::delay(100); // 400ms
 	// Score
-	setMove(0, 90, 800);
-	waitUntilSettled(0);
+	setMove(0, 90, 0, 110, 700); // 800ms
+	pros::delay(625); // 700 ms
 	states.setWingState(stateMachine::wing_state::WINGS_OUT);
-	pros::delay(200);
+	waitUntilSettled(0);
+	// pros::delay(50);
+		// states.setWingState(stateMachine::wing_state::WINGS_OUT);
+		// pros::delay(200);
 	// setMoveToPoint(116, 62, 1500);
-	setMove(28, 90, 128, 100, 1300);
+	setMove(28, 90, 128, 100, 1300); 
 	pros::delay(200);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
 	waitUntilSettled(0);
 
 	// **** 3rd triball from mid **** //
-	setMove(-12, 60, 1300);
+	setMove(-12, 60, 128, 128, 1100); // defauly 100, 100 power, 1300 ms
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 	waitUntilSettled(0);
-	setMove(0, 235, 800);
+	setMove(0, 235, 700); // 800ms
 	waitUntilSettled(0);
 	// setMove(8, 235, 128, 100, 1500);
-	setMoveToPoint(rightTriball5.x + 11, rightTriball5.y, 1200, false); //rightTriball5.y + 0
+	setMoveToPoint(rightTriball5.x + 11, rightTriball5.y,128, 128, 1000, false); // 1200ms
 	waitUntilSettled(0);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 
 	// **** Score 3rd triball and get triball from hang bar **** //
-	setMove(0, 70, 900);
+	setMove(0, 70, 700); // 900ms
 	waitUntilSettled(0);
-	setMoveToPoint(119, 62, 128, 100, 1300, false);
+	setMoveToPoint(119, 62, 128, 80, 1300, false); //setMoveToPoint(119, 62, 128, 100, 1300, false);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
 	waitUntilSettled(0);
-	// setMove(-12, 0, 90, 128, 800);
-	// pros::delay(700);
-	// setMove(-55, 0, 100, 100, 1700);
-	// pros::delay(1600);
-	setMoveToPoint(114, 11, 128, 128, 1500, true);
+
+		// Move function to get near hang bar lane
+		// setMove(-12, 0, 90, 128, 800);
+		// pros::delay(700);
+		// setMove(-55, 0, 100, 100, 1700);
+		// pros::delay(1600);
+
+	setMoveToPoint(114, 10, 128, 128, 1400, true); // setMoveToPoint(114, 11, 128, 128, 1500, true);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 	waitUntilSettled(0);
-	setMoveToPoint(80, 10, 100, 128, 1440, false);
+	setMoveToPoint(80, 10, 100, 128, 1400, false); // 1440 ms
 	pros::delay(400);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
-	waitUntilSettled(0);
+	pros::delay(900);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
-	pros::delay(200);
+	waitUntilSettled(0);
+	pros::delay(100); // 200ms
+
+		// push triball near side of goal
 		// setMove(0, 110, 900);
 		// waitUntilSettled(0);
 		// states.setIntakeState(stateMachine::intake_state::OPEN);
@@ -527,18 +535,32 @@ void sixBall() {
 		// states.setIntakeState(stateMachine::intake_state::CLOSED);
 		// pros::delay(200);
 
+	// 12040 ms: 12 s
+
 	// **** Push remaining triballs in **** //
 	// setMove(-30, 270, 128, 100, 1000);
-	setMoveToPoint(116, 20, 1140, true);
+	setMoveToPoint(116, 20, 128, 128, 1000, true); // 1) 1140ms  2) 1100ms
 	waitUntilSettled(0);
-	setMove(0, 65, 800);
+	setMove(0, 65, 0, 110, 650); // 800ms
 	waitUntilSettled(0);
-	setMove(40, 10, 127, 65, 1600);
+	setMove(40, 10, 128, 75, 1500); // turn power 65, timeout 1600
 	states.setIntakeState(stateMachine::intake_state::OPEN);
-	// setMove(-40, 190, 127, 80, 1600);
+	// setMove(-40, 190, 127, 80, 1600); // push from behind
 	waitUntilSettled(0);
-	setMove(-10, 0, 1000);
+	setMove(-20, 0, 128, 100, 700);
 	waitUntilSettled(0);
+	// 3200 for necessary movement, 700 for back up
+	// 3900 ms: 4.0 s
+
+	// **** Total Time **** //
+	// 11650 for initial movements (3 balls from mid)
+	// 3200 for final movements (hangBar triball + push 2 in goal)
+	// ~500 to back up from goal (last movement)
+	// 140 for movement setter delay (10ms per function call, 14 calls)
+	// *******************
+	// 15490 ms w/ back up, 14990 w/o back up
+	// TARGET: 14900 ms, 14.9s
+	// CUT AT LEAST 90 ms (no back up) or CUT 590 ms (back up) 
 }
 
 void fourBall() {

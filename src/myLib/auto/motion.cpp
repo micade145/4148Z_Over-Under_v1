@@ -59,7 +59,7 @@ void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTu
     states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
     rightFrontDrive.tare_position();
     driveSettled = false;
-    pros::delay(20);
+    pros::delay(10); //20 ms
 
     // Set targets
     drive_target = driveTarget;
@@ -97,7 +97,7 @@ void setMoveToPoint(double targetX, double targetY, double endOrientation, int m
         int maxRotatePower, int maxOrientPower, int maxTime, bool reversed) {
     states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
     driveSettled = false;
-    pros::delay(20);
+    pros::delay(10); // 20ms
     // Colored box for debugging
     // pros::screen::set_eraser(COLOR_BLACK);
     // pros::screen::erase();
@@ -256,6 +256,7 @@ void forceStopDrive(pros::motor_brake_mode_e mode) {
 void autoMovementTask() {
     while(true) {
         if(states.driveAutoStateIs(stateMachine::drive_auto_state::OFF)) {
+            // pros::delay(5);
             // while(!states.driveAutoStateChanged) {pros::delay(5);}
         }
         else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE)) {
@@ -274,7 +275,7 @@ void autoMovementTask() {
             // pros::screen::fill_rect(20, 20, 400, 400);
             // pros::delay(20);
         }
-        pros::delay(20);
+        pros::delay(5);
     }
 }
 
@@ -304,7 +305,7 @@ void move() {
 
     while(!driveSettled) {
         fabs(initialTurnError) < 65 ? turnFF = 2 : turnFF = 1;
-        fabs(initialDriveError) < 12 ? driveFF = 2 : driveFF = 1;
+        fabs(initialDriveError) < 12.5 ? driveFF = 2 : driveFF = 1;
         // currentPosition = ((frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH) - initialPosition;
         // driveError = driveTarget - (frontEnc.get_position() * DRIVE_DEG_TO_INCH);
 
