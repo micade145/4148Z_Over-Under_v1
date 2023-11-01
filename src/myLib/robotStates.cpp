@@ -54,7 +54,8 @@ void stateHandler() {
         else if(states.intakeStateIs(stateMachine::intake_state::OPEN)) {
             spinIntake(-85);    // -65
             if(openCount > INTAKE_OPEN_THRESHOLD) {
-                stopIntake(pros::E_MOTOR_BRAKE_BRAKE);
+                // stopIntake(pros::E_MOTOR_BRAKE_HOLD);
+                spinIntake(-10);
                 openCount = 0;
                 states.oldIntakeState = states.intakeState;
             }
@@ -63,7 +64,7 @@ void stateHandler() {
             if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE OPEN");}
         }
         else if(states.intakeStateIs(stateMachine::intake_state::CLOSED)) {
-            spinIntake(85); //65
+            spinIntake(100); //65
             if(closeCount > INTAKE_CLOSE_THRESHOLD) {
                 stopIntake(pros::E_MOTOR_BRAKE_BRAKE);
                 closeCount = 0;

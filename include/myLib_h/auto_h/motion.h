@@ -144,8 +144,9 @@ extern void waitUntilNear(double threshold, int msecDelay);
 /**
  * @brief Forces the drive to stop and switch autoMovementState to OFF; 
  * used for when running at full power
+ * @param mode Brake mode to stop drive in
 */
-extern void forceStopDrive();
+extern void forceStopDrive(pros::motor_brake_mode_e mode);
 
 // ******** Auto Movement Task ******** //
 extern void autoMovementTask();

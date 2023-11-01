@@ -131,8 +131,25 @@ void autonomous() {
 	// setMoveToPoint(0, 0, 1500, false);
 	// waitUntilSettled(500000);
 
-	// testProg();
-	sixBall();
+	testProg();
+	// sixBall();
+	// globalPose.setPoint(80, 10, 270);
+	// states.setIntakeState(stateMachine::intake_state::CLOSED);
+	// pros::delay(200);
+	// setMoveToPoint(116, 15, 128, 128, 1100, true);
+	// waitUntilSettled(0);
+	// setMove(0, 70, 0, 110, 700);
+	// waitUntilSettled(0);
+	// pros::Task curve([] {setCurve(20, 10, 27, 128, 128, 1200);});
+	// pros::delay(400);
+	// states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
+	// states.setIntakeState(stateMachine::intake_state::OPEN);
+	// pros::delay(800);
+	// curve.suspend();
+	// forceStopDrive(pros::E_MOTOR_BRAKE_COAST);
+	// setMove(-20, 0, 128, 100, 700);
+	// waitUntilSettled(0);
+
 	pros::delay(500000);
 
 	// globalPose.setPoint(105, 9, 90);

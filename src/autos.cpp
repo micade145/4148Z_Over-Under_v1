@@ -170,20 +170,20 @@ void testProg() { // pushes with back of robot
 	shakeRobot();
 	setMoveToPoint(46, 10, 80, 120, 1000, false);
 	pros::delay(700);
-	setMoveToPoint(110, 10, 1800, false);
+	setMoveToPoint(120, 13, 128, 128, 1800, false);
 	waitUntilSettled(0);
 
 	// **** Push triball in from side of goal **** //
-	setMove(-6, 90, 100, 100, 1300, true);
-	pros::delay(600);
+	setMove(-6, 90, 100, 100, 1000);
+	pros::delay(700);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 	waitUntilSettled(0);
 	setMove(0, 270, 0, 100, 1000);
 	waitUntilSettled(0);
-	setMove(-40, 190, 127, 65, 1800);
-	pros::delay(1800);
-	// setMove(6, 180, 127, 100, 1000);
-	// waitUntilSettled(0);
+	setMoveToPoint(132, 30, 100, 128, 1000, true);
+	waitUntilSettled(0);
+	setMoveToPoint(132, 55, 100, 128, 1200, true);
+	waitUntilSettled(0);
 
 	// for(int i=0; i < 3; i++) {
 	// setMove(-12, 180, 128, 80, 1000, true);
@@ -193,8 +193,6 @@ void testProg() { // pushes with back of robot
 	// }
 
 	// push 1
-	setMove(-12, 180, 128, 80, 1000, true);
-	pros::delay(1000);
 	setMove(9, 200, 128, 80, 1000);
 	waitUntilNear(3, 0);
 	// push 2
@@ -206,14 +204,23 @@ void testProg() { // pushes with back of robot
 	waitUntilNear(3, 0);
 	
 	// **** Score triballs from middle of field **** //
-	setMoveToPoint(84, 36, 1500, false);
-	waitUntilNear(4, 0);
-	setMove(0, 0, 0, 100, 900);
+	setMoveToPoint(84, 36, 1300, false);
+	waitUntilNear(3, 0);
+	setMoveToPoint(84, 48, 100, 128, 1200, false);
 	waitUntilSettled(0);
-	setMove(70, 90, 127, 90, 2000);
-	pros::delay(200);
+
+	setMove(0, 45, 800);
+	waitUntilSettled(0);
 	states.setWingState(stateMachine::wing_state::WINGS_OUT);
+	pros::delay(100);
+	setMoveToPoint(124, 72, 128, 80, 2000, false);
 	waitUntilSettled(0);
+	// setMove(0, 0, 0, 100, 900);
+	// waitUntilSettled(0);
+	// setMove(70, 90, 127, 90, 2000);
+	// pros::delay(200);
+	// states.setWingState(stateMachine::wing_state::WINGS_OUT);
+	// waitUntilSettled(0);
 
 	// push
 	setMove(-12, 90, 1200);
@@ -224,15 +231,17 @@ void testProg() { // pushes with back of robot
 		setMove(-16, 90, 128, 100, 800);
 		pros::delay(800);
 	}
-	setMove(-32, 90, 128, 100, 1400);
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
+	setMoveToPoint(90, 72, 128, 128, 1200, true);
 	waitUntilSettled(0);
-	setMoveToPoint(84, 108, 1600, false);
-	pros::delay(1600);
-	setMove(0, 140, 0, 100, 800);
-	pros::delay(600);
+	setMoveToPoint(90, 96, 100, 128, 1300, true);
+	waitUntilSettled(0);
 	states.setWingState(stateMachine::wing_state::WINGS_OUT);
-	setMove(72, 100, 128, 80, 1500);
+	pros::delay(100);
+	setMoveToPoint(128, 72, 128, 90, 2000, false);
+	waitUntilSettled(0);
+	setMoveToPoint(90, 72, 128, 128, 1200, true);
+	waitUntilSettled(0);
 }
 
 
@@ -482,8 +491,8 @@ void sixBall() {
 		// states.setWingState(stateMachine::wing_state::WINGS_OUT);
 		// pros::delay(200);
 	// setMoveToPoint(116, 62, 1500);
-	setMove(28, 90, 128, 100, 1300); 
-	pros::delay(200);
+	setMove(30, 90, 128, 100, 1300); 
+	pros::delay(900);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
 	waitUntilSettled(0);
 
@@ -494,14 +503,16 @@ void sixBall() {
 	setMove(0, 235, 700); // 800ms
 	waitUntilSettled(0);
 	// setMove(8, 235, 128, 100, 1500);
-	setMoveToPoint(rightTriball5.x + 11, rightTriball5.y,128, 128, 1000, false); // 1200ms
-	waitUntilSettled(0);
+	setMoveToPoint(rightTriball5.x + 11, rightTriball5.y,128, 128, 950, false); // 1200ms
+	pros::delay(850);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
+	waitUntilSettled(0);
+	pros::delay(100);
 
 	// **** Score 3rd triball and get triball from hang bar **** //
 	setMove(0, 70, 700); // 900ms
 	waitUntilSettled(0);
-	setMoveToPoint(119, 62, 128, 80, 1300, false); //setMoveToPoint(119, 62, 128, 100, 1300, false);
+	setMoveToPoint(120, 62, 128, 80, 1300, false); //setMoveToPoint(119, 62, 128, 100, 1300, false);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
 	waitUntilSettled(0);
 
@@ -511,13 +522,14 @@ void sixBall() {
 		// setMove(-55, 0, 100, 100, 1700);
 		// pros::delay(1600);
 
-	setMoveToPoint(114, 10, 128, 128, 1400, true); // setMoveToPoint(114, 11, 128, 128, 1500, true);
+	setMoveToPoint(114, 8, 128, 128, 1420, true); // setMoveToPoint(114, 11, 128, 128, 1500, true);
+	pros::delay(800);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 	waitUntilSettled(0);
-	setMoveToPoint(80, 10, 100, 128, 1400, false); // 1440 ms
+	setMoveToPoint(80, 10, 100, 128, 1200, false); // 1440 ms
 	pros::delay(400);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
-	pros::delay(900);
+	pros::delay(700);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 	waitUntilSettled(0);
 	pros::delay(100); // 200ms
@@ -539,11 +551,14 @@ void sixBall() {
 
 	// **** Push remaining triballs in **** //
 	// setMove(-30, 270, 128, 100, 1000);
-	setMoveToPoint(116, 20, 128, 128, 1000, true); // 1) 1140ms  2) 1100ms
+	setMoveToPoint(116, 20, 128, 128, 1100, true); // 1) 1140ms  2) 1100ms
 	waitUntilSettled(0);
-	setMove(0, 65, 0, 110, 650); // 800ms
+	setMove(0, 70, 0, 110, 700); // 800ms
 	waitUntilSettled(0);
-	setMove(40, 10, 128, 75, 1500); // turn power 65, timeout 1600
+	// setMove(40, 30, 128, 75, 1500); // turn power 65, timeout 1600
+	setCurve(20, 10, 27, 128, 128, 1500);
+	pros::delay(1300);
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
 	// setMove(-40, 190, 127, 80, 1600); // push from behind
 	waitUntilSettled(0);
