@@ -462,7 +462,7 @@ void offenseAuto(offense_auto_mode s) {
 
 }
 
-void sixBall() {
+void sixBall() { // actually five ball, maybe four ball
 	// Init
 	globalPose.setPoint(118.5, 17, 0); // in line w/ top right corner of tiles next to matchload 
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;

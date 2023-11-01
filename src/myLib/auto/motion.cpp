@@ -2,6 +2,12 @@
 #include <cmath>
 // #include <vector>
 
+// TO DO
+// Implement acceleration cap / maybe deaccel
+// Boomerange alg
+// Make curve function async
+// Path following alg 
+
 // **************** Movement Constants **************** //
 
 int DRIVE_SLEW_RATE = 5;    // tune later
@@ -131,35 +137,6 @@ void setMoveToPoint(double targetX, double targetY, int maxTime, bool reversed) 
     setMoveToPoint(targetX, targetY, 0, 100, 100, 0, maxTime, reversed);
 }
 
-// void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
-//     int stepCount = 30;
-
-//     double arcLength = 2 * M_PI * radius * (std::fabs(endAngle) / 360); // should be in inches
-
-//     double arcLengthStep = arcLength / stepCount;
-//     double tempArcLength = arcLengthStep;
-
-//     // double angleError = std::fabs(endAngle - inertial.get_heading());
-//     double angleStep = endAngle / stepCount;
-//     double tempAngle = angleStep;
-
-// //  * returnSign(angleError)
-//     setMove(arcLength + distance, tempAngle, maxDrivePower, maxTurnPower, maxTime, false, false);
-    
-//     for(int i = 0; i < stepCount - 2; i++) {    // step count - 1, so that we have time to add distance after arc before exiting move function
-//         while(drive_position < tempArcLength) {
-//             pros::delay(1);
-//         }
-//         // tempAngle += angleStep;
-// 		turn_target += angleStep;
-//         tempArcLength += arcLengthStep;
-//         if(tempArcLength > arcLength) {tempArcLength = arcLength;}
-// 		pros::delay(5);
-// 	}
-
-//     // drive_target += distance;
-//     turn_target = endAngle;
-// }
 
 void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
     int stepCount = 50; // How many "slices" to divide the arc into
@@ -174,7 +151,7 @@ void setCurve(double distance, double endAngle, double radius, int maxDrivePower
     double tempAngle = inertial.get_heading() + angleStep;  // used to get arc started
 
 //  * returnSign(angleError)
-    setMove(arcLength + distance, tempAngle, maxDrivePower, maxTurnPower, maxTime, false, false, false);
+    setMove(arcLength + distance, tempAngle, maxDrivePower, maxTurnPower, maxTime, false, false, false); // arcLength + distance
     
     for(int i = 0; i < stepCount - 1; i++) {    // step count - 2, so that we have time to add distance after arc before exiting move function
         while(drive_position < tempArcLength) {
@@ -533,7 +510,37 @@ void turn() {
 
 
 
-// the archive :(
+// ******** the archive :( ******** //
+
+// void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
+//     int stepCount = 30;
+
+//     double arcLength = 2 * M_PI * radius * (std::fabs(endAngle) / 360); // should be in inches
+
+//     double arcLengthStep = arcLength / stepCount;
+//     double tempArcLength = arcLengthStep;
+
+//     // double angleError = std::fabs(endAngle - inertial.get_heading());
+//     double angleStep = endAngle / stepCount;
+//     double tempAngle = angleStep;
+
+// //  * returnSign(angleError)
+//     setMove(arcLength + distance, tempAngle, maxDrivePower, maxTurnPower, maxTime, false, false);
+    
+//     for(int i = 0; i < stepCount - 2; i++) {    // step count - 1, so that we have time to add distance after arc before exiting move function
+//         while(drive_position < tempArcLength) {
+//             pros::delay(1);
+//         }
+//         // tempAngle += angleStep;
+// 		turn_target += angleStep;
+//         tempArcLength += arcLengthStep;
+//         if(tempArcLength > arcLength) {tempArcLength = arcLength;}
+// 		pros::delay(5);
+// 	}
+
+//     // drive_target += distance;
+//     turn_target = endAngle;
+// }
 
 // Old turn setter
 // void setTurn(double turnTarget, double maxTurnPower, int maxTime, bool turnSlew) {

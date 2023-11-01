@@ -83,17 +83,6 @@ void autonomous() {
 	// pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
-	
-	// prog route
-	// globalPose.setPoint(12, 24, 30);
-	// shakeRobot();
-	// setMoveToPoint(8, 36, 90, 100, 1500);
-	// waitUntilNear(5, 0);
-	// setMoveToPoint(12, 95, 100, 100, 3000);
-	// waitUntilNear(5, 0);
-	// setMoveToPoint(38, 108, 2000);
-	// waitUntilSettled(50000);
-
 
 	// chained move test
 	// setMove(12, 0, 1500);
@@ -113,15 +102,6 @@ void autonomous() {
 	// setMoveToPoint(0, 6, 1000);
 	// waitUntilSettled(0);
 	// }
-	// waitUntilSettled(50000);
-
-	// waitUntilNear(5, 0);
-	// setMove(24, 180, 70, 100, 1000, true);
-	// waitUntilSettled(0);
-
-	// setMove(24, 180, 100, 100, 1500, true);
-	// waitUntilNear(5, 0);
-	// setMove(0, 0, 0, 100, 1000);
 	// waitUntilSettled(50000);
 
 	// reverse moveToPoint test
@@ -182,6 +162,9 @@ void autonomous() {
 	}
 	if(autoToRun == 5) {
 		defense3Ball();
+	}
+	if(autoToRun == 6) {
+		sixBall();
 	}
 }
 
