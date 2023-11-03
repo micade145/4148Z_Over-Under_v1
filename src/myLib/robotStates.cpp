@@ -227,9 +227,9 @@ void stateHandler() {
     // }
 
     // ******** Odometry ******** //
-    if(pros::competition::is_autonomous()) {
+    // if(pros::competition::is_autonomous()) {
         updatePosition();
-    }
+    // }
 
     // ******** Matchload ******** //
     while(matchloadState) {

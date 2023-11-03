@@ -18,13 +18,13 @@ Point rightTopMatchload(124, 124);		// In front of right top matchload  (124, 12
 // double ROBOT_Y_OFFSET = 6.5;
 
 
-// Shake robot to help engage PTO, 400 ms
+// Shake robot to help engage PTO, 200 ms
 void shakeRobot() {
 	// Help engage PTO
-	setDrive(40, 40);
+	setDrive(60, 60);
 	pros::delay(200);
-	setDrive(-40, -40);
-	pros::delay(200);
+	// setDrive(-40, -40);
+	// pros::delay(200);
 	stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
 }
 
@@ -507,7 +507,7 @@ void sixBall() { // actually five ball, maybe four ball
 	pros::delay(850);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 	waitUntilSettled(0);
-	pros::delay(100);
+	pros::delay(50);
 
 	// **** Score 3rd triball and get triball from hang bar **** //
 	setMove(0, 70, 700); // 900ms
@@ -522,14 +522,15 @@ void sixBall() { // actually five ball, maybe four ball
 		// setMove(-55, 0, 100, 100, 1700);
 		// pros::delay(1600);
 
-	setMoveToPoint(114, 8, 128, 128, 1420, true); // setMoveToPoint(114, 11, 128, 128, 1500, true);
+	setMoveToPoint(114, 8.5, 128, 128, 1420, true); // setMoveToPoint(114, 11, 128, 128, 1500, true);
 	pros::delay(800);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 	waitUntilSettled(0);
-	setMoveToPoint(80, 10, 100, 128, 1200, false); // 1440 ms
+	setMoveToPoint(80, 10, 100, 128, 1300, false); // 1440 ms
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
 	pros::delay(400);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
-	pros::delay(700);
+	pros::delay(800);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 	waitUntilSettled(0);
 	pros::delay(100); // 200ms
@@ -550,20 +551,20 @@ void sixBall() { // actually five ball, maybe four ball
 	// 12040 ms: 12 s
 
 	// **** Push remaining triballs in **** //
-	// setMove(-30, 270, 128, 100, 1000);
-	setMoveToPoint(116, 20, 128, 128, 1100, true); // 1) 1140ms  2) 1100ms
+	setMoveToPoint(116, 15, 128, 128, 1100, true);
 	waitUntilSettled(0);
-	setMove(0, 70, 0, 110, 700); // 800ms
+	setMove(0, 70, 0, 110, 700);
 	waitUntilSettled(0);
-	// setMove(40, 30, 128, 75, 1500); // turn power 65, timeout 1600
-	setCurve(20, 10, 27, 128, 128, 1500);
-	pros::delay(1300);
-	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
+	setMove(60, 70, 100, 128, 1500);
+	pros::delay(600);
+	turn_target = 350;
+	max_drive_power = 128;
 	states.setIntakeState(stateMachine::intake_state::OPEN);
-	// setMove(-40, 190, 127, 80, 1600); // push from behind
 	waitUntilSettled(0);
 	setMove(-20, 0, 128, 100, 700);
 	waitUntilSettled(0);
+
+
 	// 3200 for necessary movement, 700 for back up
 	// 3900 ms: 4.0 s
 

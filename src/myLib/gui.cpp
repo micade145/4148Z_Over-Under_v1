@@ -7,36 +7,39 @@ lv_res_t act1(lv_obj_t *btnm, const char *txt){
 	//printf("red button: %s released\n", txt);
     // if(strcmp(txt, btnmMap[i]) == 0){
     autoToRun = 1;
-    pros::screen::erase_line(0, 7, 600, 7);
+    pros::screen::erase_line(0, 7, 600, 8);
     pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "DEFENSE SOLO");
 	return LV_RES_OK; // return OK because the button matrix is not deleted
 }
 lv_res_t act2(lv_obj_t *btnm, const char *txt){
     autoToRun = 2;
-    pros::screen::erase_line(0, 7, 600, 7);
+    pros::screen::erase_line(0, 7, 600, 8);
     pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "DEFENSE ELIMS");
 	return LV_RES_OK; // return OK because the button matrix is not deleted
 }
 lv_res_t act3(lv_obj_t *btnm, const char *txt){
     autoToRun = 3;
-    pros::screen::erase_line(0, 7, 600, 7);
+    pros::screen::erase_line(0, 7, 600, 8);
     pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "FOUR BALL");
 	return LV_RES_OK; // return OK because the button matrix is not deleted
 }
 lv_res_t act4(lv_obj_t *btnm, const char *txt){
     autoToRun = 4;
-    pros::screen::erase_line(0, 7, 600, 7);
+    pros::screen::erase_line(0, 7, 600, 8);
     pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "PROG SKILLS");
 	return LV_RES_OK; // return OK because the button matrix is not deleted
 }
 
 lv_res_t act5(lv_obj_t *btnm, const char *txt){
     autoToRun = 5;
+    pros::screen::erase_line(0, 7, 600, 8);
     pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "DEFENSE 3 BALL");
 	return LV_RES_OK; // return OK because the button matrix is not deleted
 }
 lv_res_t act6(lv_obj_t *btnm, const char *txt){
     autoToRun = 6;
+    pros::screen::erase_line(0, 7, 600, 8);
+    pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "FIVE BALL");
 	return LV_RES_OK; // return OK because the button matrix is not deleted
 }
 

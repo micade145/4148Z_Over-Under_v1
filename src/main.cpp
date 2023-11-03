@@ -28,7 +28,7 @@ void initialize() {
 	// pros::lcd::set_text(1, "Hello PROS User!");
 	// pros::lcd::register_btn1_cb(on_center_button);
 
-	inertial.reset(false);
+	// inertial.reset(false);
 
 	// Initialize default states
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
@@ -43,9 +43,10 @@ void initialize() {
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
 
+	pros::Task initRobot([] {inertial.reset(true);});
 	// pros::Task GUI(initGUI);
 }
-// pros::Task initRobot([] {inertial.reset(true);});
+
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -111,41 +112,33 @@ void autonomous() {
 	// setMoveToPoint(0, 0, 1500, false);
 	// waitUntilSettled(500000);
 
-	testProg();
-	// sixBall();
+	// sixBall ending test
 	// globalPose.setPoint(80, 10, 270);
+	// states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
+	// pros::delay(300);
 	// states.setIntakeState(stateMachine::intake_state::CLOSED);
 	// pros::delay(200);
 	// setMoveToPoint(116, 15, 128, 128, 1100, true);
 	// waitUntilSettled(0);
 	// setMove(0, 70, 0, 110, 700);
 	// waitUntilSettled(0);
-	// pros::Task curve([] {setCurve(20, 10, 27, 128, 128, 1200);});
-	// pros::delay(400);
-	// states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
+	// // pros::Task curve([] {setCurve(20, 10, 27, 128, 128, 1200);});
+	// // pros::delay(400);'
+	// setMove(60, 70, 100, 128, 1500);
+	// pros::delay(600);
+	// turn_target = 10;
+	// max_drive_power = 128;
+	// // pros::delay(100);
+	// // states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
 	// states.setIntakeState(stateMachine::intake_state::OPEN);
-	// pros::delay(800);
-	// curve.suspend();
-	// forceStopDrive(pros::E_MOTOR_BRAKE_COAST);
+	// waitUntilSettled(0);
+	// // forceStopDrive(pros::E_MOTOR_BRAKE_COAST);
 	// setMove(-20, 0, 128, 100, 700);
 	// waitUntilSettled(0);
 
-	pros::delay(500000);
-
-	// globalPose.setPoint(105, 9, 90);
-	// shakeRobot();
-	// setMove(-6, 90, 100, 100, 1300, true);
-	// waitUntilSettled(0);
-	// setMove(-32, 180, 100, 80, 1500, true);
-	// waitUntilSettled(0);
-	// setMove(6, 180, 100, 100, 1200, true);
-
-	// for(int i=0; i < 3; i++) {
-	// setMove(-8, 180, 120, 80, 1000, true);
-	// pros::delay(1000);
-	// setMoveToPoint(130, 20, 1000);
-	// waitUntilSettled(0);
-	// }
+	// testProg();
+	sixBall();
+	pros::delay(50000);
 
 	// Autoselector 
 	if(autoToRun == 1) {
@@ -158,7 +151,7 @@ void autonomous() {
 		fourBall();
 	}
 	if(autoToRun == 4) {
-		shootDropProgSkills();
+		testProg();
 	}
 	if(autoToRun == 5) {
 		defense3Ball();

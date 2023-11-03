@@ -38,7 +38,7 @@ extern void defenseAuto(defense_auto_mode s);
 */
 extern void offenseAuto(offense_auto_mode s);
 
-/** @brief Setup: Under Hang Bar of Offensive Zone, facing goal, ~45 deg --
+/** @brief Setup: Top right corner of tile next to matchload, preload in line with HIM sticker --
  * 
  * Shoot preload, (turn) intake hangBarTriball, shoot to goal; Knock out Matchload triball & push into goal; Score 1 from mid and 2 from auto line
 */

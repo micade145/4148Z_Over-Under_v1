@@ -51,6 +51,10 @@ int max_rotate_power;
 int max_orient_power;
 bool movement_reversed = false; // drive forward by default
 
+// curve() variables
+double radius;
+
+
 // Universal variables 
 bool driveSettled = true; // false?
 bool nearTarget = false;
@@ -136,6 +140,29 @@ void setMoveToPoint(double targetX, double targetY, int maxTranslatePower, int m
 void setMoveToPoint(double targetX, double targetY, int maxTime, bool reversed) {
     setMoveToPoint(targetX, targetY, 0, 100, 100, 0, maxTime, reversed);
 }
+
+// void curve() {
+//     int startTime = pros::c::millis();
+
+//     int stepCount = 50;
+//     double angleError = turn_target - inertial.get_heading();  // calculate error to endAngle
+
+//     double arcLength = 2 * M_PI * radius * (std::fabs(angleError) / 360); // use error to endAngle to find arc length to travel
+   
+//     double arcLengthStep = arcLength / stepCount;   // define step for arclength
+//     double tempArcLength = arcLengthStep;           // will be used to check when to iterate angle
+
+//     double angleStep = angleError / stepCount;      // define step for angle
+//     double tempAngle = inertial.get_heading() + angleStep;  // used to get arc started
+
+//     double driveError, turnError;
+//     double drivePower, turnPower;
+//     double currentPosition = (frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH_275;
+    
+//     while(true) {
+//         pros::delay(10);
+//     }
+// }
 
 
 void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime) {
@@ -390,6 +417,8 @@ void move() {
         pros::delay(10);
     }
 }
+
+
 
 void moveToPoint() {
     // Initialize timer
