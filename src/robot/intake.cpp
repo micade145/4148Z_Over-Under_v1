@@ -1,8 +1,8 @@
 #include "robot_h/intake.h"
 
 // ******** Intake Constants ******** //
-int INTAKE_CLOSE_THRESHOLD = 200;
-int INTAKE_OPEN_THRESHOLD = 200;
+int INTAKE_CLOSE_THRESHOLD = 300;   // 200 ms
+int INTAKE_OPEN_THRESHOLD = 200;    // 200 ms
 
 // ******** Intake Variables ******** //
 int openCount = 0;

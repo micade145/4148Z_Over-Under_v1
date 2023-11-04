@@ -64,7 +64,7 @@ void stateHandler() {
             if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 3, "INTAKE OPEN");}
         }
         else if(states.intakeStateIs(stateMachine::intake_state::CLOSED)) {
-            spinIntake(100); //65
+            spinIntake(127); //65
             if(closeCount > INTAKE_CLOSE_THRESHOLD) {
                 stopIntake(pros::E_MOTOR_BRAKE_BRAKE);
                 closeCount = 0;
