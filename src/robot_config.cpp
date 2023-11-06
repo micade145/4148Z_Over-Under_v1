@@ -39,7 +39,7 @@ pros::ADIDigitalOut leftWing({5, 'D'}, false);          // PORT 5D
 pros::ADIDigitalOut rightWing({5, 'E'}, false);         // PORT 5E
 // pros::ADIDigitalOut leftParkingBrake({5, 'F'}, false);  // PORT 5F
 // pros::ADIDigitalOut rightParkingBrake({5, 'G'}, false); // PORT 5G
-pros::ADIDigitalIn puncherLimitSwitch({5, 'H'});        // PORT 5H
+// pros::ADIDigitalIn puncherLimitSwitch({5, 'H'});        // PORT 5H
 
 pros::ADIDigitalOut sideClimb('H', false);              // PORT H
 

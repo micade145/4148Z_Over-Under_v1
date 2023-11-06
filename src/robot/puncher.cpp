@@ -7,7 +7,7 @@
 
 // Rotation sensor pullback constants
 int SHORT_PULLBACK_TICKS = 50000;   // In centidegrees (100 * degrees) // 50000
-int MID_PULLBACK_TICKS = 78000;     // In centidegrees (100 * degrees) // 78000
+int MID_PULLBACK_TICKS = 85000;     // In centidegrees (100 * degrees) // 78000
 int LONG_PULLBACK_TICKS = 110000;    // In centidegrees (100 * degrees) // 110000
 
 // Threshold constants

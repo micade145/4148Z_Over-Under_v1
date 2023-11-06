@@ -147,29 +147,29 @@ void stateHandler() {
     }
 
     // ******** Puncher Angle state handler ******** //
-    if(states.puncherAngleStateChanged()) {
-        if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::DOWN)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE DOWN");}
-            verticalAngler.set_value(true);
-            tilterAngler.set_value(true);
-        }
-        else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::FLAT)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE FLAT");}
-            verticalAngler.set_value(true);
-            tilterAngler.set_value(false);
-        }
-        else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::MID)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE MID");}
-            verticalAngler.set_value(false);
-            tilterAngler.set_value(true);
-        }
-        else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::STEEP)) {
-            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE STEEP");}
-            verticalAngler.set_value(false);
-            tilterAngler.set_value(false);
-        }
-        states.oldPuncherAngleState = states.puncherAngleState;
-    }
+    // if(states.puncherAngleStateChanged()) {
+    //     if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::DOWN)) {
+    //         if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE DOWN");}
+    //         verticalAngler.set_value(true);
+    //         tilterAngler.set_value(true);
+    //     }
+    //     else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::FLAT)) {
+    //         if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE FLAT");}
+    //         verticalAngler.set_value(true);
+    //         tilterAngler.set_value(false);
+    //     }
+    //     else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::MID)) {
+    //         if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE MID");}
+    //         verticalAngler.set_value(false);
+    //         tilterAngler.set_value(true);
+    //     }
+    //     else if(states.puncherAngleStateIs(stateMachine::puncher_angle_state::STEEP)) {
+    //         if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 6, "ANGLE STEEP");}
+    //         verticalAngler.set_value(false);
+    //         tilterAngler.set_value(false);
+    //     }
+    //     states.oldPuncherAngleState = states.puncherAngleState;
+    // }
         
     // ******** Wing state handler ******** //
     if(states.wingStateChanged()) {
@@ -245,7 +245,7 @@ void stateHandler() {
             pros::delay(100);
             puncherEnc.reset_position();
             // setPuncher(127);
-            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 16000) { //|| puncherLimitSwitch.get_value() == false
+            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 10000) { //|| puncherLimitSwitch.get_value() == false
                 pros::delay(5);
             }
             fireCount++;

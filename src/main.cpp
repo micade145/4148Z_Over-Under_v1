@@ -28,7 +28,7 @@ void initialize() {
 	// pros::lcd::set_text(1, "Hello PROS User!");
 	// pros::lcd::register_btn1_cb(on_center_button);
 
-	inertial.reset(false);
+	// inertial.reset(false);
 
 	// Initialize default states
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
@@ -45,7 +45,7 @@ void initialize() {
 
 	pros::Task GUI(initGUI);
 }
-// pros::Task initRobot([] {inertial.reset(true);});
+pros::Task initRobot([] {inertial.reset(true);});
 
 
 /**
@@ -81,7 +81,7 @@ void competition_initialize() {}
 pros::Task superstruct(stateHandler);
 pros::Task autoMovement(autoMovementTask);
 void autonomous() {
-	INTAKE_CLOSE_THRESHOLD = 200;
+	INTAKE_CLOSE_THRESHOLD = 250;
 	// pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
@@ -178,8 +178,7 @@ void autonomous() {
 void opcontrol() {
 	INTAKE_CLOSE_THRESHOLD = 300;
 	// globalPose.setPoint(27.5, 9, 60); // prog
-	globalPose.setPoint(118.5, 17, 0); // six ball: in line w/ top right corner of tiles next to matchload 
-
+	// globalPose.setPoint(118.5, 17, 0); // in line w/ top right corner of tiles next to matchload
 
 	// displayInfo = true;
 	autoMovement.suspend();
@@ -203,7 +202,7 @@ void opcontrol() {
 
 		// Puncher controls
 		puncherOpControl();
-		puncherAngleOpControl();
+		// puncherAngleOpControl();
 
 		// Wing toggle
 		wingOpControl();
