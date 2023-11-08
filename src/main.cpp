@@ -82,6 +82,7 @@ pros::Task superstruct(stateHandler);
 pros::Task autoMovement(autoMovementTask);
 void autonomous() {
 	INTAKE_CLOSE_THRESHOLD = 250;
+	INTAKE_OPEN_THRESHOLD = 300;
 	// pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
@@ -178,7 +179,7 @@ void autonomous() {
 void opcontrol() {
 	INTAKE_CLOSE_THRESHOLD = 300;
 	// globalPose.setPoint(27.5, 9, 60); // prog
-	// globalPose.setPoint(118.5, 17, 0); // in line w/ top right corner of tiles next to matchload
+	globalPose.setPoint(118.5, 17, 0); // in line w/ top right corner of tiles next to matchload 
 
 	// displayInfo = true;
 	autoMovement.suspend();

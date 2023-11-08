@@ -238,7 +238,7 @@ void waitUntilSettled(int msecDelay) {
 }
 
 void waitUntilNear(double threshold, int msecDelay) {
-    pros::delay(400); // minimum move time
+    pros::delay(300); // minimum move time
     if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE)) {
         while(std::fabs(drive_error) > threshold || !driveSettled) {pros::delay(5);}
     }

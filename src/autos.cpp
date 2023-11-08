@@ -438,18 +438,24 @@ void testProg() { // pushes with back of robot
 
 void defenseAuto(defense_auto_mode s) {
 // Init
-	globalPose.setPoint(24, 12, 160);
+	// globalPose.setPoint(24, 12, 160);
+	globalPose.setPoint(25, 18, 180); // new setup
+
 	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
-	// states.setPuncherAngleState(stateMachine::puncher_angle_state::DOWN);
-	// states.setIntakeState(stateMachine::intake_state::OPEN);
 
-	shakeRobot();
-	setMove(-30, 160, 120, 100, 1300);
+	// shakeRobot();
+	// setMove(-24, 160, 128, 100, 1300);
+	// waitUntilSettled(0);
+
+	// help pto engage
+	setMove(-30, 135, 100, 127, 1500);
+	pros::delay(500);
+	turn_target = 180;
 	waitUntilSettled(0);
 
 	if(s == defense_auto_mode::SOLO) {
-	setMoveToPoint(17, 24, 800, false);
+	setMoveToPoint(20, 24, 800, false); // 	setMoveToPoint(17, 24, 800, false);
 	waitUntilSettled(0);
 	setMove(0, 140, 800);
 	waitUntilSettled(0);
@@ -552,7 +558,11 @@ void sixBall() { // actually five ball, maybe four ball
 	// **** Rush Mid **** //
 	// setMoveToPoint(118.5, 26, 128, 128, 500);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
-	setMoveToPoint(rightTriball3.x + 13.5, rightTriball3.y - 7, 120, 128, 1450, false); // setMoveToPoint(rightTriball3.x + 13, rightTriball3.y - 8, 118, 128, 1450, false)
+	// setMoveToPoint(110, 48, 110, 128, 1450, false);
+	// pros::delay(450);
+	// target_x = 89; //89
+	// target_y = 64; //64
+	setMoveToPoint(rightTriball3.x + 13, rightTriball3.y - 8, 118, 128, 1450, false); // setMoveToPoint(rightTriball3.x + 13, rightTriball3.y - 8, 118, 128, 1450, false)
 	// setMoveToPoint(87, 63, 128, 128, 1400);
 	waitUntilSettled(0);
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
@@ -597,14 +607,14 @@ void sixBall() { // actually five ball, maybe four ball
 		// setMove(-55, 0, 100, 100, 1700);
 		// pros::delay(1600);
 
-	setMoveToPoint(114, 7.8, 128, 128, 1480, true); // setMoveToPoint(114, 8.5, 128, 128, 1450, true);
+	setMoveToPoint(114, 7.4, 128, 128, 1500, true); // setMoveToPoint(114, 8.5, 128, 128, 1450, true);
 	pros::delay(800);
 
 	states.setIntakeState(stateMachine::intake_state::CLOSED);
 	waitUntilSettled(0);
-	globalPose.setPoint(114, 8, 0);
-	pros::delay(20);
-	setMoveToPoint(81, 9, 60, 128, 1300, false);  // setMoveToPoint(80, 10, 100, 128, 1300, false);
+	// globalPose.setPoint(114, 8, 0);
+	// pros::delay(20);
+	setMoveToPoint(82, 15, 50, 128, 1300, false);  // setMoveToPoint(80, 10, 100, 128, 1300, false); // setMoveToPoint(82, 9, 60, 128, 1300, false)
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
 	pros::delay(700);
 	states.setIntakeState(stateMachine::intake_state::OPEN);
@@ -635,7 +645,7 @@ void sixBall() { // actually five ball, maybe four ball
 	waitUntilSettled(0);
 	setMove(60, 70, 100, 128, 1500);
 	pros::delay(500);
-	turn_target = 355;
+	turn_target = 1;
 	max_drive_power = 128;
 	states.setIntakeState(stateMachine::intake_state::OPEN);
 	waitUntilSettled(0);
