@@ -44,6 +44,7 @@ void initialize() {
 	puncher.tare_position();
 
 	pros::Task GUI(initGUI);
+	inertial.set_data_rate(5);
 }
 pros::Task initRobot([] {inertial.reset(true);});
 
@@ -82,7 +83,7 @@ pros::Task superstruct(stateHandler);
 pros::Task autoMovement(autoMovementTask);
 void autonomous() {
 	INTAKE_CLOSE_THRESHOLD = 250;
-	INTAKE_OPEN_THRESHOLD = 300;
+	INTAKE_OPEN_THRESHOLD = 450;
 	// pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
@@ -179,12 +180,14 @@ void autonomous() {
 void opcontrol() {
 	INTAKE_CLOSE_THRESHOLD = 300;
 	// globalPose.setPoint(27.5, 9, 60); // prog
-	globalPose.setPoint(118.5, 17, 0); // in line w/ top right corner of tiles next to matchload 
+	// globalPose.setPoint(118.5, 17, 0); // in line w/ top right corner of tiles next to matchload , six ball auto
+	globalPose.setPoint(25, 17, 180); // new setup for defense auto
+
 
 	// displayInfo = true;
 	autoMovement.suspend();
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
-	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	// states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
 

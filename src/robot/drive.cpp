@@ -56,7 +56,7 @@ void curveSplitArcade() {
 }
 
 // PTO Opcontrol
-bool sixMotorMode = true;
+bool sixMotorMode = states.driveStateIs(stateMachine::drive_state::SIX_MOTOR);
 void drivePtoOpControl() {
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
         sixMotorMode = !sixMotorMode;
