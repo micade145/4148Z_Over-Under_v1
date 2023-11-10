@@ -185,7 +185,7 @@ void testProg() { // pushes with back of robot
 	// waitUntilSettled(0);
 	// setMove(0, 270, 0, 100, 1000);
 	// waitUntilSettled(0);
-	setMoveToPoint(128, 32, 110, 128, 900, true);
+	setMoveToPoint(130, 24, 110, 128, 900, true);
 	waitUntilSettled(0);
 	setMoveToPoint(132, 72, 100, 128, 1200, true); // setMoveToPoint(132, 55, 100, 128, 1200, true);
 	waitUntilSettled(0);
@@ -203,11 +203,11 @@ void testProg() { // pushes with back of robot
 	pros::delay(900);
 	setMove(4, 200, 128, 80, 800);
 	waitUntilSettled(0);
-	
+
 	// **** Score triballs from middle of field **** //
 	setMoveToPoint(80, 36, 1300, false); // setMoveToPoint(84, 36, 1300, false);
 	waitUntilSettled(0);
-	setMoveToPoint(80, 68, 100, 128, 1200, false); // setMoveToPoint(84, 48, 100, 128, 1200, false);
+	setMoveToPoint(80, 63, 100, 128, 1200, false); // setMoveToPoint(84, 48, 100, 128, 1200, false);
 	waitUntilSettled(0);
 
 	setMove(0, 90, 0, 120, 700);
@@ -462,6 +462,8 @@ void defenseAuto(defense_auto_mode s) {
 	// states.setIntakeState(stateMachine::intake_state::OPEN);
 	waitUntilSettled(0);
 	states.setWingState(stateMachine::wing_state::LEFT_OUT);
+	setMove(0, 120, 800);
+	waitUntilSettled(0);
 	}
 	else if(s == defense_auto_mode::ELIMS) {
 	setMoveToPoint(28, 24, 1200, false);
@@ -660,6 +662,7 @@ void sixBall() { // actually five ball, maybe four ball
 void fourBall() {
 	// init
 	globalPose.setPoint(120, 12, 200);
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
 	states.setIntakeState(stateMachine::intake_state::OPEN);

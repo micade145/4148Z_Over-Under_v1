@@ -3,6 +3,8 @@
 stateMachine states;
 
 void stateHandler() {
+    // default states
+    // set default states here instead of in init
     puncherEnc.set_data_rate(5);
     frontEnc.set_data_rate(5);
     int loopDelay = 10;
@@ -252,6 +254,7 @@ void stateHandler() {
 
             if(!matchloadState) { // || fireCount >= fireTarget
                 stopPuncher(pros::E_MOTOR_BRAKE_BRAKE);
+                states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
                 states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 // fireCount = fireTarget = 0;
                 // matchloadState = false;

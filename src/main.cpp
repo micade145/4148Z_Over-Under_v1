@@ -108,7 +108,7 @@ void autonomous() {
 	// }
 	// waitUntilSettled(50000);
 
-	// reverse moveToPoint test
+	// reverse moveToPoint testa
 	// shakeRobot();
 	// setMoveToPoint(0, -24, 1500, true);
 	// waitUntilSettled(0);
@@ -164,6 +164,22 @@ void autonomous() {
 	}
 }
 
+void matchloadMacro() {
+	while(controller.get_analog(ANALOG_LEFT_Y) < 10) {
+	states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+	setDrive(-60, -60);
+	pros::delay(200);
+	stopDrive(pros::E_MOTOR_BRAKE_COAST);
+	matchloadState = true;
+
+	pros::delay(30000);
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	pros::delay(60);
+	shakeRobot();
+	break;
+	}
+}
+
 /**
  * Runs the operator control code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -196,6 +212,7 @@ void opcontrol() {
 	// resetOdomSensors();
 	// pros::delay(100);
 	// globalPose.setPoint(0,0,0);
+	// matchloadMacro();
 	while (true) {
 		// Drive controls
 		splitArcade(pros::E_MOTOR_BRAKE_COAST);

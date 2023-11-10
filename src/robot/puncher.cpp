@@ -105,6 +105,13 @@ bool matchloadState = false;
 void matchloadOpControl() {
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
         matchloadState = !matchloadState;
+        if(matchloadState) {
+            states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+            shakeRobot();
+        }
+        else {
+            shakeRobot();
+        }
         controller.rumble("-");
     }
 }
