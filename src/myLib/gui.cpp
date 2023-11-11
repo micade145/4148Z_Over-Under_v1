@@ -118,10 +118,10 @@ void initGUI() {
     lv_label_set_text(text4, "ANGLE: ");
     lv_obj_align(state4, text4, LV_ALIGN_OUT_RIGHT_TOP, 10, 0);
 
-    lv_label_set_text(state1, states.driveStateString[states.driveState]);
-    lv_label_set_text(state2, states.puncherStateString[states.puncherState]);
-    lv_label_set_text(state3, states.puncherStateString[punchPullback]);
-    lv_label_set_text(state4, states.angleStateString[states.puncherAngleState]);
+    // lv_label_set_text(state1, states.driveStateString[states.driveState]);
+    // lv_label_set_text(state2, states.puncherStateString[states.puncherState]);
+    // lv_label_set_text(state3, states.puncherStateString[punchPullback]);
+    // lv_label_set_text(state4, states.angleStateString[states.puncherAngleState]);
     // lv_label_set_text(statesText2, states.driveStateString[states.driveState]);
 
     // lv_label_set_text(statesText1, ("DRIVE STATE:   %s \n"

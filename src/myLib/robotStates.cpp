@@ -4,13 +4,24 @@ stateMachine states;
 
 void stateHandler() {
     // default states
-    // set default states here instead of in init
+	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
+	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
+	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
+	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
+	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
+	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+
+    // encoder data rates
     puncherEnc.set_data_rate(5);
     frontEnc.set_data_rate(5);
+
+    // local variables
     int loopDelay = 10;
     bool puncherClosePhase = false;
     // bool firstPuncherLoop = false;
     while(true) {
+    int loopStartTime = pros::c::millis();
     // ******** Drive state handler ******** //
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
@@ -33,14 +44,10 @@ void stateHandler() {
             controller.rumble("--");
             controller.clear_line(2);
             controller.print(2, 0, "SIX MOTOR DRIVE");
+            // controller.set_text(2, 0, "SIX MOTOR DRIVE");
             drivePTO.set_value(true);   // piston expanded: 6m drive, 1m puncher
-                // shake robot to help engage pto
             PUNCHER_PULLBACK_THRESHOLD = 2500;  // default threshold
 
-            // pros::screen::set_eraser(COLOR_BLACK);
-            // pros::screen::erase();
-            // pros::screen::set_pen(COLOR_BLUE);
-            // pros::screen::fill_rect(0, 0, 1000, 1000);
         }
         states.oldDriveState = states.driveState;
     }
@@ -265,12 +272,14 @@ void stateHandler() {
 
     // ******** DEBUG ******** //
     if(displayInfo) {
-    pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
-    pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
+    // pros::screen::print(TEXT_MEDIUM_CENTER, 10, "Drive Velo: %d", (leftFrontDrive.get_actual_velocity() + rightFrontDrive.get_actual_velocity()) / 2);
+    // pros::screen::print(TEXT_MEDIUM_CENTER, 11, "Brake Ready?: %s", brakeReady ? "true" : "false");
     pros::screen::print(TEXT_MEDIUM_CENTER, 5, "Puncher Enc: %d", puncherEnc.get_position());
     }
     
     // necessary task delay - do not change
-    pros::delay(loopDelay);
+    // pros::delay(loopDelay);
+    while(pros::c::millis() < loopStartTime + loopDelay) {pros::delay(1);}
+    
     }
 }
