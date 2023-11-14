@@ -4,11 +4,11 @@ stateMachine states;
 
 void stateHandler() {
     // default states
+    	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
-	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
 	states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
-	states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.setWingState(stateMachine::wing_state::WINGS_STOWED);
+    states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
 
@@ -278,8 +278,8 @@ void stateHandler() {
     }
     
     // necessary task delay - do not change
-    // pros::delay(loopDelay);
-    while(pros::c::millis() < loopStartTime + loopDelay) {pros::delay(1);}
+    pros::delay(loopDelay);
+    // while(pros::c::millis() < loopStartTime + loopDelay) {pros::delay(1);}
     
     }
 }

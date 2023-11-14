@@ -103,15 +103,18 @@ void setMatchload(int numTimes, bool waitForCompletion) {
 
 bool matchloadState = false;
 void matchloadOpControl() {
-    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
+    if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
         matchloadState = !matchloadState;
-        if(matchloadState) {
-            states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-            shakeRobot();
-        }
-        else {
-            shakeRobot();
-        }
+        // if(matchloadState) {
+        //     states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+        //     pros::delay(20);
+        //     shakeRobot();
+        // }
+        // else {
+        //     states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+        //     pros::delay(20);
+        //     shakeRobot();
+        // }
         controller.rumble("-");
     }
 }

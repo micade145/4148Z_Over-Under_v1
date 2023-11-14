@@ -38,16 +38,16 @@ void initialize() {
 	// states.setWingState(stateMachine::wing_state::WINGS_STOWED);
 	// states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	// states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-
+	
 	// Initialize puncher
 	puncher.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	puncher.tare_position();
 	
 	inertial.set_data_rate(5);
 	pros::Task GUI(initGUI);
-	
+	pros::Task initRobot([] {inertial.reset(true);});
 }
-pros::Task initRobot([] {inertial.reset(true);});
+// pros::Task initRobot([] {inertial.reset(true);});
 
 
 /**
@@ -199,7 +199,6 @@ void opcontrol() {
 	// globalPose.setPoint(27.5, 9, 60); // prog
 	// globalPose.setPoint(118.5, 17, 0); // in line w/ top right corner of tiles next to matchload , six ball auto
 	globalPose.setPoint(25, 17, 180); // new setup for defense auto
-
 
 	// displayInfo = true;
 	autoMovement.suspend();
