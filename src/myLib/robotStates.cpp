@@ -12,7 +12,11 @@ void stateHandler() {
 	states.setParkingBrakeState(stateMachine::parking_brake_state::BRAKE_OFF);
 	states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
 
-    // encoder data rates
+    // odom initialization
+    resetOdomSensors();
+	globalPose.setPoint(0.0, 0.0, 0);
+
+    // set encoder data rates
     puncherEnc.set_data_rate(5);
     frontEnc.set_data_rate(5);
 
@@ -20,8 +24,14 @@ void stateHandler() {
     int loopDelay = 10;
     bool puncherClosePhase = false;
     // bool firstPuncherLoop = false;
+
     while(true) {
     int loopStartTime = pros::c::millis();
+     // ******** Odometry ******** //
+    // if(pros::competition::is_autonomous()) {
+        updatePosition();
+    // }
+
     // ******** Drive state handler ******** //
     if(states.driveStateChanged()) {
         if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
@@ -235,15 +245,12 @@ void stateHandler() {
     //     brakeReady = false;
     // }
 
-    // ******** Odometry ******** //
-    // if(pros::competition::is_autonomous()) {
-        updatePosition();
-    // }
 
     // ******** Matchload ******** //
     while(matchloadState) {
         fireCount = 0;
         while(true) {
+            states.driveState = stateMachine::drive_state::TWO_MOTOR;
             // release
             setPuncher(-127);
             pros::delay(200);

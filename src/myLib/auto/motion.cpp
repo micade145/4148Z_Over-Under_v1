@@ -10,8 +10,8 @@
 
 // **************** Movement Constants **************** //
 
-int DRIVE_SLEW_RATE = 5;    // tune later
-int TURN_SLEW_RATE = 5;     // tune later
+int DRIVE_SLEW_RATE = 120/50;    // 500 ms to accelerate = 50 iterations; 120 (basically max power) / 50 (iterations)
+int TURN_SLEW_RATE = 120/20;     // tune later
 int SETTLE_THRESHOLD = 5;  // 500 ms: 5 iterations * 10 ms loop
 int NEAR_TARGET_THRESHOLD = 2;        // 1.7 inches
 double DISTANCE_SETTLE_THRESHOLD = 1;   // 1 inch (tune later)
@@ -92,15 +92,15 @@ void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTu
 }
 
 void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime, bool fullPower) {
-    setMove(driveTarget, turnTarget, maxDrivePower, maxTurnPower, maxTime, fullPower, false, false);
+    setMove(driveTarget, turnTarget, maxDrivePower, maxTurnPower, maxTime, fullPower, true, false);
 }
 
 void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime) {
-    setMove(driveTarget, turnTarget, maxDrivePower, maxTurnPower, maxTime, false, false, false);
+    setMove(driveTarget, turnTarget, maxDrivePower, maxTurnPower, maxTime, false, true, false);
 }
 
 void setMove(double driveTarget, double turnTarget, int maxTime) {
-    setMove(driveTarget, turnTarget, 100, 100, maxTime, false, false, false);
+    setMove(driveTarget, turnTarget, 100, 100, maxTime, false, true, false);
 }
 
 void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
@@ -296,10 +296,12 @@ void move() {
     // double currentPosition;
     int turnError = 0;
     int drivePower, turnPower;
-    int tempDriveMax, tempTurnMax;
+    int tempDriveMax = 30;
+    int tempTurnMax = 30;
     bool stopLoop = false;
     int settleCount = 0;
     // Slew conditionals
+    if(std::fabs(drive_target) < 12.5) {drive_slew = false;}
 
     // Feedforward
     double turnFF = 1;
@@ -315,8 +317,8 @@ void move() {
 
         // drive_position = rightFrontDrive.get_position() * DRIVE_DEG_TO_INCH_275;
         drive_position = ((frontEnc.get_position() / 100) * DRIVE_DEG_TO_INCH_275) - initialPosition; // in inches
-        drive_error = int(drive_target - drive_position);
-        // driveError = drive_target - currentPosition;
+        // drive_error = int(drive_target - drive_position);
+        drive_error = drive_target - drive_position;
         turnError = int(turn_target - inertial.get_heading());
 
         // Constrain relative turn from 180 to -180
@@ -328,7 +330,7 @@ void move() {
             drivePower = max_drive_power * getSign(drive_error);
         }
         else {
-            drivePower = drivePID.calculateOutput(double(drive_error)) * driveFF; //, max_drive_power, -max_drive_power
+            drivePower = int(drivePID.calculateOutput(drive_error)) * driveFF; //, max_drive_power, -max_drive_power
         }
         turnPower = turnPID.calculateOutput(double(turnError)) * turnFF; //, max_turn_power, -max_turn_power
 
@@ -403,7 +405,7 @@ void move() {
         // Debug 
         // if(!pros::competition::is_disabled()) {
             pros::screen::erase_line(0, 1, 600, 1);
-            pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %5.1f, Err: %5d, Out: %3d", drive_target, drive_error, drivePower);
+            pros::screen::print(TEXT_MEDIUM_CENTER, 1, "Drive Target: %3.1f, Err: %3.2f, Out: %3d", drive_target, drive_error, drivePower);
             pros::screen::erase_line(0, 2, 600, 2);
             pros::screen::print(TEXT_MEDIUM_CENTER, 2, "Turn Tgt: %3.1f, Err: %3d, Out: %3d", turn_target, turnError, turnPower);
             pros::screen::erase_line(0, 2, 600, 3);
@@ -464,8 +466,8 @@ void moveToPoint() {
         translationPower = constrainVoltage(translationPower, std::fabs(movementScaleFactor) * max_translate_power, -std::fabs(movementScaleFactor) * max_translate_power);
 
         // Rotate power
-        // Stop rotating when close to target 
-        std::fabs(translation_error) > 2.5 ? rotationPower = round(turnPID.calculateOutput(rotationError)) : rotationPower = 0; 
+        // Stop rotating when close to target // used to be within 2.5 inches, now 3.5
+        std::fabs(translation_error) > 6.5 ? rotationPower = round(turnPID.calculateOutput(rotationError)) : rotationPower = 0; 
 
         // Constrain outputs
         // translationPower = constrainVoltage(translationPower, max_translate_power, -max_translate_power);

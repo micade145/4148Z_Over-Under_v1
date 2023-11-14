@@ -56,16 +56,22 @@ void curveSplitArcade() {
 }
 
 // PTO Opcontrol
-bool sixMotorMode = states.driveStateIs(stateMachine::drive_state::SIX_MOTOR);
 void drivePtoOpControl() {
+    // static bool sixMotorMode = states.driveStateIs(stateMachine::drive_state::SIX_MOTOR);
     if(controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
-        sixMotorMode = !sixMotorMode;
+        // sixMotorMode = !sixMotorMode;
+        if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
+            states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+        }
+        else {
+            states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+        }
     }
-    if(sixMotorMode) { 
-        states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
-    }
-    else {
-        states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-    }
+    // if(sixMotorMode) { 
+    //     states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+    // }
+    // else {
+    //     states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+    // }
 }
 

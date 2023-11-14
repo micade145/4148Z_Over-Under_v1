@@ -44,7 +44,7 @@ void initialize() {
 	puncher.tare_position();
 	
 	inertial.set_data_rate(5);
-	pros::Task GUI(initGUI);
+	// pros::Task GUI(initGUI);
 	pros::Task initRobot([] {inertial.reset(true);});
 }
 // pros::Task initRobot([] {inertial.reset(true);});
@@ -83,11 +83,12 @@ void competition_initialize() {}
 pros::Task superstruct(stateHandler);
 pros::Task autoMovement(autoMovementTask);
 void autonomous() {
-	INTAKE_CLOSE_THRESHOLD = 250;
-	INTAKE_OPEN_THRESHOLD = 450;
-	// pros::Task trackPosition(updatePosition);
 	resetOdomSensors();
 	globalPose.setPoint(0.0, 0.0, 0);
+	
+	INTAKE_CLOSE_THRESHOLD = 250;
+	INTAKE_OPEN_THRESHOLD = 450;
+	pros::delay(50);
 
 	// chained move test
 	// setMove(12, 0, 1500);
@@ -99,70 +100,32 @@ void autonomous() {
 	// setMove(-12, 0, 80, 80, 1500);
 	// waitUntilSettled(50000);
 
-	// shakeRobot();
-	// // pushing works??
-	// for(int i=0; i < 3; i++) {
-	// setMove(-8, 0, 120, 80, 1000, true);
-	// pros::delay(1000);
-	// setMoveToPoint(0, 6, 1000);
-	// waitUntilSettled(0);
-	// }
-	// waitUntilSettled(50000);
-
-	// reverse moveToPoint testa
-	// shakeRobot();
-	// setMoveToPoint(0, -24, 1500, true);
-	// waitUntilSettled(0);
-	// setMoveToPoint(0, 0, 1500, false);
+	// setMove(24, 0, 10000);
+	// setMoveToPoint(0, 24, 10000, false);
 	// waitUntilSettled(500000);
 
-	// sixBall ending test
-	// globalPose.setPoint(80, 10, 270);
-	// states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
-	// pros::delay(300);
-	// states.setIntakeState(stateMachine::intake_state::CLOSED);
-	// pros::delay(200);
-	// setMoveToPoint(116, 15, 128, 128, 1100, true);
-	// waitUntilSettled(0);
-	// setMove(0, 70, 0, 110, 700);
-	// waitUntilSettled(0);
-	// // pros::Task curve([] {setCurve(20, 10, 27, 128, 128, 1200);});
-	// // pros::delay(400);'
-	// setMove(60, 70, 100, 128, 1500);
-	// pros::delay(600);
-	// turn_target = 10;
-	// max_drive_power = 128;
-	// // pros::delay(100);
-	// // states.setPuncherAngleState(stateMachine::puncher_angle_state::FLAT);
-	// states.setIntakeState(stateMachine::intake_state::OPEN);
-	// waitUntilSettled(0);
-	// // forceStopDrive(pros::E_MOTOR_BRAKE_COAST);
-	// setMove(-20, 0, 128, 100, 700);
-	// waitUntilSettled(0);
-
-	// testProg();
-	// sixBall();
-	// pros::delay(50000);
+	sixBall();
+	pros::delay(50000);
 
 	// Autoselector 
-	if(autoToRun == 1) {
-		defenseAuto(SOLO);
-	}
-	if(autoToRun == 2) {
-		defenseAuto(ELIMS);
-	}
-	if(autoToRun == 3) {
-		fourBall();
-	}
-	if(autoToRun == 4) {
-		testProg();
-	}
-	if(autoToRun == 5) {
-		defense3Ball();
-	}
-	if(autoToRun == 6) {
-		sixBall();
-	}
+	// if(autoToRun == 1) {
+	// 	defenseAuto(SOLO);
+	// }
+	// if(autoToRun == 2) {
+	// 	defenseAuto(ELIMS);
+	// }
+	// if(autoToRun == 3) {
+	// 	fourBall();
+	// }
+	// if(autoToRun == 4) {
+	// 	testProg();
+	// }
+	// if(autoToRun == 5) {
+	// 	defense3Ball();
+	// }
+	// if(autoToRun == 6) {
+	// 	sixBall();
+	// }
 }
 
 void matchloadMacro() {
@@ -201,9 +164,8 @@ void opcontrol() {
 	globalPose.setPoint(25, 17, 180); // new setup for defense auto
 
 	// displayInfo = true;
-	autoMovement.suspend();
+	// autoMovement.suspend();
 	// superstruct.set_priority(TASK_PRIORITY_DEFAULT + 1);
-	// states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
 	states.defaultPullback = stateMachine::puncher_state::MID_PULLBACK;
 	states.setPuncherAngleState(stateMachine::puncher_angle_state::STEEP);
 
@@ -212,7 +174,6 @@ void opcontrol() {
 	// resetOdomSensors();
 	// pros::delay(100);
 	// globalPose.setPoint(0,0,0);
-	// matchloadMacro();
 	while (true) {
 		// Drive controls
 		splitArcade(pros::E_MOTOR_BRAKE_COAST);

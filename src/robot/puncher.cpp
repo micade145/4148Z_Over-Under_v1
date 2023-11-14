@@ -108,7 +108,7 @@ void matchloadOpControl() {
         localMatchloadState = !localMatchloadState;
         if(localMatchloadState) {
             states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-            pros::delay(20);
+            pros::delay(40);
             shakeRobot();
             matchloadState = true;
         }
