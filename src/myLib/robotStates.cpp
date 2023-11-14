@@ -253,9 +253,9 @@ void stateHandler() {
             // pullback
             pros::delay(100);
             puncherEnc.reset_position();
-            // setPuncher(127);
             while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 10000) { //|| puncherLimitSwitch.get_value() == false
                 pros::delay(5);
+                if(!matchloadState) {break;}
             }
             fireCount++;
 
@@ -264,7 +264,6 @@ void stateHandler() {
                 states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
                 states.setPuncherState(stateMachine::puncher_state::PULLED_BACK);
                 // fireCount = fireTarget = 0;
-                // matchloadState = false;
                 break;
             }
         }
