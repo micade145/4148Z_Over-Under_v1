@@ -104,6 +104,7 @@ void autonomous() {
 	// setMoveToPoint(0, 24, 10000, false);
 	// waitUntilSettled(500000);
 
+	// defenseAuto(SOLO);
 	sixBall();
 	pros::delay(50000);
 
