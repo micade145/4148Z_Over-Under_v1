@@ -71,7 +71,7 @@ void stateHandler() {
             states.oldIntakeState = states.intakeState;
         }
         else if(states.intakeStateIs(stateMachine::intake_state::OPEN)) {
-            spinIntake(-85);    // -65
+            spinIntake(-95); // - 85
             if(openCount > INTAKE_OPEN_THRESHOLD) {
                 // stopIntake(pros::E_MOTOR_BRAKE_HOLD);
                 spinIntake(-10);
@@ -216,34 +216,50 @@ void stateHandler() {
     }
 
     // ******** Parking brake state handler ******** //
-    // if(states.parkingBrakeStateChanged()) {
-    //     if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_OFF)) {
-    //         if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES OFF");}
-    //         leftParkingBrake.set_value(false);
-    //         rightParkingBrake.set_value(false);
-    //         controller.rumble(".");
-    //         // if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
-    //         //     states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
-    //         // }
-    //     }
-    //     else if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_ON)) {
-    //         if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");}
-    //         leftParkingBrake.set_value(true);
-    //         rightParkingBrake.set_value(true);
-    //         controller.rumble(".");
-    //         // if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
-    //         //     states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
-    //         // }
-    //     }
-    //     states.oldParkingBrakeState = states.parkingBrakeState;
-    // }
+    if(states.parkingBrakeStateChanged()) {
+        if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_OFF)) {
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES OFF");}
+            // leftParkingBrake.set_value(false);
+            // rightParkingBrake.set_value(false);
+
+            // stop braking on drive
+            setDrive(0, 0);
+
+            // rumble for confirmation
+            controller.rumble(".");
+
+            // if(states.driveStateIs(stateMachine::drive_state::SIX_MOTOR)) {
+            //     states.setDriveState(stateMachine::drive_state::TWO_MOTOR);
+            // }
+        }
+        else if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_ON)) {
+            if(displayInfo) {pros::screen::print(TEXT_MEDIUM_CENTER, 8, "BRAKES ON");}
+            // leftParkingBrake.set_value(true);
+            // rightParkingBrake.set_value(true);
+            
+            states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+            
+            // make motors fight each other
+            setDrive(15, 15);
+            leftFrontDrive.move(-15);
+            rightFrontDrive.move(-15);
+
+            // rumble for confirmation
+            controller.rumble(".");
+
+            // if(states.driveStateIs(stateMachine::drive_state::TWO_MOTOR)) {
+            //     states.setDriveState(stateMachine::drive_state::SIX_MOTOR);
+            // }
+        }
+        states.oldParkingBrakeState = states.parkingBrakeState;
+    }
     // Drive Check for engaging Parking Brakes
-    // if((std::fabs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::fabs(rightFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD)) {
-    //     brakeReady = true;
-    // } 
-    // else {
-    //     brakeReady = false;
-    // }
+    if((std::fabs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::fabs(rightFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD)) {
+        brakeReady = true;
+    } 
+    else {
+        brakeReady = false;
+    }
 
 
     // ******** Matchload ******** //

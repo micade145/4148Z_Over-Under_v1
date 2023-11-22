@@ -33,7 +33,7 @@ lv_res_t act4(lv_obj_t *btnm, const char *txt){
 lv_res_t act5(lv_obj_t *btnm, const char *txt){
     autoToRun = 5;
     pros::screen::erase_line(0, 7, 600, 8);
-    pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "DEFENSE 3 BALL");
+    pros::screen::print(TEXT_MEDIUM_CENTER, 7, "AUTO TO RUN %d: %s", autoToRun, "DEFENSE SAFE");
 	return LV_RES_OK; // return OK because the button matrix is not deleted
 }
 lv_res_t act6(lv_obj_t *btnm, const char *txt){

@@ -44,7 +44,7 @@ void initialize() {
 	puncher.tare_position();
 	
 	inertial.set_data_rate(5);
-	// pros::Task GUI(initGUI);
+	pros::Task GUI(initGUI);
 	pros::Task initRobot([] {inertial.reset(true);});
 }
 // pros::Task initRobot([] {inertial.reset(true);});
@@ -87,8 +87,8 @@ void autonomous() {
 	globalPose.setPoint(0.0, 0.0, 0);
 	
 	INTAKE_CLOSE_THRESHOLD = 250;
-	INTAKE_OPEN_THRESHOLD = 450;
-	pros::delay(50);
+	INTAKE_OPEN_THRESHOLD = 600; // 500
+	pros::delay(10);
 
 	// chained move test
 	// setMove(12, 0, 1500);
@@ -105,28 +105,28 @@ void autonomous() {
 	// waitUntilSettled(500000);
 
 	// defenseAuto(SOLO);
-	sixBall();
-	pros::delay(50000);
+	// sixBall();
+	// pros::delay(50000);
 
 	// Autoselector 
-	// if(autoToRun == 1) {
-	// 	defenseAuto(SOLO);
-	// }
-	// if(autoToRun == 2) {
-	// 	defenseAuto(ELIMS);
-	// }
-	// if(autoToRun == 3) {
-	// 	fourBall();
-	// }
-	// if(autoToRun == 4) {
-	// 	testProg();
-	// }
-	// if(autoToRun == 5) {
-	// 	defense3Ball();
-	// }
-	// if(autoToRun == 6) {
-	// 	sixBall();
-	// }
+	if(autoToRun == 1) {
+		defenseAuto(SOLO);
+	}
+	if(autoToRun == 2) {
+		defenseAuto(ELIMS);
+	}
+	if(autoToRun == 3) {
+		fourBall();
+	}
+	if(autoToRun == 4) {
+		testProg();
+	}
+	if(autoToRun == 5) {
+		defenseSafe();
+	}
+	if(autoToRun == 6) {
+		sixBall();
+	}
 }
 
 void matchloadMacro() {
@@ -191,7 +191,7 @@ void opcontrol() {
 		wingOpControl();
 
 		// Parking Brake toggle
-		// parkingBrakeOpControl();
+		parkingBrakeOpControl();
 		
 		// Side Climb toggle
 		sideClimbOpControl();

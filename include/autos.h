@@ -57,6 +57,7 @@ extern void fourBall();
 extern void progSkills();
 
 extern void defense3Ball();
+extern void defenseSafe();
 
 extern void newTestProg();
 extern void testProg();

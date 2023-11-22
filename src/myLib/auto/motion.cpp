@@ -5,6 +5,7 @@
 // TO DO
 // Implement acceleration cap / maybe deaccel
 // Boomerange alg
+// synchronize tasks using pros::Task::delay_until for consistent loop execution
 // Make curve function async
 // Path following alg 
 
@@ -54,13 +55,11 @@ bool movement_reversed = false; // drive forward by default
 // curve() variables
 double radius;
 
-
 // Universal variables 
 bool driveSettled = true; // false?
 bool nearTarget = false;
 bool full_power = false;
 int max_time = 3000;
-
 
 // **************** Setters for Movement Functions **************** //
 
@@ -258,6 +257,7 @@ void forceStopDrive(pros::motor_brake_mode_e mode) {
 // **************** Auto Movement Task **************** //
 
 void autoMovementTask() {
+    // states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
     while(true) {
         if(states.driveAutoStateIs(stateMachine::drive_auto_state::OFF)) {
             // pros::delay(5);

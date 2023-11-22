@@ -46,9 +46,9 @@ void splitArcade(pros::motor_brake_mode_e_t driveBrakeMode) {
     if(fabs(forwardPower) <= 15) { forwardPower = 0;}
     if(fabs(turnPower) <= 15) { turnPower = 0;}
     // Only output joystick values to drive if parking brake is off
-    // if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_OFF)) {
+    if(states.parkingBrakeStateIs(stateMachine::parking_brake_state::BRAKE_OFF)) {
         setDrive(forwardPower + turnPower, forwardPower - turnPower);
-    // }
+    }
 }
 
 void curveSplitArcade() {
