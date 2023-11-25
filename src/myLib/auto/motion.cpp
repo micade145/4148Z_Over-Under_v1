@@ -11,11 +11,11 @@
 
 // **************** Movement Constants **************** //
 
-int DRIVE_SLEW_RATE = 120/50;    // 500 ms to accelerate = 50 iterations; 120 (basically max power) / 50 (iterations)
-int TURN_SLEW_RATE = 120/20;     // tune later
-int SETTLE_THRESHOLD = 5;  // 500 ms: 5 iterations * 10 ms loop
-int NEAR_TARGET_THRESHOLD = 2;        // 1.7 inches
-double DISTANCE_SETTLE_THRESHOLD = 1;   // 1 inch (tune later)
+int DRIVE_SLEW_RATE = 120/50;   // 500 ms to accelerate = 50 iterations; 120 (basically max power) / 50 (iterations)
+int TURN_SLEW_RATE = 120/20;    // tune later
+int SETTLE_THRESHOLD = 3;       // 30 ms: 3 iterations * 10 ms loop // Used to be 50ms
+int NEAR_TARGET_THRESHOLD = 2;          // 2 inches
+double DISTANCE_SETTLE_THRESHOLD = 1;   // 1 inch
 double TURN_SETTLE_THRESHOLD = 2;       // 2 degrees
 
 
@@ -59,14 +59,16 @@ double radius;
 bool driveSettled = true; // false?
 bool nearTarget = false;
 bool full_power = false;
-int max_time = 3000;
+int max_time = 2000;
 
 // **************** Setters for Movement Functions **************** //
 
 void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime, bool fullPower, bool driveSlew, bool turnSlew) {
     // Reset relative position
+    // rightFrontDrive.tare_position();
+
+    // Disable autoMovement
     states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
-    rightFrontDrive.tare_position();
     driveSettled = false;
     pros::delay(10); //20 ms
 
@@ -104,17 +106,16 @@ void setMove(double driveTarget, double turnTarget, int maxTime) {
 
 void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
         int maxRotatePower, int maxOrientPower, int maxTime, bool reversed) {
+    // Disable autoMovement
     states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
     driveSettled = false;
     pros::delay(10); // 20ms
+
     // Colored box for debugging
     // pros::screen::set_eraser(COLOR_BLACK);
     // pros::screen::erase();
     // pros::screen::set_pen(COLOR_GREEN);
     // pros::screen::fill_rect(5,5,240,200);
-
-    // Reset relative position
-    // rightFrontDrive.tare_position();
 
     // Set targets
     target_x = targetX;
@@ -220,10 +221,11 @@ void waitUntilSettled(int msecDelay) {
         // pros::screen::set_pen(COLOR_BLUE);
         // pros::screen::fill_rect(20, 20, 400, 400);
     }
-    driveSettled = false;
+    // driveSettled = false;
+        
         // debug
-        pros::screen::set_eraser(COLOR_BLACK);
-        pros::screen::erase();
+        // pros::screen::set_eraser(COLOR_BLACK);
+        // pros::screen::erase();
 
     // disable auto movement
     states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
@@ -239,10 +241,10 @@ void waitUntilSettled(int msecDelay) {
 void waitUntilNear(double threshold, int msecDelay) {
     pros::delay(300); // minimum move time
     if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE)) {
-        while(std::fabs(drive_error) > threshold || !driveSettled) {pros::delay(5);}
+        while(std::fabs(drive_error) > threshold && !driveSettled) {pros::delay(5);}
     }
     else if(states.driveAutoStateIs(stateMachine::drive_auto_state::MOVE_TO_POINT)){ 
-        while(std::fabs(translation_error) > threshold || !driveSettled) {pros::delay(5);}
+        while(std::fabs(translation_error) > threshold && !driveSettled) {pros::delay(5);}
     }
     
     pros::delay(msecDelay);
@@ -389,12 +391,12 @@ void move() {
         }
         if((settleCount >= SETTLE_THRESHOLD) || (pros::c::millis() - startTime) >= max_time) {
             stopDrive(pros::E_MOTOR_BRAKE_BRAKE);
-            drive_error = turnError = drivePower = turnPower = 0;
-            drive_position = drive_target = turn_target = 0;
-            drivePID.reset();
-            turnPID.reset();
-            driveSettled = true;
-            states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+            // drive_error = turnError = drivePower = turnPower = 0;
+            // drive_position = drive_target = turn_target = 0;
+            // drivePID.reset();
+            // turnPID.reset();
+            // driveSettled = true;
+            // states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
             break;
         }
 
@@ -418,6 +420,11 @@ void move() {
         // necessary delay - do not change
         pros::delay(10);
     }
+    // Reset
+    drive_error = turnError = drivePower = turnPower = 0;
+    drivePID.reset();
+    turnPID.reset();
+    driveSettled = true;
 }
 
 

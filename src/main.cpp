@@ -162,7 +162,7 @@ void opcontrol() {
 	INTAKE_CLOSE_THRESHOLD = 300;
 	// globalPose.setPoint(27.5, 9, 60); // prog
 	// globalPose.setPoint(118.5, 17, 0); // in line w/ top right corner of tiles next to matchload , six ball auto
-	globalPose.setPoint(25, 17, 180); // new setup for defense auto
+	globalPose.setPoint(25, 17, 180); // new setup for defense auto, back to goal
 
 	// displayInfo = true;
 	// autoMovement.suspend();

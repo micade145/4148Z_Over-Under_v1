@@ -47,7 +47,7 @@ extern int max_time;
  * @brief Full setter for the move function: Set drive only, turn only, or both simultaneously 
  * @param driveTarget Target position for the drive, in inches  @param turnTarget Target heading for drive
  * @param maxDrivePower Max power for drive @param maxTurnPower Max power for turn 
- * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param maxTime Maximum time the function is allowed to run for; default 2000 ms
  * @param fullPower If true, drive at full power instead of using PID 
  * @param driveSlew Boolean for using slew rate for drive @param turnSlew Boolean for using slew rate for turn
 */
@@ -57,7 +57,7 @@ extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, in
  * @brief Wrapped setter for the move function: Use full power
  * @param driveTarget Target position for the drive, in inches  @param turnTarget Target heading for drive
  * @param maxDrivePower Max power for drive @param maxTurnPower Max power for turn 
- * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param maxTime Maximum time the function is allowed to run for; default 2000 ms
  * @param fullPower If true, drive at full power instead of using PID
 */
 extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime, bool fullPower);
@@ -66,14 +66,14 @@ extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, in
  * @brief Wrapped setter for the move function: No slew rate
  * @param driveTarget Target position for the drive, in inches  @param turnTarget Target heading for drive
  * @param maxDrivePower Max power for drive @param maxTurnPower Max power for turn 
- * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param maxTime Maximum time the function is allowed to run for; default 2000 ms
 */
 extern void setMove(double driveTarget, double turnTarget, int maxDrivePower, int maxTurnPower, int maxTime);
 
 /**
  * @brief Wrapped setter for the move function: Only drive / turn target and timeout
  * @param driveTarget Target position for the drive, in inches  @param turnTarget Target heading for drive
- * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param maxTime Maximum time the function is allowed to run for; default 2000 ms
 */
 extern void setMove(double driveTarget, double turnTarget, int maxTime);
 
@@ -85,7 +85,7 @@ extern void setMove(double driveTarget, double turnTarget, int maxTime);
  * @param endOrientation End angle after arriving at point
  * @param maxTranslatePower Max power for driving to target @param maxRotatePower Max power for turn to target
  * @param maxOrientPower Max power for end orientation turn
- * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param maxTime Maximum time the function is allowed to run for; default 2000 ms
  * @param reversed If true, reverse movement. False (forward) by default
 */
 extern void setMoveToPoint(double targetX, double targetY, double endOrientation, int maxTranslatePower, 
@@ -95,7 +95,7 @@ extern void setMoveToPoint(double targetX, double targetY, double endOrientation
  * @brief Wrapped setter for the moveToPoint function: No end orientation
  * @param targetX Target x coordinate, in inches @param targetY Target y coordinate, in inches
  * @param maxTranslatePower Max power for driving to target @param maxRotatePower Max power for turn to target
- * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param maxTime Maximum time the function is allowed to run for; default 2000 ms
  * @param reversed If true, reverse movement. False (forward) by default
 */
 extern void setMoveToPoint(double targetX, double targetY, int maxTranslatePower, int maxRotatePower,  int maxTime, bool reversed);
@@ -103,7 +103,7 @@ extern void setMoveToPoint(double targetX, double targetY, int maxTranslatePower
 /**
  * @brief Wrapped setter for the moveToPoint function: Only target x, y and timeout
  * @param targetX Target x coordinate, in inches @param targetY Target y coordinate, in inches
- * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param maxTime Maximum time the function is allowed to run for; default 2000 ms
  * @param reversed If true, reverse movement. False (forward) by default
 */
 extern void setMoveToPoint(double targetX, double targetY, int maxTime, bool reversed);
@@ -117,7 +117,7 @@ extern void setMoveToPoint(double targetX, double targetY, int maxTime, bool rev
  * @param radius Radius of the arc the robot will travel
  * @param maxDrivePower Max power for drive
  * @param maxTurnPower Max power for turn
- * @param maxTime Maximum time the function is allowed to run for; default 3000 ms
+ * @param maxTime Maximum time the function is allowed to run for; default 2000 ms
 */
 extern void setCurve(double distance, double endAngle, double radius, int maxDrivePower, int maxTurnPower, int maxTime);
 
