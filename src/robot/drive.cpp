@@ -2,7 +2,7 @@
 
 // ******** Drive Constants ******** //
 double TURN_SENS = 0.8;
-double DRIVE_BRAKE_THRESHOLD = 45;  // In RPM
+double DRIVE_BRAKE_THRESHOLD = 45;  // 45 RPM
 
 
 // ******** Drive Helper Functions ******** //

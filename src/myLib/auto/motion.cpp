@@ -395,8 +395,8 @@ void move() {
             // drive_position = drive_target = turn_target = 0;
             // drivePID.reset();
             // turnPID.reset();
-            // driveSettled = true;
-            // states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
+            driveSettled = true;
+            states.setDriveAutoState(stateMachine::drive_auto_state::OFF);
             break;
         }
 
@@ -424,7 +424,6 @@ void move() {
     drive_error = turnError = drivePower = turnPower = 0;
     drivePID.reset();
     turnPID.reset();
-    driveSettled = true;
 }
 
 

@@ -253,13 +253,12 @@ void stateHandler() {
         }
         states.oldParkingBrakeState = states.parkingBrakeState;
     }
-    // Drive Check for engaging Parking Brakes
-    if((std::fabs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::fabs(rightFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD)) {
+    // Drive check for engaging brakes
+        // if((std::fabs(leftFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD) || (std::fabs(rightFrontDrive.get_actual_velocity()) < DRIVE_BRAKE_THRESHOLD)) {
+    if((std::fabs(leftFrontDrive.get_actual_velocity()) + std::fabs(rightFrontDrive.get_actual_velocity())) < DRIVE_BRAKE_THRESHOLD) {
         brakeReady = true;
-    } 
-    else {
-        brakeReady = false;
     }
+    else {brakeReady = false;}
 
 
     // ******** Matchload ******** //
@@ -270,15 +269,16 @@ void stateHandler() {
             // release
             setPuncher(-127);
             pros::delay(200);
-            // puncher.move(127);
             setPuncher(127);
             
-            // pullback
+            // reset encoder
             pros::delay(100);
             puncherEnc.reset_position();
-            while(puncherEnc.get_position() < MID_PULLBACK_TICKS - 10000) { //|| puncherLimitSwitch.get_value() == false
+
+            // pull back
+            while(puncherEnc.get_position() < (MID_PULLBACK_TICKS - 10000) && matchloadState) { //|| puncherLimitSwitch.get_value() == false
                 pros::delay(5);
-                if(!matchloadState) {break;}
+                // if(!matchloadState) {break;}
             }
             fireCount++;
 
